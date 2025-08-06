@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import { getProjectDirectory } from '../utils/config';
-import { getCurrentSessionId, getLatestConversationLog } from '../utils/conversation-logs';
+import { getDualSessionLogs } from '../utils/conversation-logs';
 
 interface SaveSessionOptions {
   context?: boolean;
@@ -57,67 +57,93 @@ export async function saveSessionCommand(options: SaveSessionOptions): Promise<v
 
 async function outputSaveSessionContext(projectDir: string): Promise<void> {
   try {
-    console.log(chalk.blue('📊 Session Capture Context for Claude Analysis'));
-    console.log('');
+    const claudeDir = path.join(projectDir, '.claude');
+    const flashbackDir = path.join(claudeDir, 'flashback');
+
+    console.log('# Session Capture Context for Claude Analysis\n');
 
     // 1. Output AI Analysis Prompt
-    const promptPath = path.join(projectDir, '.claude', 'flashback', 'prompts', 'session-summary.md');
+    const promptPath = path.join(flashbackDir, 'prompts', 'session-summary.md');
     if (await fs.pathExists(promptPath)) {
       const prompt = await fs.readFile(promptPath, 'utf-8');
-      console.log(chalk.green('## AI Analysis Prompt:'));
+      console.log('## AI Analysis Prompt:');
       console.log(prompt);
       console.log('');
     } else {
-      console.log(chalk.yellow('⚠️  AI prompt not found at .claude/flashback/prompts/session-summary.md'));
+      console.log('⚠️  AI prompt not found at .claude/flashback/prompts/session-summary.md\n');
     }
 
-    // 2. Archive Previous Session (if exists) and prepare for new one
-    await archivePreviousSession(projectDir);
+    // 2. Get dual session logs (same as session-start)
+    const { currentSession, previousSession } = await getDualSessionLogs(projectDir);
 
-    // 3. Output Recent Conversation Log
-    console.log(chalk.green('## Recent Conversation Log:'));
-    const sessionId = await getCurrentSessionId(projectDir);
-    const conversationLog = await getLatestConversationLog(projectDir, 100);
-    console.log(`Session: ${sessionId}`);
-    console.log('');
-    console.log(conversationLog);
+    console.log('## Session Information');
+    console.log(`- **Current Session**: ${currentSession.sessionId} (${currentSession.totalMessages} messages)`);
+    console.log(`- **Previous Session**: ${previousSession.sessionId} (${previousSession.totalMessages} messages)`);
+    console.log(`- **Project Directory**: ${projectDir}`);
     console.log('');
 
-    // 4. Output Detailed Git Analysis
-    console.log(chalk.green('## Git Analysis:'));
+    // 3. Load REMEMBER.md (project memory) 
+    const rememberPath = path.join(flashbackDir, 'memory', 'REMEMBER.md');
+    if (await fs.pathExists(rememberPath)) {
+      const rememberContent = await fs.readFile(rememberPath, 'utf-8');
+      console.log('## Project Memory (REMEMBER.md)');
+      console.log('```markdown');
+      console.log(rememberContent);
+      console.log('```');
+      console.log('');
+    } else {
+      console.log('## Project Memory (REMEMBER.md)');
+      console.log('*No project memory found*');
+      console.log('');
+    }
+
+    // 4. Load WORKING_PLAN.md (current development plan)
+    const workingPlanPath = path.join(flashbackDir, 'memory', 'WORKING_PLAN.md');
+    if (await fs.pathExists(workingPlanPath)) {
+      const workingPlanContent = await fs.readFile(workingPlanPath, 'utf-8');
+      console.log('## Current Working Plan');
+      console.log('```markdown');
+      console.log(workingPlanContent);
+      console.log('```');
+      console.log('');
+    } else {
+      console.log('## Current Working Plan');
+      console.log('*No working plan found*');
+      console.log('');
+    }
+
+    // 5. Current session context
+    if (currentSession.filteredMessages.length > 0) {
+      console.log('## Current Session Context');
+      console.log(`*${currentSession.truncationInfo}*`);
+      console.log('```');
+      console.log(currentSession.filteredMessages.join('\n'));
+      console.log('```');
+      console.log('');
+    } else {
+      console.log('## Current Session Context');
+      console.log('*No current session content*');
+      console.log('');
+    }
+
+    // 6. Git Analysis (enhanced)
+    console.log('## Git Analysis');
     const gitAnalysis = await getDetailedGitAnalysis(projectDir);
     console.log(gitAnalysis);
     console.log('');
 
-    // 5. Skip Todo Status (placeholder functionality removed)
+    // 7. Analysis Instructions
+    console.log('## Analysis Instructions');
+    console.log('Based on the above context:');
+    console.log('1. Review the project memory and working plan for context');
+    console.log('2. Analyze the current session conversation for accomplishments');
+    console.log('3. Extract key decisions, problems solved, and learning moments');
+    console.log('4. Create a session summary capturing what was actually done');
+    console.log('5. Focus on concrete changes, files modified, and next steps identified');
+    console.log('');
 
   } catch (error) {
     console.error(chalk.red('Error gathering session context:'), error instanceof Error ? error.message : String(error));
-  }
-}
-
-async function archivePreviousSession(projectDir: string): Promise<void> {
-  const currentSessionPath = path.join(projectDir, '.claude', 'flashback', 'memory', 'CURRENT_SESSION.md');
-
-  if (await fs.pathExists(currentSessionPath)) {
-    // Archive the previous session
-    const archiveDir = path.join(projectDir, '.claude', 'flashback', 'memory', 'ARCHIVE', 'sessions');
-    await fs.ensureDir(archiveDir);
-
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const archivePath = path.join(archiveDir, `session-${timestamp}.md`);
-
-    await fs.copy(currentSessionPath, archivePath);
-    console.log(chalk.blue('## Previous Session Summary:'));
-    console.log(`Archived previous session to: ${path.relative(projectDir, archivePath)}`);
-    console.log('');
-
-    // Prune old sessions (keep last 10)
-    await pruneOldSessions(archiveDir);
-  } else {
-    console.log(chalk.blue('## Previous Session Summary:'));
-    console.log('No previous session found - this will create the first one.');
-    console.log('');
   }
 }
 
@@ -232,7 +258,7 @@ async function manuallyArchiveCurrentSession(projectDir: string): Promise<void> 
 }
 
 async function pruneOldSessionsManually(projectDir: string, keepCount: number): Promise<void> {
-  const archiveDir = path.join(projectDir, '.claude', 'memory', 'ARCHIVE', 'sessions');
+  const archiveDir = path.join(projectDir, '.claude', 'flashback', 'memory', 'ARCHIVE', 'sessions');
 
   if (!await fs.pathExists(archiveDir)) {
     console.log(chalk.yellow('⚠️  No archived sessions found to prune.'));

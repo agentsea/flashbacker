@@ -95,22 +95,23 @@ The system provides **two complementary ways** to access 12 AI specialists:
 - Version dynamically read from `package.json`
 
 **Working Commands (Post-Cleanup):**
-- `init`: Template-driven project initialization with failsafe memory protection
+- `init`: Template-driven project initialization with failsafe memory protection and MCP server integration
 - `persona`: AI persona system with 13 specialists (architect, security, etc.)
 - `agent`: Context gathering for Claude Code agent subagents 
 - `memory`: REMEMBER.md management for persistent project knowledge
-- `working-plan`: Development plan tracking across sessions
-- `save-session`: Session insight capture before compaction
+- `working-plan`: Development plan tracking across sessions with AI analysis
+- `save-session`: Session insight capture using comprehensive context gathering (fixed architecture)
 - `session-start`: Context loading for session restoration after compaction
 - `discuss`: Multi-persona AI debates using real subagents
 - `debt-hunter`: Technical debt and duplicate code detection with CLI scanning
 - `doctor`: System diagnostics and health checks
-- `status`: Installation status (completely rewritten for correct architecture)
+- `status`: Installation status with accurate slash commands detection
 
 **Key Utilities:**
 - `src/utils/file-utils.ts`: Dynamic template scanning functions
 - `src/utils/config.ts`: Project directory detection and configuration
-- `src/utils/conversation-logs.ts`: Claude Code session log parsing
+- `src/utils/conversation-logs.ts`: Claude Code session log parsing with dual session support
+- `src/utils/claude-config.ts`: Slash commands detection and Claude Code integration
 - `src/core/hooks.ts`: Claude Code hook system integration
 
 **Template System:**
@@ -136,11 +137,28 @@ The system provides **two complementary ways** to access 12 AI specialists:
 - Hook scripts installed in `.claude/flashback/scripts/`
 - Automatic context injection prevents repeated corrections across sessions
 
+### Save-Session System Architecture (FIXED v2.2.6+)
+
+**Previous Issue**: Save-session was architecturally broken - expected Claude to write files through slash commands (impossible).
+
+**Fixed Architecture**: Now follows Hybrid AI+Computer pattern correctly:
+- **CLI (`flashback save-session --context`)**: Gathers comprehensive context like session-start
+- **Claude**: Provides structured analysis in conversation (no file writing)
+- **Context includes**: Project memory, working plan, full conversation logs, git analysis
+- **Output**: Structured session summary for continuity, not broken file operations
+
 ## Development Patterns
 
 ### Recent Major Changes
 
-#### v2.2.6 - Public Release (Current)
+#### v2.2.6+ - Post-MCP Integration (Current)
+- **MCP Server Integration**: Added context7, playwright, and sequential-thinking MCP servers for enhanced capabilities
+- **Critical Bug Fixes**: Fixed slash commands detection issues in `flashback status` and config validation
+- **Save-Session Overhaul**: Completely fixed broken save-session system using session-start architecture
+- **Documentation Improvements**: Enhanced README with User Guide links and better navigation
+- **Template System**: All templates properly updated in `templates/` directory for consistent distribution
+
+#### v2.2.6 - Public Release
 - **Framework Coexistence**: Fixed catastrophic init system bug that destroyed entire .claude directories
 - **Dynamic Template Scanning**: Replaced hardcoded agent/persona lists with runtime template discovery
 - **Security Protections**: Full GitHub security suite (branch protection, secret scanning, CodeQL)
@@ -255,7 +273,7 @@ The `templates/` directory is crucial - it contains all the bundled content that
 
 ## Current Status
 
-**v2.2.6**: "PUBLIC RELEASE" - First public release with critical framework coexistence fixes and dynamic template scanning. Fixed catastrophic init system bug that destroyed other Claude frameworks. Enhanced template-driven architecture with bulletproof multi-framework coexistence. All 13 specialists available with improved developer experience and production stability.
+**v2.2.6+**: "POST-MCP INTEGRATION" - Enhanced with MCP servers and critical bug fixes. Fixed save-session architecture, slash commands detection, and template distribution. All 13 specialists available with MCP-enhanced capabilities including context7, playwright, and sequential-thinking servers for comprehensive analysis and automation.
 
 ## Single Test Command
 

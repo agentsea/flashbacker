@@ -1,53 +1,104 @@
 # Save Session
 
-You are an expert session analyst capturing meaningful insights from conversation logs.
+**Create a beautifully formatted session summary document** in this conversation capturing meaningful insights.
 
-## Task
-1. **Read the AI analysis prompt**: Load `.claude/flashback/prompts/session-summary.md` for detailed analysis instructions
-2. **Gather session context**: Use `flashback save-session --context` to get conversation transcript and git changes
-3. **Analyze conversation**: Extract real accomplishments, file changes, decisions, problems solved
-4. **Create session summary**: Write meaningful markdown to `.claude/flashback/memory/CURRENT_SESSION.md`
+## Task Workflow
+1. **Check for Existing Session**: First check if there's an existing session file to archive
+2. **Archive Previous Session**: If found, save it to archive before creating new summary
+3. **Gather Context**: Run `flashback save-session --context` to get comprehensive session data
+4. **Analyze Session**: Extract real accomplishments, file changes, and decisions made  
+5. **Create New Summary**: Output polished session documentation **directly in this conversation**
+6. **Save Session Record**: Write the formatted summary to `.claude/flashback/memory/CURRENT_SESSION.md`
 
-## Archive Management Commands
-The context command automatically handles archiving. For manual control:
-- `flashback save-session --archive` - Archive current session to `.claude/flashback/memory/ARCHIVE/sessions/`
-- `flashback save-session --prune 5` - Keep only 5 most recent archived sessions (default: 10)
+## Session File Management
+**Before creating the new session summary:**
 
-## Analysis Focus
-From conversation transcript, extract:
-- **Files Modified**: Actual file changes from tool calls (Write, Edit, etc.)
-- **Commands Executed**: Bash commands run and their results
-- **Problems Solved**: Issues encountered and how they were resolved
-- **Key Decisions**: Important architectural or design decisions made
-- **Learning Moments**: Insights discovered during debugging or development
-- **Next Steps**: Explicitly mentioned follow-up tasks
+1. **Check for existing session**: Use Read tool to check if `.claude/flashback/memory/CURRENT_SESSION.md` exists
+2. **Archive if found**: If file exists, copy it to `.claude/flashback/memory/ARCHIVE/sessions/session-[timestamp].md` 
+3. **Clean old archives**: Keep only the 10 most recent archived sessions (delete older ones)
 
-## Output Instructions
-Create `.claude/flashback/memory/CURRENT_SESSION.md` with format:
-```markdown
-# Session Summary - [Date]
+**After creating the session summary:**
+- Save the formatted document to `.claude/flashback/memory/CURRENT_SESSION.md` for future archiving
 
-## Overview
-[Meaningful summary of what was accomplished]
+## Manual Commands (Alternative)
+If the built-in archiving above fails, you can use:
+- `flashback save-session --archive` - Manually archive session files  
+- `flashback save-session --prune 5` - Manually prune old archived sessions
 
-## Files Modified
-- `path/to/file.js` - [Description of changes]
+**Note**: The primary workflow handles archiving automatically in the prompt above.
 
-## Git Summary  
-- Total files changed: X (added/modified/deleted)
-- Current status: [clean/dirty]
-
-## Key Accomplishments
-- [Actual things that were done]
-
-## Problems Solved
-- [Issues encountered and solutions]
-
-## Next Steps
-- [Explicit next steps mentioned]
-
-## Learning & Insights
-- [Important discoveries made]
+## Context Gathering
+```bash
+flashback save-session --context
 ```
 
-Use concrete, specific details from actual conversation content, not generalizations.
+Provides comprehensive session data:
+- **Enhanced Analysis Prompt**: Detailed instructions for creating beautiful documentation
+- **Project Context**: Memory and working plan for background
+- **Conversation Logs**: Complete session transcript with tool calls
+- **Git Analysis**: Actual file changes and repository state
+- **Tool Usage Tracking**: All Edit, Write, Bash, and other tool calls made
+
+## Required Output Structure
+**You MUST create a complete session document** using this exact format:
+
+```markdown
+# 📋 Session Summary - [Month Day, Year]
+
+## 🎯 Session Overview  
+[2-3 sentences describing main focus and outcomes]
+
+## 📁 Files Modified
+### Code Changes
+- **`src/file.ts`** - [Detailed description with technical context]
+
+### Documentation Updates  
+- **`README.md`** - [Specific documentation changes]
+
+## ⚒️ Tool Calls & Operations
+### File Operations
+- **Edit**: `file.ts:45-67` - [What was edited and why]
+- **Write**: `newfile.md` - [What was created]
+
+### System Commands
+- **Bash**: `npm run build` - [Command purpose and result]
+
+## ✅ Key Accomplishments
+- **[Specific Feature]**: [Implementation details and impact]
+
+## 🔧 Problems Solved
+- **Issue**: [Problem description]
+  - **Solution**: [Technical solution with details]
+  - **Verification**: [How solution was validated]
+
+## 💡 Technical Decisions
+- **Decision**: [What was decided with rationale]
+
+## 🔄 Next Steps
+- **Immediate**: [Next session priorities]
+
+## 🧠 Learning & Insights
+- **Technical Patterns**: [Architectural insights discovered]
+
+## 📊 Session Metrics
+- **Tool Calls**: [Number of tool calls made]
+- **Files Changed**: [Number of files modified]
+
+## 🌳 Git Repository State
+- **Status**: [Current repository state]
+```
+
+## Quality Standards
+- **Professional Formatting**: Use emojis, proper structure, and clean markdown
+- **Specific Details**: Include exact file paths, line numbers, technical specifics  
+- **Complete Documentation**: Cover all aspects of the session comprehensively
+- **Actionable Content**: Focus on concrete changes and decisions made
+
+## CRITICAL REMINDERS
+- **Dual Output**: Create session document **both in conversation AND save to file**
+- **Complete Workflow**: Follow the full archive → analyze → save process
+- **Automatic Archiving**: Handle existing session files before creating new ones
+- **Professional Quality**: Make it beautiful, comprehensive, and actionable
+- **File Persistence**: Save to `CURRENT_SESSION.md` for future session continuity
+
+Usage: `/fb:save-session`
