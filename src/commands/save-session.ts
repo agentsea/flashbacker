@@ -82,7 +82,7 @@ async function outputSaveSessionContext(projectDir: string): Promise<void> {
     console.log(`- **Project Directory**: ${projectDir}`);
     console.log('');
 
-    // 3. Load REMEMBER.md (project memory) 
+    // 3. Load REMEMBER.md (project memory)
     const rememberPath = path.join(flashbackDir, 'memory', 'REMEMBER.md');
     if (await fs.pathExists(rememberPath)) {
       const rememberContent = await fs.readFile(rememberPath, 'utf-8');

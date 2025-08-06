@@ -137,6 +137,6 @@ export async function checkSlashCommandsInstalled(projectDir?: string): Promise<
   // Check that we have at least some slash commands installed
   const commandFiles = await fs.readdir(commandsDir);
   const mdFiles = commandFiles.filter(f => f.endsWith('.md'));
-  
+
   return mdFiles.length > 0;
 }
