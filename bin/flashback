@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const { spawn } = require('child_process');
+
+// Find the built CLI entry point
+const cliPath = path.join(__dirname, '..', 'lib', 'cli.js');
+
+// Execute with all arguments passed through
+const child = spawn('node', [cliPath, ...process.argv.slice(2)], {
+  stdio: 'inherit'
+});
+
+child.on('exit', (code) => {
+  process.exit(code || 0);
+});

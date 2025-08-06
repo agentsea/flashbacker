@@ -1,0 +1,63 @@
+# Source files - users only need compiled JS
+src/
+*.ts
+!*.d.ts
+
+# Development files
+.vscode/
+.idea/
+.DS_Store
+*.log
+.env*
+
+# Testing
+test/
+tests/
+*.test.js
+*.test.ts
+coverage/
+.nyc_output
+test-results/
+junit.xml
+
+# Build tools
+tsconfig.json
+tsconfig.*.json
+.eslintrc*
+.prettierrc*
+jest.config.*
+
+# Documentation (keep README.md)
+docs/
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore
+
+# Development dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+.tmp/
+.temp/
+*.tmp
+*.temp
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# State and config directories - these should be created by users
+.claude/
+
+# User exports and generated content
+.claude/exports/
+
+# Development scripts
+scripts/
+qa-analysis.js

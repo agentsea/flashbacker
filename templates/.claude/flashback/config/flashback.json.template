@@ -1,0 +1,12 @@
+{
+  "version": "{{VERSION}}",
+  "project_name": "{{PROJECT_NAME}}",
+  "initialized": "{{TIMESTAMP}}",
+  "memory": {
+    "max_archived_sessions": 10,
+    "max_archived_working_plans": 10
+  },
+  "hooks": {
+    "session_start_enabled": true
+  }
+}
