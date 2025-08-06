@@ -1,6 +1,6 @@
-# Flashback Installation Guide
+# Flashbacker Installation Guide
 
-> **Complete installation guide for Flashback - Claude Code session continuity with AI personas**
+> **Complete installation guide for Flashbacker - Claude Code session continuity with AI personas**
 
 ## 🚀 Quick Start (Recommended)
 
@@ -55,9 +55,11 @@ npm link
 flashback --version
 flashback doctor
 
-# 5. Initialize in your project
+# 5. Initialize in your project (WITH MCP SERVERS - RECOMMENDED)
 cd /path/to/your/project
-flashback init                    # Set up new project
+flashback init --mcp             # RECOMMENDED: Full setup with MCP servers
+# OR
+flashback init                    # Basic setup without MCP servers
 # OR
 flashback init --refresh          # Update existing project, preserve memory
 # OR  
@@ -69,7 +71,7 @@ flashback init --clean           # Start completely fresh
 ```bash
 # This will work once published to npm
 npm install -g flashbacker
-flashback init
+flashback init --mcp             # RECOMMENDED: Include MCP servers
 ```
 
 ## 📋 Installation Verification
@@ -97,11 +99,11 @@ ls .claude/commands/fb/     # Should show persona.md, working-plan.md, etc.
 
 Expected output from `flashback doctor`:
 ```
-🏥 Flashback System Diagnostics
+🏥 Flashbacker System Diagnostics
 
 ✅ Node.js version: v22.x.x (compatible - LTS supported)
 ✅ npm version: v10.x.x (compatible)  
-✅ Flashback CLI: Working (v2.2.6)
+✅ Flashbacker CLI: Working (v2.2.6)
 ✅ Project structure: Initialized  
 ✅ Configuration: Valid
 ✅ Slash commands: Installed (/fb: namespace)
@@ -119,14 +121,14 @@ Expected output from `flashback doctor`:
 
 **System-wide Installation + Per-project Initialization**
 
-Flashback follows a clean installation model:
+Flashbacker follows a clean installation model:
 
-1. **Global Installation**: Install Flashback once on your system (via `npm link`)
+1. **Global Installation**: Install Flashbacker once on your system (via `npm link`)
 2. **Per-project Usage**: Initialize projects with `flashback init` (creates `.claude/` directory only)
 3. **No Pollution**: Your project directories remain clean - no conflicting files
 
 **What gets installed where:**
-- **System**: Flashback CLI globally available as `flashback` command
+- **System**: Flashbacker CLI globally available as `flashback` command
 - **Project**: Only `.claude/` directory with templates and configuration
 - **Result**: Clean separation, no conflicts with existing project structure
 
@@ -136,12 +138,13 @@ Flashback follows a clean installation model:
 
 ```bash
 cd /path/to/your/project
-flashback init
+flashback init --mcp                    # RECOMMENDED: Include MCP servers
 
 # This creates:
 # .claude/
 # ├── agents/                           # 12 Claude Code agents (@agent-{name})
 # ├── commands/fb/                      # Slash commands (/fb:persona, etc.)
+# ├── claude_desktop_config.json        # MCP servers configuration
 # └── flashback/
 #     ├── config/flashback.json         # Configuration
 #     ├── memory/REMEMBER.md            # Project memory
@@ -150,6 +153,33 @@ flashback init
 #     ├── prompts/                      # AI analysis prompts
 #     └── scripts/session-start.sh      # SessionStart hook
 ```
+
+### MCP Servers Installation Options
+
+**Option 1: Full Installation with MCP Servers (RECOMMENDED)**
+```bash
+flashback init --mcp
+# Installs everything + 3 powerful MCP servers:
+# • context7: Documentation and library context
+# • playwright: Browser automation and testing  
+# • sequential-thinking: Advanced reasoning chains
+```
+
+**Option 2: MCP Servers Only (For Existing Installations)**
+```bash
+flashback init --mcp-only
+# Only installs MCP servers, skips template setup
+# Perfect for adding MCP to existing Flashbacker projects
+```
+
+**Option 3: Basic Installation (No MCP Servers)**
+```bash
+flashback init
+# Standard installation without MCP servers
+# You can add MCP servers later with --mcp-only
+```
+
+**⚠️ Important**: After MCP installation, restart Claude Code to load the new servers.
 
 ### Test Slash Commands in Claude Code
 
@@ -190,7 +220,7 @@ cat ~/.claude/settings.json | grep -A 10 hooks
 
 ### Development Setup
 
-If you want to contribute or modify Flashback:
+If you want to contribute or modify Flashbacker:
 
 ```bash
 git clone https://github.com/agentsea/flashbacker.git
@@ -362,7 +392,7 @@ flashback init --refresh
 
 ## 🌐 Multiple Project Setup
 
-To use Flashback across multiple projects:
+To use Flashbacker across multiple projects:
 
 ```bash
 # Install globally once
@@ -375,7 +405,7 @@ cd /project2 && flashback init
 cd /project3 && flashback init
 
 # Each project gets its own .claude/ directory
-# But shares the global Flashback installation
+# But shares the global Flashbacker installation
 ```
 
 ## 🎯 IDE Integration
@@ -389,7 +419,7 @@ Create `.vscode/tasks.json` in your project:
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Flashback: Show Status",
+      "label": "Flashbacker: Show Status",
       "type": "shell",
       "command": "flashback status",
       "group": "build",
@@ -399,13 +429,13 @@ Create `.vscode/tasks.json` in your project:
       }
     },
     {
-      "label": "Flashback: Persona Analysis", 
+      "label": "Flashbacker: Persona Analysis", 
       "type": "shell",
       "command": "flashback persona architect --context \"${input:analysisRequest}\"",
       "group": "build"
     },
     {
-      "label": "Flashback: Show Memory",
+      "label": "Flashbacker: Show Memory",
       "type": "shell", 
       "command": "flashback memory --show",
       "group": "build"
@@ -427,7 +457,7 @@ Create `.vscode/tasks.json` in your project:
 Add to your `.bashrc`, `.zshrc`, or `.fish`:
 
 ```bash
-# Flashback shortcuts
+# Flashbacker shortcuts
 alias fb="flashback"
 alias fbs="flashback status"
 alias fbm="flashback memory --show"
@@ -440,7 +470,7 @@ alias fbp="flashback persona --list"
 # fb persona architect --context "analyze auth system"
 ```
 
-## 🔄 Updating Flashback
+## 🔄 Updating Flashbacker
 
 ### From Source
 
@@ -473,9 +503,9 @@ flashback init --refresh
 
 ### Template Architecture
 
-Flashback uses a pure template-driven system:
+Flashbacker uses a pure template-driven system:
 
-- **Source Templates**: `templates/.claude/flashback/` (in Flashback repo)
+- **Source Templates**: `templates/.claude/flashback/` (in Flashbacker repo)
 - **Live Templates**: `.claude/flashback/` (in your projects)
 - **No Hardcoded Fallbacks**: Clean failures if templates unavailable
 - **Delta Sync**: Automatically removes obsolete files during refresh
@@ -497,7 +527,7 @@ flashback init --refresh
 
 ### Git Integration
 
-Flashback automatically manages `.gitignore`:
+Flashbacker automatically manages `.gitignore`:
 
 **Excluded from git:**
 - `.claude/state/session-states/` - Session states (sensitive)

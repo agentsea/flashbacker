@@ -56,6 +56,6 @@ temp/
 .prettiercache
 
 
-# Flashback - Claude Code state management (exclude user state, but include templates)
+# Flashbacker - Claude Code state management (exclude user state, but include templates)
 .claude/
 !templates/.claude/

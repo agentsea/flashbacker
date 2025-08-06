@@ -82,7 +82,7 @@ When creating a PR, please include:
 3. Run `flashback doctor` for diagnostics
 
 ### Bug Report Template
-- **Environment**: Node.js version, OS, Flashback version
+- **Environment**: Node.js version, OS, Flashbacker version
 - **Steps to reproduce**: Clear, step-by-step instructions
 - **Expected behavior**: What should happen
 - **Actual behavior**: What actually happens
@@ -93,7 +93,7 @@ When creating a PR, please include:
 ### Guidelines
 - Check existing issues and discussions first
 - Clearly explain the use case and benefit
-- Consider if it fits Flashback's core mission
+- Consider if it fits Flashbacker's core mission
 - Provide examples of how it would work
 
 ## 🎯 Areas for Contribution

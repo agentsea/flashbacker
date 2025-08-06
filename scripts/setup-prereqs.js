@@ -114,7 +114,7 @@ function setupNode() {
 }
 
 function main() {
-  log('🚀 Flashback Prerequisites Setup', 'bold');
+  log('🚀 Flashbacker Prerequisites Setup', 'bold');
   log('=====================================', 'blue');
   
   // Check current environment

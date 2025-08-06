@@ -10,22 +10,25 @@ npm run build              # Compile TypeScript to lib/
 npm run dev               # Watch mode compilation
 npm link                  # Link for global CLI testing
 
-# Testing (Note: Most tests were deleted as obsolete)
-npm test                  # Build + run remaining tests
+# Testing (Most tests deleted as obsolete)
+npm test                  # Build + run remaining tests (main command to use)
 npm run test:unit         # Unit tests (if any remain)
 npm run test:coverage     # Coverage report
 
-# Code quality
+# Code quality (Run before commits)
 npm run lint              # ESLint TypeScript files
-npm run lint:fix          # Auto-fix ESLint issues
+npm run lint:fix          # Auto-fix ESLint issues (use this first)
 npm run format            # Prettier formatting
 
 # Prerequisites checking
-npm run setup:prereqs     # Check Node.js/npm compatibility
+npm run setup:prereqs     # Check Node.js/npm compatibility before development
 
 # Development workflow
-npm run build && npm unlink -g flashbacker && npm link  # After changes, rebuild and relink
+npm run build && npm link  # After changes, rebuild and relink globally
+flashback --version        # Verify installation (should show 2.2.6)
 ```
+
+**Development Pattern**: Always run `npm run lint:fix` before `npm run build` to auto-fix style issues.
 
 ## Architecture Overview
 
@@ -71,6 +74,8 @@ The system provides **two complementary ways** to access 12 AI specialists:
 - **Benefits**: Project-aware analysis with complete understanding of codebase patterns
 
 **13 Available Specialists**: architect, security, refactorer, performance, frontend, backend, devops, qa, analyzer, mentor, product, code-critic, debate-moderator
+
+**IMPORTANT**: The templates/ directory is currently empty in this repository. Templates are distributed at runtime via dynamic scanning from bundled npm package. Never hardcode template content - always use `getRequiredFlashbackDirectories()` from `src/utils/file-utils.ts` for dynamic template discovery.
 
 ### Template-Driven Architecture (CRITICAL)
 
@@ -135,7 +140,14 @@ The system provides **two complementary ways** to access 12 AI specialists:
 
 ### Recent Major Changes
 
-#### v2.2.4 - Production Release (Current)
+#### v2.2.6 - Public Release (Current)
+- **Framework Coexistence**: Fixed catastrophic init system bug that destroyed entire .claude directories
+- **Dynamic Template Scanning**: Replaced hardcoded agent/persona lists with runtime template discovery
+- **Security Protections**: Full GitHub security suite (branch protection, secret scanning, CodeQL)
+- **Public Repository**: Clean public release at github.com/agentsea/flashbacker with professional docs
+- **Non-destructive Cleanup**: --clean install only removes Flashbacker files, preserves other frameworks
+
+#### v2.2.4 - Production Release
 - **Node.js Engine Constraints**: Added strict Node.js 18.x-22.x LTS version support in package.json
 - **Prerequisites System**: Added automated compatibility checker (`npm run setup:prereqs`)
 - **ESLint Configuration**: Comprehensive code quality enforcement with consistent formatting rules
@@ -237,9 +249,23 @@ The project memory (`REMEMBER.md`) contains critical architectural insights incl
 **Published as:** `flashbacker` on npm  
 **Global install:** `npm install -g flashbacker`
 **Files included:** `lib/`, `bin/`, `templates/`, `README.md`, `package.json`
+**Repository:** `github.com/agentsea/flashbacker` (public)
 
 The `templates/` directory is crucial - it contains all the bundled content that gets distributed to user projects during initialization.
 
 ## Current Status
 
-**v2.2.4**: "PRODUCTION" - Stable production release with enhanced Node.js compatibility (18.x-22.x LTS), comprehensive ESLint configuration, and automated prerequisites checking. Native module compilation issues resolved. Template-driven architecture with dual-layer AI system (personas + agents). All 13 specialists available with improved developer experience and production stability.
+**v2.2.6**: "PUBLIC RELEASE" - First public release with critical framework coexistence fixes and dynamic template scanning. Fixed catastrophic init system bug that destroyed other Claude frameworks. Enhanced template-driven architecture with bulletproof multi-framework coexistence. All 13 specialists available with improved developer experience and production stability.
+
+## Single Test Command
+
+Since most tests were deleted as obsolete, run the remaining tests with:
+```bash
+npm test                  # Builds and runs all remaining tests
+```
+
+For development testing:
+```bash
+npm run build && npm link  # After making changes, rebuild and relink globally
+flashback --version        # Should show current version (2.2.6)
+```

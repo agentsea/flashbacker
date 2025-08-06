@@ -1,12 +1,17 @@
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
+import { promisify } from 'util';
 import { registerHooks, unregisterHooks } from '../core/hooks';
 import { getRequiredFlashbackDirectories } from '../utils/file-utils';
+
+const execAsync = promisify(require('child_process').exec);
 
 interface InitOptions {
   refresh?: boolean;
   clean?: boolean;
+  mcp?: boolean;
+  mcpOnly?: boolean;
 }
 
 export async function initCommand(options: InitOptions): Promise<void> {
@@ -17,6 +22,18 @@ export async function initCommand(options: InitOptions): Promise<void> {
     const claudeDir = path.join(cwd, '.claude');
     const flashbackDir = path.join(claudeDir, 'flashback');
     const configPath = path.join(claudeDir, 'flashback', 'config', 'flashback.json');
+
+    // Handle MCP-only installation
+    if (options.mcpOnly) {
+      console.log(chalk.blue('🔌 MCP-only installation requested'));
+      console.log(chalk.gray('🔌 Installing MCP servers...'));
+      await installMcpServers(cwd);
+      console.log(chalk.green('✅ MCP servers installed successfully!'));
+      console.log(chalk.gray('\nNext steps:'));
+      console.log(chalk.gray('  • Restart Claude Code to load the new MCP servers'));
+      console.log(chalk.gray('  • MCP servers: context7, playwright, sequential-thinking'));
+      return;
+    }
 
     // Check for existing Claude frameworks before any destructive operations
     await checkForExistingFrameworks(cwd);
@@ -108,8 +125,16 @@ export async function initCommand(options: InitOptions): Promise<void> {
     await ensureGitignoreProtection(cwd);
 
     // Register hooks (purge old ones first)
-    console.log(chalk.gray('🪝 Registering hooks...'));
-    await registerHooksForProject(cwd);
+    if (!options.mcpOnly) {
+      console.log(chalk.gray('🪝 Registering hooks...'));
+      await registerHooksForProject(cwd);
+    }
+
+    // Install MCP servers if requested
+    if (options.mcp) {
+      console.log(chalk.gray('🔌 Installing MCP servers...'));
+      await installMcpServers(cwd);
+    }
 
     console.log(chalk.green('✅ Flashback initialized successfully!'));
     console.log(chalk.gray('\nNext steps:'));
@@ -640,6 +665,112 @@ async function cleanupObsoleteDirectories(projectDir: string): Promise<void> {
 
   } catch (error) {
     console.log(chalk.yellow(`   ⚠️  Could not cleanup obsolete directories: ${error instanceof Error ? error.message : String(error)}`));
+  }
+}
+
+/**
+ * Install required MCP servers for Flashbacker
+ */
+async function installMcpServers(projectDir: string): Promise<void> {
+  const mcpServers = [
+    { name: 'context7', package: '@upstash/context7-mcp', command: '@upstash/context7-mcp', args: ['-y', '@upstash/context7-mcp'] },
+    { name: 'playwright', package: 'mcp-playwright', command: 'mcp-playwright', args: ['mcp-playwright'] },
+    { name: 'sequential-thinking', package: '@modelcontextprotocol/server-sequential-thinking', command: '@modelcontextprotocol/server-sequential-thinking', args: ['-y', '@modelcontextprotocol/server-sequential-thinking'] },
+  ];
+
+  const claudeDir = path.join(projectDir, '.claude');
+  const configPath = path.join(claudeDir, 'claude_desktop_config.json');
+
+  // Ensure .claude directory exists
+  await fs.ensureDir(claudeDir);
+
+  try {
+    // Check if npm is available
+    try {
+      await execAsync('npm --version');
+    } catch (error) {
+      throw new Error('npm is required to install MCP servers. Please install Node.js and npm.');
+    }
+
+    // Install each MCP server globally
+    console.log(chalk.gray('   📦 Installing MCP server packages...'));
+    console.log(chalk.yellow('   ⚠️  MCP package installation is experimental - may require manual installation'));
+
+    for (const server of mcpServers) {
+      try {
+        console.log(chalk.gray(`   ⬇️  Installing ${server.package}...`));
+        await execAsync(`npm install -g ${server.package}`, { timeout: 60000 });
+        console.log(chalk.green(`   ✅ ${server.name} installed`));
+      } catch (error) {
+        console.log(chalk.yellow(`   ⚠️  Could not install ${server.name}: ${error instanceof Error ? error.message : String(error)}`));
+        console.log(chalk.gray(`   💡 Try manual install: npm install -g ${server.package}`));
+        // Continue with configuration even if package install fails
+      }
+    }
+
+    // Update Claude Code configuration
+    console.log(chalk.gray('   ⚙️  Updating Claude Code configuration...'));
+    await updateClaudeConfig(configPath, mcpServers);
+
+    // Verify installations
+    console.log(chalk.gray('   🔍 Verifying MCP server installations...'));
+    await verifyMcpServers(mcpServers);
+
+    console.log(chalk.green('   ✅ MCP servers installation complete'));
+    console.log(chalk.yellow('   ⚠️  Restart Claude Code to load the new MCP servers'));
+
+  } catch (error) {
+    throw new Error(`MCP servers installation failed: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+/**
+ * Update Claude Code configuration to include MCP servers
+ */
+async function updateClaudeConfig(configPath: string, mcpServers: Array<{ name: string; package: string; command: string; args: string[] }>): Promise<void> {
+  try {
+    let config: any = {};
+
+    // Read existing config if it exists
+    if (await fs.pathExists(configPath)) {
+      const configContent = await fs.readFile(configPath, 'utf-8');
+      config = JSON.parse(configContent);
+    }
+
+    // Initialize mcpServers section if it doesn't exist
+    if (!config.mcpServers) {
+      config.mcpServers = {};
+    }
+
+    // Add each MCP server to config
+    for (const server of mcpServers) {
+      config.mcpServers[server.name] = {
+        command: 'npx',
+        args: server.args,
+      };
+    }
+
+    // Write updated config
+    await fs.writeFile(configPath, JSON.stringify(config, null, 2));
+    console.log(chalk.green('   ✅ Claude Code configuration updated'));
+
+  } catch (error) {
+    throw new Error(`Failed to update Claude Code configuration: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+/**
+ * Verify MCP server installations
+ */
+async function verifyMcpServers(mcpServers: Array<{ name: string; package: string; command: string; args: string[] }>): Promise<void> {
+  for (const server of mcpServers) {
+    try {
+      // Try to run the MCP server with --help to verify it's installed
+      await execAsync(`npx ${server.args.join(' ')} --help`, { timeout: 10000 });
+      console.log(chalk.green(`   ✅ ${server.name} is working`));
+    } catch (error) {
+      console.log(chalk.yellow(`   ⚠️  ${server.name} verification failed - may need manual check`));
+    }
   }
 }
 

@@ -1,12 +1,12 @@
-# Flashback User Guide
+# Flashbacker User Guide
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
 ## 🎉 Current Status (v2.2.6 - August 6, 2025)
 
-**Flashback provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
+**Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
-### How You Actually Use Flashback ✅
+### How You Actually Use Flashbacker ✅
 
 **🎯 PRIMARY USAGE - SLASH COMMANDS IN CLAUDE CODE:**
 - ✅ `/fb:persona architect "review API design"` - Get specialized architectural analysis
@@ -42,9 +42,9 @@ cd /path/to/your/project
 flashback init
 ```
 
-## 🎯 How You Actually Use Flashback
+## 🎯 How You Actually Use Flashbacker
 
-After installation, you primarily use Flashback through **slash commands in Claude Code**:
+After installation, you primarily use Flashbacker through **slash commands in Claude Code**:
 
 ### Primary Commands (What You'll Use Daily)
 ```bash
@@ -162,7 +162,7 @@ All 12 specialists available in both layers:
 
 ## 🧠 Memory System
 
-Flashback maintains project knowledge that survives context compactions:
+Flashbacker maintains project knowledge that survives context compactions:
 
 ### Automatic Memory Loading
 - **SessionStart Hook**: Automatically loads REMEMBER.md + WORKING_PLAN.md after compaction
@@ -302,7 +302,7 @@ flashback init --refresh  # In your project
 
 ## 🔒 Security
 
-Flashback automatically excludes `.claude/` from git commits to protect sensitive data.
+Flashbacker automatically excludes `.claude/` from git commits to protect sensitive data.
 
 ## 🔧 Requirements
 

@@ -30,19 +30,21 @@ program
 
 program
   .command('init')
-  .description('Initialize Flashback in current project')
+  .description('Initialize Flashbacker in current project')
   .option('-r, --refresh', 'Refresh installation while preserving existing memory and state')
   .option('-c, --clean', 'Clean install - remove existing state and start fresh')
+  .option('--mcp', 'Install with MCP servers (context7, playwright, sequential-thinking)')
+  .option('--mcp-only', 'Only install MCP servers (skip template setup)')
   .action(initCommand);
 
 program
   .command('status')
-  .description('Show Flashback installation and configuration status')
+  .description('Show Flashbacker installation and configuration status')
   .action(statusCommand);
 
 program
   .command('config')
-  .description('Manage Flashback configuration')
+  .description('Manage Flashbacker configuration')
   .option('-s, --show', 'Show current configuration')
   .option('-r, --reset', 'Reset to default configuration')
   .action(configCommand);

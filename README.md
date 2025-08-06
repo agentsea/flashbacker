@@ -19,7 +19,7 @@
 
 > **Claude Code state management with session continuity and AI personas**
 
-Flashback provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
+Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
 **Current Status: v2.2.6** - 🚧 **ALPHA** - Critical framework coexistence fixes with dynamic template scanning. Fixed catastrophic init system bug that destroyed other Claude frameworks. Bulletproof multi-framework coexistence.
 
@@ -43,26 +43,24 @@ nvm use 22
 # Option 3: Download from https://nodejs.org/ (LTS version)
 ```
 
-### Installation
+### Quick Installation
 ```bash
 # Clone and build
 git clone https://github.com/agentsea/flashbacker.git
 cd flashbacker
+npm install && npm run build && npm link
 
-# If using nvm, it will auto-switch to the correct version
-npm install && npm run build
-
-# Link globally
-npm link
-
-# Initialize in your project
+# Initialize with MCP servers (RECOMMENDED)
 cd /path/to/your/project
-flashback init
+flashback init --mcp              # Includes context7, playwright, sequential-thinking
 ```
 
-## 🎯 How You Actually Use Flashback
+> 📖 **[Complete Installation Guide →](docs/user-guide/INSTALLATION.md)**  
+> Comprehensive setup instructions, troubleshooting, and advanced options
 
-After installation, you use Flashback through **slash commands in Claude Code**:
+## 🎯 How You Actually Use Flashbacker
+
+After installation, you use Flashbacker through **slash commands in Claude Code**:
 
 ### Primary Commands (What You'll Use Daily)
 ```bash
@@ -132,6 +130,11 @@ When you run `/fb:persona architect "review API"`:
 - **Memory System**: Persistent project knowledge across sessions
 - **Working Plan**: AI-powered development priority tracking
 
+### 🔌 **MCP Server Integration**
+- **context7**: Up-to-date documentation and library context for any framework
+- **playwright**: Browser automation, testing, and web interaction capabilities  
+- **sequential-thinking**: Advanced multi-step reasoning and problem-solving chains
+
 ## 🎯 Slash Commands You'll Use
 
 ### Persona Analysis (Current Conversation)
@@ -191,9 +194,10 @@ flashback memory --show
 ## 🏗️ How It Works
 
 ### 1. Installation & Setup
-- Run `flashback init` once per project
-- Creates `.claude/flashback/` directory structure
+- Run `flashback init --mcp` once per project (recommended)
+- Creates `.claude/flashback/` directory structure  
 - Installs SessionStart hook for automatic context loading
+- Configures powerful MCP servers for enhanced capabilities
 
 ### 2. Daily Usage
 - Use `/fb:persona <name> "request"` for specialized analysis
@@ -219,6 +223,7 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 flashback doctor          # Check system health
 flashback status          # Verify installation
 flashback init --refresh  # Update templates
+flashback init --mcp      # Add MCP servers to existing setup
 ```
 
 ## 🏗️ Architecture
@@ -244,7 +249,7 @@ flashback init --refresh  # Update templates
 
 ## 🔒 Security
 
-Flashback automatically excludes `.claude/` from git commits to protect sensitive data.
+Flashbacker automatically excludes `.claude/` from git commits to protect sensitive data.
 
 ## 📄 License
 
@@ -252,7 +257,7 @@ MIT License
 
 ---
 
-**v2.2.6 Status**: 🚧 **ALPHA** - Critical framework coexistence fixes with dynamic template scanning. Fixed catastrophic init system bug that destroyed other Claude frameworks like SoftMachine. Bulletproof multi-framework coexistence with proper cleanup.
+**v2.2.6 Status**: 🚧 **ALPHA** - Critical framework coexistence fixes with dynamic template scanning + **NEW: MCP Server Integration**. Fixed catastrophic init system bug that destroyed other Claude frameworks. Now includes context7, playwright, and sequential-thinking MCP servers for enhanced capabilities.
 
 ## 🙏 Acknowledgments
 
