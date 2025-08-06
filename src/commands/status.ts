@@ -95,7 +95,7 @@ export async function statusCommand(): Promise<void> {
 
     // Check slash commands
     console.log('\n⚡ Slash Commands:');
-    const commandsDir = path.join(flashbackDir, 'commands', 'fb');
+    const commandsDir = path.join(cwd, '.claude', 'commands', 'fb');
     if (await fs.pathExists(commandsDir)) {
       const commandFiles = await fs.readdir(commandsDir);
       const commandCount = commandFiles.filter(f => f.endsWith('.md')).length;

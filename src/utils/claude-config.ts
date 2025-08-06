@@ -128,15 +128,15 @@ This starts a structured discussion with evidence requirements and consensus mec
 
 export async function checkSlashCommandsInstalled(projectDir?: string): Promise<boolean> {
   const currentProject = projectDir || process.cwd();
-  const commandsDir = path.join(currentProject, '.claude', 'commands');
+  const commandsDir = path.join(currentProject, '.claude', 'commands', 'fb');
 
-  const requiredCommands = ['record-state.md', 'state-view.md', 'memory.md', 'discuss.md'];
-
-  for (const command of requiredCommands) {
-    if (!await fs.pathExists(path.join(commandsDir, command))) {
-      return false;
-    }
+  if (!await fs.pathExists(commandsDir)) {
+    return false;
   }
 
-  return true;
+  // Check that we have at least some slash commands installed
+  const commandFiles = await fs.readdir(commandsDir);
+  const mdFiles = commandFiles.filter(f => f.endsWith('.md'));
+  
+  return mdFiles.length > 0;
 }
