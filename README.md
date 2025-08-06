@@ -56,6 +56,7 @@ flashback init --mcp              # Includes context7, playwright, sequential-th
 ```
 
 > 📖 **[Complete Installation Guide →](docs/user-guide/INSTALLATION.md)**  
+> 📚 **[User Guide →](docs/user-guide/USER_GUIDE.md)**  
 > Comprehensive setup instructions, troubleshooting, and advanced options
 
 ## 🎯 How You Actually Use Flashbacker
