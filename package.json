@@ -1,6 +1,6 @@
 {
   "name": "flashbacker",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "description": "Claude Code state management with session continuity and AI personas",
   "main": "lib/index.js",
   "bin": {

@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.2.6 - August 6, 2025)
+## 🎉 Current Status (v2.2.7 - August 7, 2025)
 
 **Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
@@ -145,7 +145,7 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 **Layer 1: Personas** - Direct template application in current conversation  
 **Layer 2: Agents** - Dedicated subagents with comprehensive project context
 
-All 14 specialists available in both layers:
+All 16 specialists available in both layers:
 
 - **architect**: Systems architecture, scalability, design patterns
 - **security**: Threat modeling, vulnerabilities, compliance  
@@ -153,6 +153,8 @@ All 14 specialists available in both layers:
 - **frontend**: UX, accessibility, performance
 - **cli-master**: Command-line interface design, human-machine interaction
 - **typescript-master**: Advanced TypeScript development, type system mastery
+- **debt-hunter**: Technical debt detection, code quality analysis with CLI scanning
+- **hallucination-hunter**: AI code validation, semantic correctness analysis
 - **analyzer**: Root cause analysis, investigation
 - **mentor**: Knowledge transfer, documentation
 - **refactorer**: Code quality, technical debt
@@ -313,4 +315,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.2.6 Status**: 🚧 **ALPHA** - Critical framework coexistence fixes with dynamic template scanning. Fixed catastrophic init system bug that destroyed other Claude frameworks. Bulletproof multi-framework coexistence.
+**v2.2.7 Status**: 🚧 **ALPHA** - Hunter agent expansion with 16 total specialists. Added debt-hunter and hallucination-hunter agents with CLI scanning capabilities and intelligent analysis. Full dual-layer system with enhanced code quality analysis.

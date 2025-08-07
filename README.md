@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.2.6** - 🚧 **ALPHA** - Critical framework coexistence fixes with dynamic template scanning. Fixed catastrophic init system bug that destroyed other Claude frameworks. Bulletproof multi-framework coexistence.
+**Current Status: v2.2.7** - 🚧 **ALPHA** - Hunter agent expansion with 16 total specialists. Added debt-hunter and hallucination-hunter agents with CLI scanning capabilities and intelligent analysis.
 
 ## 🚀 Quick Start
 
@@ -105,7 +105,7 @@ When you run `/fb:persona architect "review API"`:
 
 **Layer 1: Personas (Current Conversation)**
 - `/fb:persona architect "analyze API design"` - Direct template application
-- All 12 personas available for immediate analysis in current conversation
+- All 16 personas available for immediate analysis in current conversation
 
 **Layer 2: Agents (Dedicated Subagents)** 
 - `@agent-architect "analyze API design"` - Spawns dedicated subagent with full project context
@@ -119,6 +119,8 @@ When you run `/fb:persona architect "review API"`:
 - **frontend**: UX, accessibility, performance
 - **cli-master**: Command-line interface design, human-machine interaction
 - **typescript-master**: Advanced TypeScript development, type system mastery
+- **debt-hunter**: Technical debt detection, code quality analysis with CLI scanning
+- **hallucination-hunter**: AI code validation, semantic correctness analysis
 - **analyzer**: Root cause analysis, investigation
 - **mentor**: Knowledge transfer, documentation
 - **refactorer**: Code quality, technical debt
@@ -260,7 +262,7 @@ MIT License
 
 ---
 
-**v2.2.6 Status**: 🚧 **ALPHA** - Critical framework coexistence fixes with dynamic template scanning + **NEW: MCP Server Integration**. Fixed catastrophic init system bug that destroyed other Claude frameworks. Now includes context7, playwright, and sequential-thinking MCP servers for enhanced capabilities.
+**v2.2.7 Status**: 🚧 **ALPHA** - Hunter agent expansion + **16 Total Specialists**. Added debt-hunter and hallucination-hunter agents with CLI scanning capabilities. Full dual-layer system with personas and dedicated subagents, plus MCP server integration.
 
 ## 🙏 Acknowledgments
 
