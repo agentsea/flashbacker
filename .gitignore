@@ -56,9 +56,6 @@ temp/
 .prettiercache
 
 
-# Flashbacker - Claude Code state management (exclude user state, but include templates)
+# Claude Code frameworks (exclude all user state, but include bundled templates)
 .claude/
 !templates/.claude/
-
-# Claude Code frameworks (exclude all)
-.claude/
