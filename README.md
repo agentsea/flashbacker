@@ -66,12 +66,22 @@ After installation, you use Flashbacker through **slash commands in Claude Code*
 ### Primary Commands (What You'll Use Daily)
 ```bash
 # Persona Analysis (Current Conversation)
-/fb:persona architect "review our API design"     # Get specialized AI analysis
-/fb:persona security "analyze authentication"     # Security expert analysis  
+/fb:persona architect "review our API design"           # Systems architecture analysis
+/fb:persona security "analyze authentication"           # Security expert analysis
+/fb:persona database-architect "optimize our schema"    # Database design patterns
+/fb:persona api-designer "design REST endpoints"        # API specification expertise
+/fb:persona data-engineer "review ETL pipeline"         # Data architecture analysis
+/fb:persona platform-engineer "Kubernetes strategy"     # Infrastructure expertise
+/fb:persona docker-master "container orchestration"     # Docker/containerization expert
 
 # Agent Analysis (Dedicated Subagents with Project Context)
 @agent-architect "analyze our microservices architecture"
 @agent-security "comprehensive security audit of auth system"
+@agent-database-architect "database optimization and schema analysis"
+@agent-api-designer "REST/GraphQL API design and standards compliance"
+@agent-data-engineer "ETL pipeline architecture and data flow analysis"
+@agent-platform-engineer "Kubernetes infrastructure and DevOps strategy"
+@agent-docker-master "comprehensive Docker and container orchestration analysis"
 @agent-performance "deep performance analysis with recommendations"
 @agent-qa "create comprehensive testing strategy"
 
@@ -151,6 +161,11 @@ When you run `/fb:persona architect "review API"`:
 ```bash
 /fb:persona architect "should we refactor the database layer?"
 /fb:persona security "review authentication in src/auth/"
+/fb:persona database-architect "optimize our PostgreSQL schema and indexes"
+/fb:persona api-designer "design GraphQL schema for user management"
+/fb:persona data-engineer "review our Apache Kafka streaming pipeline"
+/fb:persona platform-engineer "Kubernetes deployment and scaling strategy"
+/fb:persona docker-master "optimize container deployment and orchestration"
 /fb:persona performance "optimize our query performance"
 /fb:persona qa "what edge cases should we test?"
 ```
@@ -159,6 +174,11 @@ When you run `/fb:persona architect "review API"`:
 ```bash
 @agent-architect "analyze our microservices architecture"
 @agent-security "comprehensive security audit of auth system"
+@agent-database-architect "database design review with optimization recommendations"
+@agent-api-designer "REST API standards compliance and OpenAPI specification"
+@agent-data-engineer "ETL pipeline performance and data quality analysis"
+@agent-platform-engineer "infrastructure-as-code review and DevOps optimization"
+@agent-docker-master "comprehensive containerization strategy and deployment optimization"
 @agent-performance "deep performance analysis with recommendations"
 @agent-qa "create comprehensive testing strategy"
 ```
