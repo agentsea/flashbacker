@@ -73,7 +73,7 @@ The system provides **two complementary ways** to access 12 AI specialists:
 - **Implementation**: Claude Code agents with context gathering via `flashback agent --context`
 - **Benefits**: Project-aware analysis with complete understanding of codebase patterns
 
-**13 Available Specialists**: architect, security, refactorer, performance, frontend, backend, devops, qa, analyzer, mentor, product, code-critic, debate-moderator
+**17 Available Specialists**: architect, security, refactorer, performance, frontend, backend, devops, qa, analyzer, mentor, product, code-critic, debate-moderator, debt-hunter, database-architect, api-designer, data-engineer, platform-engineer
 
 **IMPORTANT**: The templates/ directory is currently empty in this repository. Templates are distributed at runtime via dynamic scanning from bundled npm package. Never hardcode template content - always use `getRequiredFlashbackDirectories()` from `src/utils/file-utils.ts` for dynamic template discovery.
 
@@ -96,7 +96,7 @@ The system provides **two complementary ways** to access 12 AI specialists:
 
 **Working Commands (Post-Cleanup):**
 - `init`: Template-driven project initialization with failsafe memory protection and MCP server integration
-- `persona`: AI persona system with 13 specialists (architect, security, etc.)
+- `persona`: AI persona system with 17 specialists (architect, security, database-architect, api-designer, data-engineer, platform-engineer, etc.)
 - `agent`: Context gathering for Claude Code agent subagents 
 - `memory`: REMEMBER.md management for persistent project knowledge
 - `working-plan`: Development plan tracking across sessions with AI analysis
@@ -177,7 +177,7 @@ The system provides **two complementary ways** to access 12 AI specialists:
 - **Persona Layer**: Simplified `/fb:persona` commands for immediate analysis in current conversation
 - **Agent Layer**: Proper Claude Code `@agent-{name}` system with dedicated subagent conversations
 - **Context Integration**: Agents automatically gather project context via `flashback agent --context`
-- **Template Updates**: All 13 specialists available in both persona and agent formats
+- **Template Updates**: All 17 specialists available in both persona and agent formats
 
 #### v2.1.2 - Hunter Commands
 - **Debt-Hunter Command**: CLI-based technical debt scanning with duplicate function detection
@@ -273,7 +273,7 @@ The `templates/` directory is crucial - it contains all the bundled content that
 
 ## Current Status
 
-**v2.2.6+**: "POST-MCP INTEGRATION" - Enhanced with MCP servers and critical bug fixes. Fixed save-session architecture, slash commands detection, and template distribution. All 13 specialists available with MCP-enhanced capabilities including context7, playwright, and sequential-thinking servers for comprehensive analysis and automation.
+**v2.2.6+**: "POST-MCP INTEGRATION" - Enhanced with MCP servers and critical bug fixes. Fixed save-session architecture, slash commands detection, and template distribution. All 17 specialists available with MCP-enhanced capabilities including context7, playwright, and sequential-thinking servers for comprehensive analysis and automation.
 
 ## Single Test Command
 
