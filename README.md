@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.2.7** - 🚧 **ALPHA** - Hunter agent expansion with 16 total specialists. Added debt-hunter and hallucination-hunter agents with CLI scanning capabilities and intelligent analysis.
+**Current Status: v2.2.7** - 🚧 **ALPHA** - High-impact agent expansion with 17 total specialists. Added database-architect, api-designer, data-engineer, and platform-engineer agents with verified patterns from context7.
 
 ## 🚀 Quick Start
 
@@ -105,7 +105,7 @@ When you run `/fb:persona architect "review API"`:
 
 **Layer 1: Personas (Current Conversation)**
 - `/fb:persona architect "analyze API design"` - Direct template application
-- All 16 personas available for immediate analysis in current conversation
+- All 17 personas available for immediate analysis in current conversation
 
 **Layer 2: Agents (Dedicated Subagents)** 
 - `@agent-architect "analyze API design"` - Spawns dedicated subagent with full project context
@@ -117,6 +117,10 @@ When you run `/fb:persona architect "review API"`:
 - **security**: Threat modeling, vulnerability assessment
 - **backend**: APIs, reliability, data integrity
 - **frontend**: UX, accessibility, performance
+- **database-architect**: Database design, query optimization, schema evolution with proven design patterns
+- **api-designer**: REST/GraphQL API design, OpenAPI specifications, integration patterns with industry standards
+- **data-engineer**: ETL pipelines, data modeling, analytics architecture, streaming systems with proven engineering patterns
+- **platform-engineer**: Kubernetes, infrastructure-as-code, observability, developer experience with verified patterns
 - **cli-master**: Command-line interface design, human-machine interaction
 - **typescript-master**: Advanced TypeScript development, type system mastery
 - **debt-hunter**: Technical debt detection, code quality analysis with CLI scanning
@@ -262,7 +266,7 @@ MIT License
 
 ---
 
-**v2.2.7 Status**: 🚧 **ALPHA** - Hunter agent expansion + **16 Total Specialists**. Added debt-hunter and hallucination-hunter agents with CLI scanning capabilities. Full dual-layer system with personas and dedicated subagents, plus MCP server integration.
+**v2.2.7 Status**: 🚧 **ALPHA** - High-impact agent expansion + **17 Total Specialists**. Added database-architect, api-designer, data-engineer, and platform-engineer agents with verified patterns from context7. Full dual-layer system with personas and dedicated subagents, plus MCP server integration.
 
 ## 🙏 Acknowledgments
 

@@ -100,6 +100,10 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 ### Persona Commands (Current Conversation)
 ```bash
 /fb:persona architect "should we refactor the database layer?"
+/fb:persona database-architect "optimize database schema and queries"
+/fb:persona api-designer "design REST API for user management"
+/fb:persona data-engineer "review ETL pipeline architecture"
+/fb:persona platform-engineer "Kubernetes deployment strategy"
 /fb:persona security "review authentication in src/auth/"
 /fb:persona performance "optimize our query performance"
 /fb:persona qa "what edge cases should we test?"
@@ -111,6 +115,10 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 ### Agent Commands (Dedicated Subagents)
 ```bash
 @agent-architect "comprehensive architecture review"
+@agent-database-architect "database design and optimization analysis"
+@agent-api-designer "REST/GraphQL API architecture and specifications"
+@agent-data-engineer "ETL pipeline and data architecture review"
+@agent-platform-engineer "Kubernetes infrastructure and DevOps analysis"
 @agent-security "full security audit with threat modeling"
 @agent-performance "deep performance analysis and optimization"
 @agent-qa "create comprehensive testing strategy"
@@ -145,16 +153,19 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 **Layer 1: Personas** - Direct template application in current conversation  
 **Layer 2: Agents** - Dedicated subagents with comprehensive project context
 
-All 16 specialists available in both layers:
+All 17 specialists available in both layers:
 
 - **architect**: Systems architecture, scalability, design patterns
 - **security**: Threat modeling, vulnerabilities, compliance  
 - **backend**: APIs, reliability, data integrity
 - **frontend**: UX, accessibility, performance
+- **database-architect**: Database design, query optimization, schema evolution with proven design patterns
+- **api-designer**: REST/GraphQL API design, OpenAPI specifications, integration patterns with industry standards
+- **data-engineer**: ETL pipelines, data modeling, analytics architecture, streaming systems with proven engineering patterns
+- **platform-engineer**: Kubernetes, infrastructure-as-code, observability, developer experience with verified patterns
 - **cli-master**: Command-line interface design, human-machine interaction
 - **typescript-master**: Advanced TypeScript development, type system mastery
 - **debt-hunter**: Technical debt detection, code quality analysis with CLI scanning
-- **hallucination-hunter**: AI code validation, semantic correctness analysis
 - **analyzer**: Root cause analysis, investigation
 - **mentor**: Knowledge transfer, documentation
 - **refactorer**: Code quality, technical debt
@@ -315,4 +326,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.2.7 Status**: 🚧 **ALPHA** - Hunter agent expansion with 16 total specialists. Added debt-hunter and hallucination-hunter agents with CLI scanning capabilities and intelligent analysis. Full dual-layer system with enhanced code quality analysis.
+**v2.2.7 Status**: 🚧 **ALPHA** - High-impact agent expansion with 17 total specialists. Added database-architect, api-designer, data-engineer, and platform-engineer agents with verified patterns from context7. Full dual-layer system with enhanced architectural analysis.
