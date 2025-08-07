@@ -23,7 +23,7 @@ ELSE (if all requested agents exist), proceed with the rest of this command.
 ## How It Works
 1. **Parse Arguments**: Extract agent list and discussion topic from command
 2. **Gather Context**: Run `flashback agent --context` to get project context bundle
-3. **Sequential Agent Calls**: Call each requested agent individually with full context
+3. **PARALLEL Agent Calls**: Call ALL requested agents simultaneously in one message using multiple tool calls
 4. **Collect Responses**: Gather all agent responses in main conversation
 5. **Synthesize Results**: Analyze responses for consensus, disagreements, and recommendations
 6. **User Confirmation**: Present findings and ask for approval before taking actions
@@ -52,11 +52,13 @@ First, let me check which agents are available and validate the requested agents
 1. **Context Gathering**: 
    Run `flashback agent --context` to get project context bundle for consistent analysis
 
-2. **Sequential Agent Calls**:
-   For each validated agent, call them individually using the Task tool with:
-   - Full project context bundle
-   - The discussion topic
-   - Their specialty perspective
+2. **PARALLEL Agent Calls (CRITICAL - MUST USE PARALLEL EXECUTION)**:
+   **YOU MUST** call ALL validated agents simultaneously in ONE message using multiple Task tool calls:
+   - Send a SINGLE message containing multiple `<invoke name="Task">` calls
+   - Each agent gets the full project context bundle
+   - Each agent gets the discussion topic from their specialty perspective  
+   - **DO NOT** call agents one-by-one sequentially - this is slow and wastes time
+   - **EXAMPLE**: If discussing with architect,security,performance - make 3 Task tool calls in ONE message
 
 3. **Response Collection & Synthesis**:
    After gathering all agent perspectives, provide:
