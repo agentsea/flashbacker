@@ -145,12 +145,14 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 **Layer 1: Personas** - Direct template application in current conversation  
 **Layer 2: Agents** - Dedicated subagents with comprehensive project context
 
-All 12 specialists available in both layers:
+All 14 specialists available in both layers:
 
 - **architect**: Systems architecture, scalability, design patterns
 - **security**: Threat modeling, vulnerabilities, compliance  
 - **backend**: APIs, reliability, data integrity
 - **frontend**: UX, accessibility, performance
+- **cli-master**: Command-line interface design, human-machine interaction
+- **typescript-master**: Advanced TypeScript development, type system mastery
 - **analyzer**: Root cause analysis, investigation
 - **mentor**: Knowledge transfer, documentation
 - **refactorer**: Code quality, technical debt

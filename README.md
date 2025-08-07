@@ -117,6 +117,8 @@ When you run `/fb:persona architect "review API"`:
 - **security**: Threat modeling, vulnerability assessment
 - **backend**: APIs, reliability, data integrity
 - **frontend**: UX, accessibility, performance
+- **cli-master**: Command-line interface design, human-machine interaction
+- **typescript-master**: Advanced TypeScript development, type system mastery
 - **analyzer**: Root cause analysis, investigation
 - **mentor**: Knowledge transfer, documentation
 - **refactorer**: Code quality, technical debt
