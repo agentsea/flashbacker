@@ -51,7 +51,7 @@ npm install && npm run build
 # 4. ⚡ CRITICAL: Link globally (makes 'flashback' command available everywhere)
 npm link
 
-# 5. ✅ Verify installation shows v2.2.6
+# 5. ✅ Verify installation shows v2.2.8
 flashback --version
 flashback doctor
 
@@ -80,7 +80,7 @@ After installation, verify everything works:
 
 ```bash
 # Check version and basic functionality
-flashback --version          # Should show 2.2.6
+flashback --version          # Should show 2.2.8
 flashback doctor            # System diagnostics
 
 # Test core commands
@@ -103,12 +103,12 @@ Expected output from `flashback doctor`:
 
 ✅ Node.js version: v22.x.x (compatible - LTS supported)
 ✅ npm version: v10.x.x (compatible)  
-✅ Flashbacker CLI: Working (v2.2.6)
+✅ Flashbacker CLI: Working (v2.2.8)
 ✅ Project structure: Initialized  
 ✅ Configuration: Valid
 ✅ Slash commands: Installed (/fb: namespace)
-✅ Agent definitions: 12 agents available (@agent-{name})
-✅ Persona templates: 12 templates available
+✅ Agent definitions: 19 agents available (@agent-{name}) including GPT-5 integration
+✅ Persona templates: 19 templates available
 ✅ Memory system: Ready
 ✅ Hook system: SessionStart registered
 ✅ ESLint configuration: Ready
@@ -142,14 +142,14 @@ flashback init --mcp                    # RECOMMENDED: Include MCP servers
 
 # This creates:
 # .claude/
-# ├── agents/                           # 12 Claude Code agents (@agent-{name})
+# ├── agents/                           # 19 Claude Code agents (@agent-{name}) including GPT-5
 # ├── commands/fb/                      # Slash commands (/fb:persona, etc.)
 # ├── claude_desktop_config.json        # MCP servers configuration
 # └── flashback/
 #     ├── config/flashback.json         # Configuration
 #     ├── memory/REMEMBER.md            # Project memory
 #     ├── memory/WORKING_PLAN.md        # Development plan
-#     ├── personas/                     # 12 AI personas for /fb:persona  
+#     ├── personas/                     # 19 AI personas for /fb:persona  
 #     ├── prompts/                      # AI analysis prompts
 #     └── scripts/session-start.sh      # SessionStart hook
 ```
@@ -283,7 +283,7 @@ cd /path/to/flashbacker
 npm unlink && npm link
 
 # Verify correct version:
-flashback --version  # Should show 2.2.6
+flashback --version  # Should show 2.2.8
 
 # If still wrong, check which flashback you're running:
 which flashback
@@ -569,6 +569,6 @@ After successful installation:
 
 ---
 
-**Installation Status**: v2.2.6 - Source installation fully functional with critical framework coexistence fixes and dynamic template scanning  
+**Installation Status**: v2.2.8 - Source installation fully functional with GPT-5 integration and enhanced analysis capabilities  
 **Next**: NPM package publication for simplified installation  
 **Last Updated**: August 6, 2025 - Fixed catastrophic init system bug that destroyed other Claude frameworks, implemented dynamic template scanning

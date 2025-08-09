@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.2.7** - 🚧 **ALPHA** - High-impact agent expansion with 18 total specialists. Added database-architect, api-designer, data-engineer, platform-engineer, and docker-master agents with verified patterns from context7.
+**Current Status: v2.2.8** - 🚧 **ALPHA** - GPT-5 integration with 19 total specialists. Added gpt5-cursor agent for advanced analysis via GPT-5 through cursor-agent CLI integration.
 
 ## 🚀 Quick Start
 
@@ -115,7 +115,7 @@ When you run `/fb:persona architect "review API"`:
 
 **Layer 1: Personas (Current Conversation)**
 - `/fb:persona architect "analyze API design"` - Direct template application
-- All 18 personas available for immediate analysis in current conversation
+- All 19 personas available for immediate analysis in current conversation
 
 **Layer 2: Agents (Dedicated Subagents)** 
 - `@agent-architect "analyze API design"` - Spawns dedicated subagent with full project context
@@ -144,6 +144,7 @@ When you run `/fb:persona architect "review API"`:
 - **devops**: Infrastructure, deployment
 - **product**: User needs, business strategy
 - **code-critic**: Code quality enforcement
+- **gpt5-cursor**: GPT-5 integration for advanced analysis, second opinions, and complex problem solving
 
 ### 🔄 **State Management**
 - **Dynamic Template Scanning**: Zero hardcoded paths, everything from bundled templates
@@ -287,7 +288,7 @@ MIT License
 
 ---
 
-**v2.2.7 Status**: 🚧 **ALPHA** - High-impact agent expansion + **18 Total Specialists**. Added database-architect, api-designer, data-engineer, platform-engineer, and docker-master agents with verified patterns from context7. Full dual-layer system with personas and dedicated subagents, plus MCP server integration.
+**v2.2.8 Status**: 🚧 **ALPHA** - GPT-5 integration + **19 Total Specialists**. Added gpt5-cursor agent for leveraging GPT-5 through cursor-agent CLI. Enhanced analytical capabilities for second opinions and complex problem solving. Full dual-layer system with personas and dedicated subagents, plus MCP server integration.
 
 ## 🙏 Acknowledgments
 

@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.2.7 - August 7, 2025)
+## 🎉 Current Status (v2.2.8 - August 9, 2025)
 
 **Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
@@ -155,7 +155,7 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 **Layer 1: Personas** - Direct template application in current conversation  
 **Layer 2: Agents** - Dedicated subagents with comprehensive project context
 
-All 18 specialists available in both layers:
+All 19 specialists available in both layers:
 
 - **architect**: Systems architecture, scalability, design patterns
 - **security**: Threat modeling, vulnerabilities, compliance  
@@ -177,6 +177,7 @@ All 18 specialists available in both layers:
 - **devops**: Infrastructure, deployment
 - **product**: User needs, business strategy
 - **code-critic**: Code quality enforcement
+- **gpt5-cursor**: GPT-5 integration for advanced analysis, second opinions, and complex problem solving
 
 ## 🧠 Memory System
 
@@ -329,4 +330,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.2.7 Status**: 🚧 **ALPHA** - High-impact agent expansion with 18 total specialists. Added database-architect, api-designer, data-engineer, platform-engineer, and docker-master agents with verified patterns from context7. Full dual-layer system with enhanced architectural analysis.
+**v2.2.8 Status**: 🚧 **ALPHA** - GPT-5 integration with 19 total specialists. Added gpt5-cursor agent for advanced analysis via GPT-5 through cursor-agent CLI integration. Enhanced analytical capabilities for second opinions and complex problem solving.
