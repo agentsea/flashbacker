@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.2.8 - August 9, 2025)
+## 🎉 Current Status (v2.2.9 - August 9, 2025)
 
 **Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
@@ -63,9 +63,10 @@ After installation, you primarily use Flashbacker through **slash commands in Cl
 /fb:how "specific topic"                              # Plan implementation for specific topic only
 /fb:remember key insight or decision              # Save important info to memory
 
-# Code Quality
+# Code Quality & Fix Analysis
 /fb:debt-hunter                                   # Hunt technical debt and code quality issues
 /fb:hallucination-hunter                          # Hunt AI-generated code that doesn't work
+/fb:fix-master "error description"                 # Surgical fix methodology for precise bug fixes
 ```
 
 ### What Happens Behind the Scenes
@@ -142,12 +143,13 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 /fb:discuss architect,security "topic"  # Multi-agent discussion coordination
 ```
 
-### Code Quality Commands
+### Code Quality & Fix Commands
 ```bash
 /fb:debt-hunter                      # Hunt technical debt and code quality issues
 /fb:debt-hunter duplicates           # Focus on duplicate function detection
 /fb:debt-hunter comprehensive        # Full technical debt + duplicate analysis
 /fb:hallucination-hunter             # Hunt AI-generated code that doesn't actually work
+/fb:fix-master "error description"    # Surgical fix methodology for systematic bug fixes
 ```
 
 ## 🎭 Available AI Personas
@@ -330,4 +332,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.2.8 Status**: 🚧 **ALPHA** - GPT-5 integration with 19 total specialists. Added gpt5-cursor agent for advanced analysis via GPT-5 through cursor-agent CLI integration. Enhanced analytical capabilities for second opinions and complex problem solving.
+**v2.2.9 Status**: 🚧 **ALPHA** - Surgical fix methodology with 19 total specialists. Added `/fb:fix-master` for systematic code fixes with 5-phase methodology (isolation → analysis → implementation → validation → testing). Enforces precise, minimal changes with manual validation before automated testing.

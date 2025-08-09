@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.2.8** - 🚧 **ALPHA** - GPT-5 integration with 19 total specialists. Added gpt5-cursor agent for advanced analysis via GPT-5 through cursor-agent CLI integration.
+**Current Status: v2.2.9** - 🚧 **ALPHA** - Surgical fix methodology with 19 total specialists. Added `/fb:fix-master` for systematic, precise code fixes with manual validation workflow.
 
 ## 🚀 Quick Start
 
@@ -92,9 +92,10 @@ After installation, you use Flashbacker through **slash commands in Claude Code*
 /fb:how "specific topic"                              # Plan implementation for specific topic only
 /fb:remember key insight or decision              # Save important info to memory
 
-# Code Quality Analysis
+# Code Quality & Fix Analysis
 /fb:debt-hunter                                   # Hunt technical debt and code quality issues
 /fb:hallucination-hunter                          # Hunt AI-generated code that doesn't work
+/fb:fix-master "error description"                 # Surgical fix methodology for precise bug fixes
 ```
 
 ### What Happens Behind the Scenes
@@ -288,7 +289,7 @@ MIT License
 
 ---
 
-**v2.2.8 Status**: 🚧 **ALPHA** - GPT-5 integration + **19 Total Specialists**. Added gpt5-cursor agent for leveraging GPT-5 through cursor-agent CLI. Enhanced analytical capabilities for second opinions and complex problem solving. Full dual-layer system with personas and dedicated subagents, plus MCP server integration.
+**v2.2.9 Status**: 🚧 **ALPHA** - Surgical Fix Methodology + **19 Total Specialists**. Added `/fb:fix-master` for systematic code fixes with 5-phase methodology (isolation → analysis → implementation → validation → testing). Enforces precise, minimal changes with manual validation before automated testing.
 
 ## 🙏 Acknowledgments
 
