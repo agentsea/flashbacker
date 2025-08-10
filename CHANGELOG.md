@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2025-08-10
+
+### Added
+- **NEW PERSONA**: Added `john-carmack` persona for performance-critical systems analysis
+  - **Performance optimization**: Hot path clarity and deterministic performance analysis
+  - **Functional programming discipline**: Minimal side effects and pure function advocacy
+  - **Control flow simplification**: Shallow conditional logic and consistent execution paths
+  - **Language-agnostic principles**: Real-time systems optimization applicable across all languages
+  - **Game engine methodology**: Applies proven game engine principles to any performance-critical codebase
+- Enhanced specialist ecosystem from 19 to **20 total specialists**
+- All personas maintain dual-layer availability (slash commands + dedicated subagents)
+
+### Enhanced
+- Performance analysis capabilities through specialized John Carmack methodology
+- Architectural review focusing on hot path optimization and functional patterns
+- Code quality analysis emphasizing deterministic behavior and minimal side effects
+- System design guidance for predictable performance and reduced bug risk
+
+### Technical
+- Created comprehensive john-carmack persona template with performance-focused analysis patterns
+- Template distribution system supports performance optimization workflow
+- Full dual-layer system maintains consistency across all 20 specialists
+- Enhanced context-gathering capabilities for performance-critical analysis
+
 ## [2.2.9] - 2025-08-09
 
 ### Added

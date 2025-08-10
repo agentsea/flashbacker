@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.2.9 - August 9, 2025)
+## 🎉 Current Status (v2.3.0 - August 10, 2025)
 
 **Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
@@ -112,6 +112,7 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 /fb:persona backend "review API reliability"
 /fb:persona frontend "improve user experience"
 /fb:persona analyzer "investigate this bug"
+/fb:persona john-carmack "analyze hot path performance and control flow"
 ```
 
 ### Agent Commands (Dedicated Subagents)
@@ -128,6 +129,7 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 @agent-backend "API reliability assessment"
 @agent-frontend "UX analysis and accessibility audit"
 @agent-analyzer "root cause analysis with investigation"
+@agent-john-carmack "performance-critical systems analysis with game engine principles"
 ```
 
 ### Session Management Commands
@@ -157,7 +159,7 @@ flashback discuss "Should we use microservices?" --personas architect,devops,sec
 **Layer 1: Personas** - Direct template application in current conversation  
 **Layer 2: Agents** - Dedicated subagents with comprehensive project context
 
-All 19 specialists available in both layers:
+All 20 specialists available in both layers:
 
 - **architect**: Systems architecture, scalability, design patterns
 - **security**: Threat modeling, vulnerabilities, compliance  
@@ -180,6 +182,7 @@ All 19 specialists available in both layers:
 - **product**: User needs, business strategy
 - **code-critic**: Code quality enforcement
 - **gpt5-cursor**: GPT-5 integration for advanced analysis, second opinions, and complex problem solving
+- **john-carmack**: Performance-critical systems analysis, game engine principles, functional programming discipline
 
 ## 🧠 Memory System
 
@@ -332,4 +335,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.2.9 Status**: 🚧 **ALPHA** - Surgical fix methodology with 19 total specialists. Added `/fb:fix-master` for systematic code fixes with 5-phase methodology (isolation → analysis → implementation → validation → testing). Enforces precise, minimal changes with manual validation before automated testing.
+**v2.3.0 Status**: 🚧 **ALPHA** - Performance-critical systems analysis with 20 total specialists. Added `john-carmack` persona for game engine principles, hot path optimization, functional programming discipline, and deterministic performance analysis across all languages.

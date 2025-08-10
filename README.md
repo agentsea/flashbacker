@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.2.9** - 🚧 **ALPHA** - Surgical fix methodology with 19 total specialists. Added `/fb:fix-master` for systematic, precise code fixes with manual validation workflow.
+**Current Status: v2.3.0** - 🚧 **ALPHA** - Performance-critical systems analysis with 20 total specialists. Added `john-carmack` persona for game engine principles and hot path optimization.
 
 ## 🚀 Quick Start
 
@@ -73,6 +73,7 @@ After installation, you use Flashbacker through **slash commands in Claude Code*
 /fb:persona data-engineer "review ETL pipeline"         # Data architecture analysis
 /fb:persona platform-engineer "Kubernetes strategy"     # Infrastructure expertise
 /fb:persona docker-master "container orchestration"     # Docker/containerization expert
+/fb:persona john-carmack "optimize hot path performance" # Performance-critical systems expert
 
 # Agent Analysis (Dedicated Subagents with Project Context)
 @agent-architect "analyze our microservices architecture"
@@ -81,9 +82,10 @@ After installation, you use Flashbacker through **slash commands in Claude Code*
 @agent-api-designer "REST/GraphQL API design and standards compliance"
 @agent-data-engineer "ETL pipeline architecture and data flow analysis"
 @agent-platform-engineer "Kubernetes infrastructure and DevOps strategy"
-@agent-docker-master "comprehensive Docker and container orchestration analysis"
+@agent-docker-master "comprehensive Docker and container orchestration analysis"  
 @agent-performance "deep performance analysis with recommendations"
 @agent-qa "create comprehensive testing strategy"
+@agent-john-carmack "performance-critical systems analysis with game engine principles"
 
 # Session Management
 /fb:working-plan                                  # Update development priorities
@@ -116,7 +118,7 @@ When you run `/fb:persona architect "review API"`:
 
 **Layer 1: Personas (Current Conversation)**
 - `/fb:persona architect "analyze API design"` - Direct template application
-- All 19 personas available for immediate analysis in current conversation
+- All 20 personas available for immediate analysis in current conversation
 
 **Layer 2: Agents (Dedicated Subagents)** 
 - `@agent-architect "analyze API design"` - Spawns dedicated subagent with full project context
@@ -146,6 +148,7 @@ When you run `/fb:persona architect "review API"`:
 - **product**: User needs, business strategy
 - **code-critic**: Code quality enforcement
 - **gpt5-cursor**: GPT-5 integration for advanced analysis, second opinions, and complex problem solving
+- **john-carmack**: Performance-critical systems analysis, game engine principles, functional programming discipline
 
 ### 🔄 **State Management**
 - **Dynamic Template Scanning**: Zero hardcoded paths, everything from bundled templates
@@ -170,6 +173,7 @@ When you run `/fb:persona architect "review API"`:
 /fb:persona docker-master "optimize container deployment and orchestration"
 /fb:persona performance "optimize our query performance"
 /fb:persona qa "what edge cases should we test?"
+/fb:persona john-carmack "analyze hot path performance and control flow"
 ```
 
 ### Agent Analysis (Dedicated Subagents)
@@ -289,7 +293,7 @@ MIT License
 
 ---
 
-**v2.2.9 Status**: 🚧 **ALPHA** - Surgical Fix Methodology + **19 Total Specialists**. Added `/fb:fix-master` for systematic code fixes with 5-phase methodology (isolation → analysis → implementation → validation → testing). Enforces precise, minimal changes with manual validation before automated testing.
+**v2.3.0 Status**: 🚧 **ALPHA** - Performance-Critical Systems Analysis + **20 Total Specialists**. Added `john-carmack` persona for game engine principles, hot path optimization, functional programming discipline, and deterministic performance analysis across all languages.
 
 ## 🙏 Acknowledgments
 
