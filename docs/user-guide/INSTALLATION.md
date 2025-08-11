@@ -34,7 +34,44 @@ nvm use 22
 
 ⚠️ **Important**: Versions outside Node.js 18-22 range may cause native module compilation errors.
 
-### Option 1: Source Installation (Current)
+## 🚀 Installation Options
+
+### Option 1: Automated Installer (RECOMMENDED)
+
+**Single command installation and updates with automatic template refresh:**
+
+```bash
+# Fresh installation
+curl -fsSL https://raw.githubusercontent.com/agentsea/flashbacker/main/scripts/install.sh | bash
+
+# Or download and run locally for review
+curl -fsSL https://raw.githubusercontent.com/agentsea/flashbacker/main/scripts/install.sh -o install.sh
+chmod +x install.sh
+./install.sh
+```
+
+**What the installer does:**
+- ✅ **Validates prerequisites** (Node.js 18.x-22.x, npm 9.x+)
+- ✅ **Clones/updates repository** to `~/.claude/flashbacker/`
+- ✅ **Installs dependencies and builds** automatically
+- ✅ **Creates npm link** for global `flashback` command
+- ✅ **Sets up shell alias** (Zsh/Bash auto-detection)
+- ✅ **Smart template refresh** - updates existing projects automatically
+- ✅ **Version verification** and next steps guidance
+
+**For updates (preserves your project memory):**
+```bash
+# The same command works for updates - it detects existing installations
+curl -fsSL https://raw.githubusercontent.com/agentsea/flashbacker/main/scripts/install.sh | bash
+
+# Updates include:
+# - Latest code and bug fixes
+# - New personas (like john-carmack) 
+# - Enhanced agents and templates
+# - Automatic project template refresh
+```
+
+### Option 2: Manual Source Installation
 
 ```bash
 # 1. Clone the repository

@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.1] - 2025-08-11
+
+### Added
+- **AUTOMATED INSTALLER**: Added `scripts/install.sh` for single-command installation and updates
+  - **Smart template refresh**: Automatically updates existing projects with new personas and agents
+  - **Prerequisites validation**: Checks Node.js 18.x-22.x and npm 9.x+ compatibility before installation
+  - **Shell integration**: Auto-detects Zsh/Bash and creates flashback command alias
+  - **Update detection**: Intelligently handles both fresh installs and updates with different workflows
+  - **Project discovery**: Finds and refreshes all existing Flashbacker projects automatically
+- Enhanced installation experience with single `curl | bash` command
+- Comprehensive error handling and user feedback throughout installation process
+
+### Enhanced
+- Installation documentation now features automated installer as the recommended option
+- Manual installation remains available as Option 2 for users who prefer it
+- Better user onboarding with clearer installation paths and next steps
+- Reduced installation complexity from 4 commands to 1 for most users
+
+### Technical
+- Created robust installer script with comprehensive prerequisite checking
+- Implemented smart project discovery to refresh templates during updates
+- Added shell configuration detection and automatic alias creation
+- Enhanced installation architecture supports both fresh installs and seamless updates
+- Full backward compatibility with existing manual installation workflows
+
 ## [2.3.0] - 2025-08-10
 
 ### Added

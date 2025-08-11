@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.3.0** - 🚧 **ALPHA** - Performance-critical systems analysis with 20 total specialists. Added `john-carmack` persona for game engine principles and hot path optimization.
+**Current Status: v2.3.1** - 🚧 **ALPHA** - Automated installer with smart template refresh. Single-command installation and updates with automatic project discovery.
 
 ## 🚀 Quick Start
 
@@ -44,6 +44,18 @@ nvm use 22
 ```
 
 ### Quick Installation
+
+**Option 1: Automated Installer (RECOMMENDED)**
+```bash
+# Single command installation with automatic template refresh
+curl -fsSL https://raw.githubusercontent.com/agentsea/flashbacker/main/scripts/install.sh | bash
+
+# Then initialize in your project
+cd /path/to/your/project
+flashback init --mcp              # Includes context7, playwright, sequential-thinking
+```
+
+**Option 2: Manual Installation**  
 ```bash
 # Clone and build
 git clone https://github.com/agentsea/flashbacker.git
@@ -293,7 +305,7 @@ MIT License
 
 ---
 
-**v2.3.0 Status**: 🚧 **ALPHA** - Performance-Critical Systems Analysis + **20 Total Specialists**. Added `john-carmack` persona for game engine principles, hot path optimization, functional programming discipline, and deterministic performance analysis across all languages.
+**v2.3.1 Status**: 🚧 **ALPHA** - Automated Installer + **20 Total Specialists**. Single-command installation with smart template refresh, automatic project discovery, and comprehensive update handling for seamless user experience.
 
 ## 🙏 Acknowledgments
 
