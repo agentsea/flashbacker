@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.3.0 - August 10, 2025)
+## 🎉 Current Status (v2.3.2 - August 13, 2025)
 
 **Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
@@ -335,4 +335,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.3.0 Status**: 🚧 **ALPHA** - Performance-critical systems analysis with 20 total specialists. Added `john-carmack` persona for game engine principles, hot path optimization, functional programming discipline, and deterministic performance analysis across all languages.
+**v2.3.2 Status**: 🚧 **ALPHA** - Complete dual-layer AI system with 20 total specialists. All specialists now available as both personas (`/fb:persona`) and agents (`@agent-`) including full `@agent-john-carmack` support with project-aware performance analysis.

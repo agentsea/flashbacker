@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.3.1** - 🚧 **ALPHA** - Automated installer with smart template refresh. Single-command installation and updates with automatic project discovery.
+**Current Status: v2.3.2** - 🚧 **ALPHA** - Complete dual-layer AI system with all 20 specialists available as both personas and agents. John Carmack now includes full agent support with project-aware analysis.
 
 ## 🚀 Quick Start
 
@@ -305,7 +305,7 @@ MIT License
 
 ---
 
-**v2.3.1 Status**: 🚧 **ALPHA** - Automated Installer + **20 Total Specialists**. Single-command installation with smart template refresh, automatic project discovery, and comprehensive update handling for seamless user experience.
+**v2.3.2 Status**: 🚧 **ALPHA** - Complete Dual-Layer System + **20 Total Specialists**. All specialists now available in both persona (`/fb:persona`) and agent (`@agent-`) formats with full project-aware analysis capabilities.
 
 ## 🙏 Acknowledgments
 

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.2] - 2025-08-13
+
+### Added
+- **NEW AGENT**: Added `@agent-john-carmack` as a full Claude Code agent
+  - **Complete dual-layer coverage**: John Carmack now available in both persona (`/fb:persona john-carmack`) and agent (`@agent-john-carmack`) formats
+  - **Project-aware analysis**: Agent automatically gathers full project context via `flashback agent --context`
+  - **Performance-critical systems expertise**: Game engine principles, hot path optimization, functional programming discipline
+  - **Template consistency**: Agent template follows established YAML frontmatter and context-gathering patterns
+- Enhanced dual-layer AI system completeness with all 20 specialists available in both formats
+
+### Technical
+- Created comprehensive john-carmack agent template with YAML frontmatter and context-gathering instructions
+- Agent template includes performance-critical systems analysis focus and game engine methodology
+- Full integration with existing agent infrastructure and template distribution system
+- Maintains consistency across all 20 specialists in dual-layer architecture
+
 ## [2.3.1] - 2025-08-11
 
 ### Added
