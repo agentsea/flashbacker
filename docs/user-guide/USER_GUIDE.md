@@ -563,49 +563,6 @@ npm run build && npm unlink && npm link
 flashback init --refresh  # In your project
 ```
 
-```
-
-### Advanced Workflow Patterns
-
-#### **The "Feature Complete" Pattern**
-1. **Plan**: `/fb:how "implement feature X"`
-2. **Design**: Multi-agent discussion for architecture
-3. **Implement**: Task-focused development with continuous validation
-4. **Review**: Code critique with discussion system
-5. **Document**: Update memory with key decisions
-6. **Track**: Update working plan with progress
-
-#### **The "Bug Hunter" Pattern**
-1. **Investigate**: `/fb:fix-master "error description"`
-2. **Analyze**: Multiple persona perspectives on the issue
-3. **Collaborate**: Discussion system for root cause analysis
-4. **Resolve**: Focused task work with validation
-5. **Prevent**: Update memory and tests to prevent recurrence
-
-#### **The "Architecture Review" Pattern**
-1. **Assess**: Current architecture with architect persona
-2. **Critique**: Multi-agent review of design decisions
-3. **Discuss**: Collaborative evaluation of alternatives
-4. **Decide**: Evidence-based architectural choices
-5. **Document**: Memory system for future reference
-
-### Workflow Integration Principles
-
-**Memory → Tasks → Working Plan:**
-- **Memory**: Long-term architectural decisions and patterns
-- **Tasks**: Short-term atomic deliverables with clear outcomes
-- **Working Plan**: Medium-term priorities and development phases
-
-**Personas → Discussions → Agents:**
-- **Personas**: Quick expert analysis in current conversation
-- **Discussions**: Multi-perspective collaborative decision making
-- **Agents**: Deep analysis with full project context in dedicated conversations
-
-**Sessions → Continuity → Context:**
-- **Sessions**: Individual work periods with focused outcomes
-- **Continuity**: Automatic context restoration across sessions
-- **Context**: Rich project understanding that survives compactions
-
 ## 🔒 Security
 
 Flashbacker automatically excludes `.claude/` from git commits to protect sensitive data.
