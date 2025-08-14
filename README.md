@@ -19,9 +19,16 @@
 
 > **Claude Code state management with session continuity and AI personas**
 
-Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
+**Flashbacker provides:** 
 
-**Current Status: v2.3.5** - 🚧 **ALPHA** - Comprehensive task management system with surgical discipline. Added 4 new task commands with atomic deliverable focus and anti-placeholder enforcement following fix-master principles.
+1) Session continuity for Claude Code through intelligent state management memory commands
+2) Specialized AI personas accessed via `/fb:` slash commands
+3) Dedicated agents accessed via @agent-{AGENT-NAME} commands
+4) Agent discussion system for complex issues
+5) A code task management system for complex issues
+6) A code quality and fix system for complex issues
+
+**Current Status: v2.3.5** - 🚧 **ALPHA** - Complete workflow system with 20 total specialists. Enhanced with comprehensive task management, advanced discussion system, and integrated workflow patterns for professional development teams.
 
 ## 🚀 Quick Start
 
@@ -87,54 +94,63 @@ After installation, you use Flashbacker through **slash commands in Claude Code*
 
 ### Primary Commands (What You'll Use Daily)
 ```bash
-# Persona Analysis (Current Conversation)
-/fb:persona architect "review our API design"           # Systems architecture analysis
-/fb:persona security "analyze authentication"           # Security expert analysis
-/fb:persona database-architect "optimize our schema"    # Database design patterns
-/fb:persona api-designer "design REST endpoints"        # API specification expertise
-/fb:persona data-engineer "review ETL pipeline"         # Data architecture analysis
-/fb:persona platform-engineer "Kubernetes strategy"     # Infrastructure expertise
-/fb:persona docker-master "container orchestration"     # Docker/containerization expert
-/fb:persona john-carmack "optimize hot path performance" # Performance-critical systems expert
+# Persona Commands (Current Conversation) - Specialized templates applied to current conversation
+/fb:persona architect "review our API design"     # Systems architecture analysis
+/fb:persona security "analyze authentication"     # Security expert analysis
+/fb:persona database-architect "optimize schema" # Database design patterns
+/fb:persona john-carmack "optimize hot path"      # Performance-critical systems
 
-# Agent Analysis (Dedicated Subagents with Project Context)
-@agent-architect "analyze our microservices architecture"
-@agent-security "comprehensive security audit of auth system"
-@agent-database-architect "database optimization and schema analysis"
-@agent-api-designer "REST/GraphQL API design and standards compliance"
-@agent-data-engineer "ETL pipeline architecture and data flow analysis"
-@agent-platform-engineer "Kubernetes infrastructure and DevOps strategy"
-@agent-docker-master "comprehensive Docker and container orchestration analysis"  
-@agent-performance "deep performance analysis with recommendations"
-@agent-qa "create comprehensive testing strategy"
-@agent-john-carmack "performance-critical systems analysis with game engine principles"
+# Agent Commands (Dedicated Subagents) - Launch dedicated subagent with full context
+@agent-architect "comprehensive API analysis"     # Spawns subagent with project context
+@agent-security "security audit with remediation" # Project-aware security analysis
+@agent-code-critic "brutally honest code review"  # Code quality enforcement
+@agent-john-carmack "performance analysis"        # Game engine principles approach
 
-# Session Management
-/fb:working-plan                                  # Update development priorities
-/fb:save-session                                  # Capture session insights
-/fb:how                                           # Plan implementation before coding
-/fb:how "specific topic"                              # Plan implementation for specific topic only
-/fb:remember key insight or decision              # Save important info to memory
+# Session Management - Manual memory management (NO automatic hooks)
+/fb:working-plan {context}                        # Update development priorities
+/fb:save-session                                  # Capture session insights before compaction
+/fb:session-start                                 # Restore context after compaction
+/fb:remember {key insight}                        # Save important info to memory
+/fb:how "explain what you understood"              # Get implementation plan
 
-# Code Quality & Fix Analysis
-/fb:debt-hunter                                   # Hunt technical debt and code quality issues
-/fb:hallucination-hunter                          # Hunt AI-generated code that doesn't work
-/fb:fix-master "error description"                 # Surgical fix methodology for precise bug fixes
+# Code Quality & Task Management
+/fb:debt-hunter                                   # Hunt technical debt with AST analysis
+/fb:hallucination-hunter                          # Hunt fake AI-generated code
+/fb:fix-master "error description"                # Surgical fix methodology
+/fb:create-tasks "issue description"               # Break down issues into atomic tasks
+/fb:work-task {task-number}                       # Focus on specific task
+/fb:update-tasks {task-number}                    # Update task progress
+
+# Discussion System - Multi-agent collaboration (READ ONLY recommended)
+flashback discuss "Should we use microservices?" john-carmack,architect,security
+/fb:discuss architect,security "review this code" # In-conversation multi-agent review
 ```
 
 ### What Happens Behind the Scenes
-When you run `/fb:persona architect "review API"`:
-1. **CLI gathers context**: Loads project memory, working plan, conversation history
-2. **Template processing**: Applies architect persona template with your request
-3. **Formatted output**: Provides structured prompt for Claude's Task tool
-4. **You get**: Specialized architectural analysis with full project context
+
+**Persona Commands (`/fb:persona architect "review API"`):**
+1. **Direct template application**: Reads persona template from `.claude/flashback/personas/architect.md`
+2. **Simple output**: Template content + your request in current conversation
+3. **Immediate analysis**: No subagent spawn, direct analysis
+
+**Agent Commands (`@agent-architect "review API"`):**
+1. **Agent spawning**: Claude Code spawns dedicated architect subagent
+2. **Context gathering**: Agent runs `flashback agent --context` to get project bundle
+3. **Rich context**: Agent receives REMEMBER.md, WORKING_PLAN.md, conversation history
+4. **Project-aware analysis**: Specialized analysis with full project understanding
+
+**Session Management (Manual - No Automatic Hooks):**
+- When context window hits ~10%, run `/fb:save-session` or `/fb:working-plan`
+- After compaction, run `/fb:session-start` to restore context
+- Memory files: REMEMBER.md, WORKING_PLAN.md, CURRENT_SESSION.md
 
 ## ✨ Core Features
 
-### 🧠 **Session Continuity System**
-- **SessionStart Hook**: Automatically loads project memory + working plan after compaction
+### 🧠 **Session Continuity System (Manual)**
+- **Manual Memory Management**: Claude Code lacks pre/post-compaction hooks
 - **Memory Injection**: REMEMBER.md prevents repeated corrections across sessions  
 - **Working Plan Intelligence**: AI analyzes conversations to update development plans
+- **Session Restoration**: `/fb:session-start` restores context after compaction
 
 ### 🎭 **Dual-Layer AI System**
 
@@ -272,8 +288,11 @@ flashback memory --show
 
 ### Discussion System
 ```bash
-# CLI command for multi-persona debates:
-flashback discuss "Should we use microservices?" --personas architect,devops,security
+# CLI command for multi-agent analysis (READ ONLY recommended):
+flashback discuss "Should we use microservices?" john-carmack,architect,devops,security
+
+# In-conversation multi-agent discussions:
+/fb:discuss architect,security,performance "review this authentication implementation"
 ```
 
 ### Diagnostics (When Things Go Wrong)
@@ -315,7 +334,7 @@ MIT License
 
 ---
 
-**v2.3.5 Status**: 🚧 **ALPHA** - Task Management System + **20 Total Specialists**. Added comprehensive task management with `/fb:create-tasks`, `/fb:update-tasks`, `/fb:tasks-status`, and `/fb:work-task` commands enforcing surgical discipline and atomic deliverable focus.
+**v2.3.5 Status**: 🚧 **ALPHA** - **Complete Workflow System** + **20 Total Specialists**. Enhanced comprehensive task management system with manual session continuity, advanced discussion workflows, and integrated development patterns for professional teams.
 
 ## 🙏 Acknowledgments
 
