@@ -7,7 +7,9 @@
     "flashback": "bin/flashback"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:compile && npm run build:copy-templates",
+    "build:compile": "tsc",
+    "build:copy-templates": "cp -r templates lib/ 2>/dev/null || true",
     "dev": "tsc --watch",
     "test": "npm run build && jest",
     "test:unit": "npm run build && jest tests/unit",
