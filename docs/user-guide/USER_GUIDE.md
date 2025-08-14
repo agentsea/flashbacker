@@ -85,7 +85,7 @@ flashback init --mcp
 
 - ✅ `/fb:working-plan` # AI updates development priorities from conversation to the ./claude/flashback/memory/WORKING_PLAN.md file
 - ✅ `/fb:save-session` # Capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
-- ✅ `/fb:remember` {always remember to do XYZ with this project}# AI updates key insights from conversation to the ./claude/flashback/memory/REMEMBER.md file
+- ✅ `/fb:remember "always remember to do XYZ with this project"` # AI updates key insights from conversation to the ./claude/flashback/memory/REMEMBER.md file
 
 ## 🔄 **Complete Session Management Workflows**
 
@@ -97,14 +97,14 @@ When you see Claude has about **10% context window left** run the following:
 
 1. `/fb:working-plan` command AND/OR `/fb:save-session` to capture session insights before compaction to the `./claude/flashback/memory/WORKING_PLAN.md` file or the `./claude/flashback/memory/CURRENT_SESSION.md` file respectively.
 
-2. AFTER COMPACTION, RUN **/fb:session-start** to restore the context from the **./claude/flashback/memory/CURRENT_SESSION.md** file
+2. AFTER COMPACTION, RUN `/fb:session-start` to restore the context from the `./claude/flashback/memory/CURRENT_SESSION.m` file
 
 
 ## 🔄 Complete Session Continuity System Commands
 
 ### Working Plan Intelligence
 ```bash
-/fb:working-plan  {create a new working plan based on everything we just discussed}  # AI analyzes conversation and updates development priorities
+/fb:working-plan  "create a new working plan based on everything we just discussed"  # AI analyzes conversation and updates development priorities
 ```
 This command:
 - Analyzes recent conversation for accomplishments and new tasks
