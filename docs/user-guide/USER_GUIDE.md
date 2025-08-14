@@ -95,7 +95,7 @@ flashback init --mcp
 
 When you see Claude has about **10% context window left** run the following:
 
-1. **/fb:working-plan** command AND/OR **/fb:save-session** to capture session insights before compaction to the **./claude/flashback/memory/WORKING_PLAN.md** file or the **./claude/flashback/memory/CURRENT_SESSION.md** file respectively.
+1. `/fb:working-plan` command AND/OR `/fb:save-session` to capture session insights before compaction to the `./claude/flashback/memory/WORKING_PLAN.md` file or the `./claude/flashback/memory/CURRENT_SESSION.md` file respectively.
 
 2. AFTER COMPACTION, RUN **/fb:session-start** to restore the context from the **./claude/flashback/memory/CURRENT_SESSION.md** file
 
