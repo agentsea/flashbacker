@@ -73,7 +73,7 @@ The system provides **two complementary ways** to access 12 AI specialists:
 - **Implementation**: Claude Code agents with context gathering via `flashback agent --context`
 - **Benefits**: Project-aware analysis with complete understanding of codebase patterns
 
-**17 Available Specialists**: architect, security, refactorer, performance, frontend, backend, devops, qa, analyzer, mentor, product, code-critic, debate-moderator, debt-hunter, database-architect, api-designer, data-engineer, platform-engineer
+**20 Available Specialists**: architect, security, refactorer, performance, frontend, backend, devops, qa, analyzer, mentor, product, code-critic, debate-moderator, debt-hunter, database-architect, api-designer, data-engineer, platform-engineer, docker-master, john-carmack, fix-master
 
 **IMPORTANT**: The templates/ directory is currently empty in this repository. Templates are distributed at runtime via dynamic scanning from bundled npm package. Never hardcode template content - always use `getRequiredFlashbackDirectories()` from `src/utils/file-utils.ts` for dynamic template discovery.
 
@@ -106,6 +106,7 @@ The system provides **two complementary ways** to access 12 AI specialists:
 - `debt-hunter`: Technical debt and duplicate code detection with CLI scanning
 - `doctor`: System diagnostics and health checks
 - `status`: Installation status with accurate slash commands detection
+- `fix-master`: Surgical fix methodology with 7-phase protocol for precise bug resolution
 
 **Key Utilities:**
 - `src/utils/file-utils.ts`: Dynamic template scanning functions
@@ -151,7 +152,14 @@ The system provides **two complementary ways** to access 12 AI specialists:
 
 ### Recent Major Changes
 
-#### v2.2.6+ - Post-MCP Integration (Current)
+#### v2.3.3 - Enhanced Surgical Fix Protocol (Current)
+- **Fix-Master Integration**: Added comprehensive 7-phase surgical fix methodology with intelligent agent validation
+- **Advanced Specialists**: Enhanced capabilities with docker-master, john-carmack, and fix-master personas
+- **Improved Error Resolution**: Structured workflow for precise bug resolution with comprehensive fix reporting
+- **Defensive Security Focus**: Specialized security analysis capabilities with threat modeling and vulnerability assessment
+- **Performance Optimization**: john-carmack persona for game engine principles and deterministic performance analysis
+
+#### v2.2.6 - Post-MCP Integration
 - **MCP Server Integration**: Added context7, playwright, and sequential-thinking MCP servers for enhanced capabilities
 - **Critical Bug Fixes**: Fixed slash commands detection issues in `flashback status` and config validation
 - **Save-Session Overhaul**: Completely fixed broken save-session system using session-start architecture
@@ -273,7 +281,7 @@ The `templates/` directory is crucial - it contains all the bundled content that
 
 ## Current Status
 
-**v2.2.6+**: "POST-MCP INTEGRATION" - Enhanced with MCP servers and critical bug fixes. Fixed save-session architecture, slash commands detection, and template distribution. All 17 specialists available with MCP-enhanced capabilities including context7, playwright, and sequential-thinking servers for comprehensive analysis and automation.
+**v2.3.3**: "ENHANCED SURGICAL FIX PROTOCOL" - Advanced fix methodology with intelligent agent validation. Enhanced `/fb:fix-master` workflow with structured 7-phase methodology, smart agent integration, and comprehensive fix reporting. Now includes 20 total specialists with refined capabilities for precise bug resolution and defensive security analysis.
 
 ## Single Test Command
 
