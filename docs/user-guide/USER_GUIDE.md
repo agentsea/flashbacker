@@ -10,27 +10,88 @@
 
 **🎯 PRIMARY USAGE - SLASH COMMANDS IN CLAUDE CODE:**
 
-**Note: Personas are NOT sub-agents. They are specialized templates that are applied to the current conversation.**
-
-- ✅ `/fb:persona architect "review API design"` - Get specialized architectural analysis
-- ✅ `/fb:persona security "analyze vulnerabilities"` - Security expert analysis
-- ✅ `/fb:working-plan` - AI updates development priorities from conversation
-- ✅ `/fb:save-session` - Capture session insights before compaction
-- ✅ **Automatic Context Loading**: SessionStart hook loads project memory + working plan
-
-**🧠 SESSION CONTINUITY SYSTEM:**
-
-**Note: This allows Claude to overcome amnesia when it /compact is called or it auto-compacts or if you use /exit to exit the session. DETAILS in 'Session Management Commands'**
-
-- ✅ **Memory Injection**: REMEMBER.md prevents repeated corrections across sessions
-- ✅ **Working Plan Intelligence**: AI analyzes conversations to update development priorities
-- ✅ **Template-Driven Architecture**: Dynamic scanning with zero hardcoded paths
-
 **🎭 DUAL-LAYER AI SYSTEM:**
 - ✅ **Layer 1 - Personas**: Direct template application in current conversation (`/fb:persona`)
 - ✅ **Layer 2 - Agents**: Dedicated subagents with project context (`@agent-{name}`)
 - ✅ **Context Bundles**: Agents auto-gather REMEMBER.md, WORKING_PLAN.md, conversation history
 - ✅ **Discussion System**: Multi-persona AI debates for complex decisions
+
+**Note: Personas are NOT sub-agents. They are specialized templates that are applied to the current conversation.**
+
+- ✅ `/fb:persona architect "review API design"` # Get specialized architectural analysis
+- ✅ `/fb:persona security "analyze vulnerabilities"` # Security expert analysis
+- ✅ **Automatic Context Loading**: SessionStart hook loads project memory + working plan
+
+**Note: Agents ARE sub-agents. They are largely the same as personas but launch dedicated SUBAGENTS.**
+
+- ✅ `@agent-architect "review API design"` # Get specialized architectural analysis
+- ✅ `@agent-security "analyze vulnerabilities"` # Security expert analysis
+- ✅ `@agent-john-carmack "analyze hot path performance and control flow"` # Performance-critical systems analysis with game engine principles in the style of the legendary John Carmack
+- ✅ `@agent-code-critic "be brutally honest about this code and tell me what is actually implemented and what is not realistically!"`      # Code quality enforcement
+
+
+**🧠 SESSION CONTINUITY SYSTEM AND MEMORY:**
+
+**Note: This allows Claude to overcome amnesia when it /compact is called or it auto-compacts or if you use /exit to exit the session. DETAILS in 'Session Management Commands'**
+
+- ✅ `/fb:working-plan` # AI updates development priorities from conversation to the ./claude/flashback/memory/WORKING_PLAN.md file
+- ✅ `/fb:save-session` # Capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
+- ✅ `/fb:remember` {always remember to do XYZ with this project}# AI updates key insights from conversation to the ./claude/flashback/memory/REMEMBER.md file
+
+
+## 🔄 Session Continuity System
+
+### Working Plan Intelligence
+```bash
+/fb:working-plan  {create a new working plan based on verything we just discussed}  # AI analyzes conversation and updates development priorities
+```
+This command:
+- Analyzes recent conversation for accomplishments and new tasks
+- Updates current phase and priorities
+- Moves completed tasks to "Recently Completed" section
+- Identifies next steps discovered during the session
+
+### Implementation Planning
+```bash
+/fb:how                  # Get structured implementation planning prompt
+/fb:how "Explain exactly what you understood from what I just told you and output a plan to implemnet it" # Focused planning for specific topic only
+```
+This command:
+- Prompts Claude to understand your request clearly so you know you are aligned as AI often DOES NOT UNDERSTAND YOU and you can save a LOT of TIME and TROUBLE and frustration by having it explain what it understood and what it's plan is to implement it.
+- Requires step-by-step implementation plan
+- Identifies file changes, risks, and success criteria
+- Ensures approval before beginning implementation
+
+
+### Memory Management
+```bash
+/fb:remember {key information here}    # Add important info to project memory
+```
+This command:
+- Adds information to `.claude/flashback/memory/REMEMBER.md`
+- Categorizes information into appropriate sections
+- Ensures key insights survive context compactions
+- Makes knowledge available to all personas and future sessions
+
+### Session Capture
+```bash
+/fb:save-session    # Capture session insights before compaction
+```
+This command:
+- Creates structured session summary
+- Documents files modified with descriptions
+- Records key accomplishments and problems solved
+- Identifies next steps for future sessions
+
+
+
+## 🔄 **Complete Session Management Workflows**
+
+### Workflow 1: After Context Compaction
+
+**What Happens Automatically:**
+1. **Claude Code compacts** your conversation to save tokens and you can use the /fb:save-session AND/OR fb:working-plan command to capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
+
 
 ## 🚀 Quick Installation
 
@@ -61,7 +122,7 @@ flashback init --mcp
 
 > 📖 **[Complete Installation Guide →](INSTALLATION.md)** - Full installation options, troubleshooting, and MCP setup
 
-## 🎯 How You Actually Use Flashbacker
+## 🎯 More Details on How You Actually Use Flashbacker
 
 After installation, you primarily use Flashbacker through **slash commands in Claude Code**:
 
@@ -134,68 +195,11 @@ flashback status                  # Show installation status
 flashback doctor                  # Run system diagnostics
 ```
 
-## ✨ Dual-Layer AI System of Personas and Agents
+## ✨ Available AI Personas and Agents - CURRENT LIST
 
 **Personas are specialized templates that are applied to the current conversation.**
 **Agents are dedicated subagents with full context.**
 
-### Persona Commands (Current Conversation)
-```bash
-/fb:persona architect "should we refactor the database layer?"
-/fb:persona database-architect "optimize database schema and queries"
-/fb:persona api-designer "design REST API for user management"
-/fb:persona data-engineer "review ETL pipeline architecture"
-/fb:persona platform-engineer "Kubernetes deployment strategy"
-/fb:persona docker-master "optimize container deployment and orchestration"
-/fb:persona security "review authentication in src/auth/"
-/fb:persona performance "optimize our query performance"
-/fb:persona qa "what edge cases should we test?"
-/fb:persona backend "review API reliability"
-/fb:persona frontend "improve user experience"
-/fb:persona analyzer "investigate this bug"
-/fb:persona john-carmack "analyze hot path performance and control flow"
-```
-
-### Agent Commands (Dedicated Subagents)
-```bash
-@agent-architect "comprehensive architecture review"
-@agent-database-architect "database design and optimization analysis"
-@agent-api-designer "REST/GraphQL API architecture and specifications"
-@agent-data-engineer "ETL pipeline and data architecture review"
-@agent-platform-engineer "Kubernetes infrastructure and DevOps analysis"
-@agent-docker-master "comprehensive Docker and container orchestration analysis"
-@agent-security "full security audit with threat modeling"
-@agent-performance "deep performance analysis and optimization"
-@agent-qa "create comprehensive testing strategy"
-@agent-backend "API reliability assessment"
-@agent-frontend "UX analysis and accessibility audit"
-@agent-analyzer "root cause analysis with investigation"
-@agent-john-carmack "performance-critical systems analysis with game engine principles in the style of the legendary John Carmack"
-```
-
-### Session Management Commands
-```bash
-/fb:working-plan          # Update development plan with AI analysis
-/fb:save-session         # Capture session insights before compaction
-/fb:session-start        # Load project context (runs automatically via hook)
-/fb:remember important insight here  # Add key information to project memory
-/fb:persona-list         # Show all available AI personas with descriptions
-/fb:agents-list          # Show all available Claude Code agents with descriptions
-```
-
-### Code Quality & Fix Commands
-```bash
-/fb:debt-hunter                      # Hunt technical debt and code quality issues
-/fb:debt-hunter duplicates           # Focus on duplicate function detection
-/fb:debt-hunter comprehensive        # Full technical debt + duplicate analysis
-/fb:hallucination-hunter             # Hunt AI-generated code that doesn't actually work
-/fb:fix-master "error description"    # Surgical fix methodology for systematic bug fixes
-```
-
-## 🎭 Available AI Personas
-
-**Layer 1: Personas** - Direct template application in current conversation  
-**Layer 2: Agents** - Dedicated subagents with comprehensive project context
 
 All 20 specialists available in both layers:
 
@@ -222,86 +226,30 @@ All 20 specialists available in both layers:
 - **gpt5-cursor**: GPT-5 integration for advanced analysis, second opinions, and complex problem solving
 - **john-carmack**: Performance-critical systems analysis, game engine principles, functional programming discipline
 
-## 🧠 Memory System
 
-Flashbacker maintains project knowledge that survives context compactions:
-
-### Automatic Memory Loading
-- **SessionStart Hook**: Automatically loads REMEMBER.md + WORKING_PLAN.md after compaction
-- **Context Injection**: Every persona gets full project context
-- **Persistent Knowledge**: Key insights survive across sessions
-
-### Manual Memory Management
+### Session Management Commands
 ```bash
-# Add key information to project memory
-/fb:remember important architectural decision about database design
-
-# View current memory (CLI command)
-flashback memory --show
+/fb:working-plan          # Update development plan with AI analysis
+/fb:save-session         # Capture session insights before compaction
+/fb:session-start        # Load project context (runs automatically via hook)
+/fb:remember important insight here  # Add key information to project memory
+/fb:persona-list         # Show all available AI personas with descriptions
+/fb:agents-list          # Show all available Claude Code agents with descriptions
 ```
 
-## 🔄 Session Continuity System
-
-### Working Plan Intelligence
+### Code Quality & Fix Commands
 ```bash
-/fb:working-plan    # AI analyzes conversation and updates development priorities
+/fb:debt-hunter                      # Hunt technical debt and code quality issues
+/fb:debt-hunter duplicates           # Focus on duplicate function detection
+/fb:debt-hunter comprehensive        # Full technical debt + duplicate analysis
+/fb:hallucination-hunter             # Hunt AI-generated code that doesn't actually work
+/fb:fix-master "error description"    # Surgical fix methodology for systematic bug fixes
 ```
-This command:
-- Analyzes recent conversation for accomplishments and new tasks
-- Updates current phase and priorities
-- Moves completed tasks to "Recently Completed" section
-- Identifies next steps discovered during the session
 
-### Implementation Planning
-```bash
-/fb:how                  # Get structured implementation planning prompt
-/fb:how "specific topic" # Focused planning for specific topic only
-```
-This command:
-- Prompts Claude to understand your request clearly
-- Requires step-by-step implementation plan
-- Identifies file changes, risks, and success criteria
-- Ensures approval before beginning implementation
-- **NEW**: Accepts optional arguments for focused planning on specific topics
 
-### Memory Management
-```bash
-/fb:remember key information here    # Add important info to project memory
-```
-This command:
-- Adds information to `.claude/flashback/memory/REMEMBER.md`
-- Categorizes information into appropriate sections
-- Ensures key insights survive context compactions
-- Makes knowledge available to all personas and future sessions
+## 🧠 Using the Memory System
 
-### Session Capture
-```bash
-/fb:save-session    # Capture session insights before compaction
-```
-This command:
-- Creates structured session summary
-- Documents files modified with descriptions
-- Records key accomplishments and problems solved
-- Identifies next steps for future sessions
-
-### Automatic Session Restoration
-- **SessionStart Hook**: Automatically loads project context after compaction
-- **Context Loading**: REMEMBER.md + WORKING_PLAN.md + conversation history
-- **No Manual Action Required**: Everything loads automatically
-
-## 🔄 **Complete Session Management Workflows**
-
-### Workflow 1: After Context Compaction
-
-**What Happens Automatically:**
-1. **Claude Code compacts** your conversation to save tokens
-2. **SessionStart Hook triggers** automatically (no action needed)
-3. **Context injection occurs**:
-   ```
-   Loading project memory from REMEMBER.md...
-   Loading working plan from WORKING_PLAN.md...
-   Project context restored successfully! ✓
-   ```
+Flashbacker maintains project knowledge that survives context compactions if you manually use it. Unfortuanately, Claude Code does not support AUTOMATIC memory HOOKs via pre-compaction or post-compaction.
 
 **What You Should Do Next:**
 ```bash
@@ -501,59 +449,8 @@ flashback discuss john-carmack,architect,code-critic "Do a comprehensive API des
 # Result: Consensus on indexing strategy + query optimization
 ```
 
-#### Example 2: API Design Critique
 
-```bash
-# New API endpoint design
-/fb:persona api-designer "review this REST API design for user management"
-/fb:persona security "analyze API security implications"
-/fb:persona frontend "evaluate API usability from frontend perspective"
-
-# Multi-stakeholder discussion:
-/fb:discuss api-designer,security,frontend "finalize user management API design"
-
-# Result: Unified API specification with security and usability considerations
-```
-
-#### Example 3: Architecture Decision Validation
-
-```bash
-# Major architectural change
-/fb:persona architect "evaluate microservices vs monolithic architecture"
-/fb:persona devops "assess deployment and operational complexity"
-/fb:persona performance "analyze performance implications"
-
-# Strategic decision discussion:
-/fb:discuss architect,devops,performance,security "make final architecture recommendation"
-
-# Result: Evidence-based architectural decision with implementation roadmap
-```
-
-### Discussion System Benefits
-
-**Multi-Perspective Analysis:**
-- **Reduces blind spots** in code review
-- **Catches edge cases** from different domains
-- **Provides balanced recommendations** considering multiple factors
-
-**Consensus Building:**
-- **Identifies conflicting recommendations** between specialists
-- **Synthesizes unified solutions** from diverse inputs
-- **Prioritizes concerns** based on project context
-
-**Knowledge Transfer:**
-- **Documents decision rationale** in project memory
-- **Captures expert insights** for future reference
-- **Builds team understanding** of complex trade-offs
-
-How the discussion system works:
-1. **Parse Agent List**: Extract comma-separated agents from command
-2. **Gather Context**: Runs `flashback agent --context` in the background to get project bundle
-3. **Sequential Agent Calls**: Call each requested agent individually with full context
-4. **Synthesize Results**: Analyze responses for consensus, disagreements, and recommendations
-5. **Generate Action Items**: Provide clear next steps based on collective analysis
-
-## 🔗 **Integrated Workflow Examples**
+## 🔗 **Complete Integrated Workflow Examples**
 
 ### Complete Feature Development Workflow
 
@@ -561,8 +458,8 @@ How the discussion system works:
 
 ```bash
 # 1. Initial planning and task creation
-/fb:create-tasks "implement user profile management with photo uploads"
-/fb:how "build user profile system with image handling"
+/fb:how "What did you understand about what I asked you to do?"
+/fb:create-tasks ISSUE-012 "implement user profile management with photo uploads"
 
 # 2. Architecture and design phase
 /fb:persona architect "design user profile system architecture"
@@ -573,7 +470,7 @@ How the discussion system works:
 /fb:discuss architect,api-designer,security "finalize profile management design"
 
 # 4. Implementation phase with task focus
-/fb:work-task 1  # Start with first atomic task
+/fb:work-task TASK-001  # Start with first atomic task
 /fb:persona backend "implement profile data model"
 /fb:remember "using bcrypt for password hashing, S3 for profile images"
 
@@ -584,7 +481,6 @@ How the discussion system works:
 # 6. Progress tracking and session management
 /fb:update-tasks  # Update task progress based on conversation
 /fb:working-plan  # Update overall development priorities
-/fb:save-session  # Capture session insights
 ```
 
 ### Bug Investigation and Resolution Workflow
@@ -592,25 +488,24 @@ How the discussion system works:
 **Scenario: Critical Production Issue**
 
 ```bash
-# 1. Initial problem analysis
-/fb:fix-master "users can't login after password reset, getting 401 errors"
 
-# 2. Multi-domain investigation
+# 1. Multi-domain investigation
 /fb:persona analyzer "investigate this login failure after password reset"
 /fb:persona security "analyze authentication flow for password reset issues"
 /fb:persona backend "debug API responses for login failures"
 
+# 2. Fix the problem
+/fb:fix-master-enhanced "users can't login after password reset, getting 401 errors"
+
 # 3. Root cause discussion
-/fb:discuss analyzer,security,backend "determine root cause of password reset login issue"
+/fb:discuss analyzer,security,backend "discuss the fix and validate that it works"
 
 # 4. Solution validation
 /fb:persona qa "create test cases for password reset login flow"
 /fb:remember "issue was token invalidation not happening after password reset"
 
 # 5. Implementation tracking
-/fb:create-tasks "fix password reset authentication flow"
-/fb:work-task 1
-/fb:update-tasks
+/fb:update-tasks "update the issue with the stuff we just checked into git by looking at the diffs"
 ```
 
 ### Code Review and Refactoring Workflow
@@ -631,7 +526,7 @@ How the discussion system works:
 /fb:discuss code-critic,refactorer,security "create refactoring roadmap"
 
 # 4. Incremental improvement
-/fb:create-tasks "refactor authentication module following modern patterns"
+/fb:create-tasks "refactor authentication module following everything the agents outlined"
 /fb:work-task 1  # Start with first refactoring task
 
 # 5. Validation and testing
