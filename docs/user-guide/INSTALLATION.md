@@ -111,7 +111,7 @@ npm install && npm run build
 # 4. ⚡ CRITICAL: Link globally (makes 'flashback' command available everywhere)
 npm link
 
-# 5. ✅ Verify installation shows v2.3.4
+# 5. ✅ Verify installation shows v2.3.5
 flashback --version
 flashback doctor
 
@@ -138,7 +138,7 @@ After installation, verify everything works:
 
 ```bash
 # Check version and basic functionality
-flashback --version          # Should show 2.3.4
+flashback --version          # Should show 2.3.5
 flashback doctor            # System diagnostics
 
 # Test core commands
@@ -161,7 +161,7 @@ Expected output from `flashback doctor`:
 
 ✅ Node.js version: v22.x.x (compatible - LTS supported)
 ✅ npm version: v10.x.x (compatible)  
-✅ Flashbacker CLI: Working (v2.3.4)
+✅ Flashbacker CLI: Working (v2.3.5)
 ✅ Project structure: Initialized  
 ✅ Configuration: Valid
 ✅ Slash commands: Installed (/fb: namespace)
@@ -341,7 +341,7 @@ cd /path/to/flashbacker
 npm unlink && npm link
 
 # Verify correct version:
-flashback --version  # Should show 2.3.4
+flashback --version  # Should show 2.3.5
 
 # If still wrong, check which flashback you're running:
 which flashback
@@ -630,7 +630,7 @@ After successful installation:
 
 ---
 
-**Installation Status**: v2.3.4 - **NPM package published and fully functional!** 🎉  
+**Installation Status**: v2.3.5 - **NPM package published and fully functional!** 🎉  
 **Available**: Official npm package at https://www.npmjs.com/package/flashbacker  
 **Recommended**: Use `npm install -g flashbacker` for easiest installation  
-**Last Updated**: August 14, 2025 - Enhanced surgical fix protocol with npm package publication
+**Last Updated**: August 14, 2025 - Comprehensive task management system with surgical discipline and npm package publication

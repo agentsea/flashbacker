@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.3.4 - August 14, 2025)
+## 🎉 Current Status (v2.3.5 - August 14, 2025)
 
 **Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
@@ -335,4 +335,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.3.4 Status**: 🚧 **ALPHA** - Enhanced surgical fix protocol with 20 total specialists. Significantly improved `/fb:fix-master` workflow featuring intelligent agent validation, structured 7-phase methodology, and comprehensive fix reporting for precise bug resolution.
+**v2.3.5 Status**: 🚧 **ALPHA** - Comprehensive task management system with 20 total specialists. Added `/fb:create-tasks`, `/fb:update-tasks`, `/fb:tasks-status`, and `/fb:work-task` commands with surgical discipline enforcement and atomic deliverable focus.

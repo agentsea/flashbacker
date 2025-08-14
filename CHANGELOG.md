@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.5] - 2025-08-14
+
+### Added
+- **NEW TASK TEMPLATES**: Added comprehensive task management system with 4 new slash commands
+  - **`/fb:create-tasks`**: Generate atomic, AI-friendly task breakdown from comprehensive issues
+  - **`/fb:update-tasks`**: Mark tasks complete, update progress tracking, maintain dashboards
+  - **`/fb:tasks-status`**: Display comprehensive progress dashboard across all active issues
+  - **`/fb:work-task`**: Focus AI attention on single atomic task with full context and clear deliverables
+- Enhanced project management capabilities with granular task tracking and atomic deliverable focus
+
+### Enhanced
+- **Surgical Discipline Integration**: All task templates now enforce fix-master principles
+  - **Anti-placeholder enforcement**: Strong language against creating empty/TODO files
+  - **Focused implementation**: Prevents E2E test creation for incomplete features
+  - **Atomic task discipline**: One task, one deliverable, no scope creep
+  - **Quality standards**: Working code required, manual testing first, targeted tests only
+
+### Technical
+- Created 4 comprehensive task management templates following template-driven architecture
+- Enhanced all task templates with CRITICAL sections and anti-pattern enforcement
+- Integrated surgical discipline principles from fix-master methodology across task system
+- Maintained template consistency with relative paths and dynamic scanning compatibility
+
 ## [2.3.4] - 2025-08-14
 
 ### Fixed
