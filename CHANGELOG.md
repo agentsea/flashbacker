@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.4] - 2025-08-14
+
+### Fixed
+- **CRITICAL**: NPM template distribution reliability
+  - Implemented dual-path template resolution for published vs. dev environments
+  - Enhanced build to copy `templates/` into `lib/templates/` for runtime discovery
+  - Verified `npm pack` includes both `templates/` and `lib/templates/`
+  - Added validation steps to test install from tarball and runtime health
+
+### Documentation
+- Updated `README.md`, `USER_GUIDE.md`, and `INSTALLATION.md` to reflect v2.3.4
+- Documented template distribution strategy at a high level
+
 ## [2.3.3] - 2025-08-14
 
 ### Enhanced
