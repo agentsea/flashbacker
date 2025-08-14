@@ -45,9 +45,19 @@ nvm use 22
 
 ### Quick Installation
 
-**Option 1: Automated Installer (RECOMMENDED)**
+**Option 1: NPM Package (RECOMMENDED)**
 ```bash
-# Single command installation with automatic template refresh
+# Install globally from npm registry
+npm install -g flashbacker
+
+# Initialize in your project with MCP servers
+cd /path/to/your/project
+flashback init --mcp              # Includes context7, playwright, sequential-thinking
+```
+
+**Option 2: Automated Installer Script**
+```bash
+# Alternative: Single command installation with automatic template refresh
 curl -fsSL https://raw.githubusercontent.com/agentsea/flashbacker/main/scripts/install.sh | bash
 
 # Then initialize in your project
@@ -55,9 +65,9 @@ cd /path/to/your/project
 flashback init --mcp              # Includes context7, playwright, sequential-thinking
 ```
 
-**Option 2: Manual Installation**  
+**Option 3: Manual Source Installation**  
 ```bash
-# Clone and build
+# For development or latest unreleased features
 git clone https://github.com/agentsea/flashbacker.git
 cd flashbacker
 npm install && npm run build && npm link

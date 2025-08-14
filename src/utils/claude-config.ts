@@ -42,7 +42,7 @@ export async function installSlashCommands(projectDir?: string): Promise<void> {
     // Use the global flashback command - this should work for users
     flashbackCliPath = 'flashback';
     // For modules, try to resolve via require.resolve-like approach
-    _flashbackModulePath = 'flashbacker';  // Use the npm package name
+    _flashbackModulePath = 'flashbacker';  // Reserved for future module path resolution
   } catch {
     // Fallback for development or local installs
     flashbackCliPath = 'flashback';

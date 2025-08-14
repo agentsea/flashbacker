@@ -36,7 +36,28 @@ nvm use 22
 
 ## 🚀 Installation Options
 
-### Option 1: Automated Installer (RECOMMENDED)
+### Option 1: NPM Package (RECOMMENDED)
+
+**Install directly from npm registry:**
+
+```bash
+# Install globally
+npm install -g flashbacker
+
+# Initialize in your project with MCP servers (RECOMMENDED)
+cd /path/to/your/project
+flashback init --mcp              # Includes context7, playwright, sequential-thinking
+```
+
+**What the npm installation provides:**
+- ✅ **Official package** published to npm registry
+- ✅ **Automatic dependency resolution** and installation
+- ✅ **Global CLI availability** as `flashback` command
+- ✅ **Version management** via npm (easy updates)
+- ✅ **All templates bundled** - no separate cloning needed
+- ✅ **Professional distribution** with verified package integrity
+
+### Option 2: Automated Installer Script
 
 **Single command installation and updates with automatic template refresh:**
 
@@ -71,7 +92,9 @@ curl -fsSL https://raw.githubusercontent.com/agentsea/flashbacker/main/scripts/i
 # - Automatic project template refresh
 ```
 
-### Option 2: Manual Source Installation
+### Option 3: Manual Source Installation
+
+**For development, contributions, or latest unreleased features:**
 
 ```bash
 # 1. Clone the repository
@@ -88,11 +111,11 @@ npm install && npm run build
 # 4. ⚡ CRITICAL: Link globally (makes 'flashback' command available everywhere)
 npm link
 
-# 5. ✅ Verify installation shows v2.2.8
+# 5. ✅ Verify installation shows v2.3.4
 flashback --version
 flashback doctor
 
-# 5. Initialize in your project (WITH MCP SERVERS - RECOMMENDED)
+# 6. Initialize in your project (WITH MCP SERVERS - RECOMMENDED)
 cd /path/to/your/project
 flashback init --mcp             # RECOMMENDED: Full setup with MCP servers
 # OR
@@ -103,13 +126,11 @@ flashback init --refresh          # Update existing project, preserve memory
 flashback init --clean           # Start completely fresh
 ```
 
-### Option 2: NPM Installation (Future)
-
-```bash
-# This will work once published to npm
-npm install -g flashbacker
-flashback init --mcp             # RECOMMENDED: Include MCP servers
-```
+**When to use source installation:**
+- Contributing to Flashbacker development
+- Testing unreleased features or bug fixes
+- Customizing Flashbacker for specific needs
+- Corporate environments requiring source code review
 
 ## 📋 Installation Verification
 
@@ -526,14 +547,17 @@ flashback --version  # Should show latest version
 cd /your/project && flashback init --refresh
 ```
 
-### From npm (Future)
+### From NPM Package
 
 ```bash
 # Update global installation
 npm update -g flashbacker
 
-# Refresh templates in projects
-flashback init --refresh
+# Verify new version
+flashback --version
+
+# Refresh templates in existing projects
+cd /your/project && flashback init --refresh
 ```
 
 ## 📦 Template Management
@@ -606,6 +630,7 @@ After successful installation:
 
 ---
 
-**Installation Status**: v2.3.4 - Source installation fully functional with enhanced surgical fix protocol and intelligent agent validation  
-**Next**: NPM package publication for simplified installation  
-**Last Updated**: August 14, 2025 - Enhanced surgical fix protocol with intelligent agent validation, structured workflows, and comprehensive fix reporting
+**Installation Status**: v2.3.4 - **NPM package published and fully functional!** 🎉  
+**Available**: Official npm package at https://www.npmjs.com/package/flashbacker  
+**Recommended**: Use `npm install -g flashbacker` for easiest installation  
+**Last Updated**: August 14, 2025 - Enhanced surgical fix protocol with npm package publication
