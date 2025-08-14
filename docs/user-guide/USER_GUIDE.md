@@ -4,7 +4,15 @@
 
 ## 🎉 Current Status (v2.3.5 - August 14, 2025)
 
-**Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
+**Flashbacker provides:** 
+
+1) session continuity for Claude Code through intelligent state management memory commands
+2) specialized AI personas accessed via `/fb:` slash commands
+3) Dedicated agents accessed via @agent-{AGENT-NAME} commands
+4) Agent discussion system for complex issues
+5) A code task management system for complex issues
+6) A code quality and fix system for complex issues
+
 
 ## 🚀 Quick Installation
 
