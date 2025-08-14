@@ -6,6 +6,35 @@
 
 **Flashbacker provides session continuity for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.**
 
+## 🚀 Quick Installation
+
+**Option 1: NPM Package (RECOMMENDED)**
+```bash
+# Install from npm registry
+npm install -g flashbacker
+
+# Initialize in your project with MCP servers
+cd /path/to/your/project
+flashback init --mcp              # Includes context7, playwright, sequential-thinking
+```
+
+**Option 2: Source Installation (Development)**
+```bash
+# Clone and build from source
+git clone https://github.com/agentsea/flashbacker.git
+cd flashbacker
+npm install && npm run build
+
+# Link globally
+npm link
+
+# Initialize in your project
+cd /path/to/your/project
+flashback init --mcp
+```
+
+> 📖 **[Complete Installation Guide →](INSTALLATION.md)** - Full installation options, troubleshooting, and MCP setup
+
 ### How You Actually Use Flashbacker ✅
 
 **🎯 PRIMARY USAGE - SLASH COMMANDS IN CLAUDE CODE:**
@@ -38,8 +67,18 @@
 - ✅ `/fb:save-session` # Capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
 - ✅ `/fb:remember` {always remember to do XYZ with this project}# AI updates key insights from conversation to the ./claude/flashback/memory/REMEMBER.md file
 
+## 🔄 **Complete Session Management Workflows**
 
-## 🔄 Session Continuity System
+### Workflow 1: After Context Compaction
+
+**Does it happen automatically? NO!!!! Claude Code does not have proper hooks for pre and post compaction at this time so session management is done manually!**
+
+When you see Claude has about 10% context window left run the following
+1. **/fb:save-session** AND/OR **/fb:working-plan** command to capture session insights before compaction to the **./claude/flashback/memory/CURRENT_SESSION.md** file
+2. AFTER COMPACTION, RUN **/fb:session-start** to restore the context from the **./claude/flashback/memory/CURRENT_SESSION.md** file
+
+
+## 🔄 Complete Session Continuity System Commands
 
 ### Working Plan Intelligence
 ```bash
@@ -51,7 +90,7 @@ This command:
 - Moves completed tasks to "Recently Completed" section
 - Identifies next steps discovered during the session
 
-### Implementation Planning
+### Getting Claude to Underestand and Output a Plan to Implement
 ```bash
 /fb:how                  # Get structured implementation planning prompt
 /fb:how "Explain exactly what you understood from what I just told you and output a plan to implemnet it" # Focused planning for specific topic only
@@ -59,8 +98,6 @@ This command:
 This command:
 - Prompts Claude to understand your request clearly so you know you are aligned as AI often DOES NOT UNDERSTAND YOU and you can save a LOT of TIME and TROUBLE and frustration by having it explain what it understood and what it's plan is to implement it.
 - Requires step-by-step implementation plan
-- Identifies file changes, risks, and success criteria
-- Ensures approval before beginning implementation
 
 
 ### Memory Management
@@ -83,44 +120,6 @@ This command:
 - Records key accomplishments and problems solved
 - Identifies next steps for future sessions
 
-
-
-## 🔄 **Complete Session Management Workflows**
-
-### Workflow 1: After Context Compaction
-
-**What Happens Automatically:**
-1. **Claude Code compacts** your conversation to save tokens and you can use the /fb:save-session AND/OR fb:working-plan command to capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
-
-
-## 🚀 Quick Installation
-
-**Option 1: NPM Package (RECOMMENDED)**
-```bash
-# Install from npm registry
-npm install -g flashbacker
-
-# Initialize in your project with MCP servers
-cd /path/to/your/project
-flashback init --mcp              # Includes context7, playwright, sequential-thinking
-```
-
-**Option 2: Source Installation (Development)**
-```bash
-# Clone and build from source
-git clone https://github.com/agentsea/flashbacker.git
-cd flashbacker
-npm install && npm run build
-
-# Link globally
-npm link
-
-# Initialize in your project
-cd /path/to/your/project
-flashback init --mcp
-```
-
-> 📖 **[Complete Installation Guide →](INSTALLATION.md)** - Full installation options, troubleshooting, and MCP setup
 
 ## 🎯 More Details on How You Actually Use Flashbacker
 
@@ -233,12 +232,12 @@ All 20 specialists available in both layers:
 /fb:save-session         # Capture session insights before compaction
 /fb:session-start        # Load project context (runs automatically via hook)
 /fb:remember important insight here  # Add key information to project memory
-/fb:persona-list         # Show all available AI personas with descriptions
-/fb:agents-list          # Show all available Claude Code agents with descriptions
 ```
 
 ### Code Quality & Fix Commands
 ```bash
+/fb:persona-list         # Show all available AI personas with descriptions
+/fb:agents-list          # Show all available Claude Code agents with descriptions
 /fb:debt-hunter                      # Hunt technical debt and code quality issues
 /fb:debt-hunter duplicates           # Focus on duplicate function detection
 /fb:debt-hunter comprehensive        # Full technical debt + duplicate analysis
