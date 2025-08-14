@@ -20,7 +20,7 @@
 
 **🧠 SESSION CONTINUITY SYSTEM:**
 
-**Note: This allows Claude to overcome amneisa when it /compact is called or it auto-compacts or if you use /exit to exist the session. DETAILS in 'Session Management Commands'**
+**Note: This allows Claude to overcome amnesia when it /compact is called or it auto-compacts or if you use /exit to exit the session. DETAILS in 'Session Management Commands'**
 
 - ✅ **Memory Injection**: REMEMBER.md prevents repeated corrections across sessions
 - ✅ **Working Plan Intelligence**: AI analyzes conversations to update development priorities
@@ -80,16 +80,16 @@ flashback discuss "Should we use microservices? Research the pros and cons and p
 
 # Session Management
 **Use the working-plan command to save a comprehensive working plan of what you are developing and to keep that plan updated with information**
-/fb:working-plan  {additional information to tell Claude}                                # Update development priorities and capture them in a document ./claude/flashback/memory/WORKING_PLAN.md (which you ca read directly in your project)
+/fb:working-plan  {additional information to tell Claude}                                # Update development priorities and capture them in a document ./claude/flashback/memory/WORKING_PLAN.md (which you can read directly in your project)
 
 **Use the remember command to save bite size, importnat info like a) tests always go in ./tests b) .env files must always go in .gitignore c) etc.**
 /fb:remember {key insight or decision}             # Save important info to memory to ./claude/flashback/memory/REMEMBER.md (which you can read directly in your project). 
 
-/fb:save-session                                  # Capture session insights and capture them in a document ./claude/flashback/memory/CURRENT_SESSION.md  (which you ca read directly in your project)
+/fb:save-session                                  # Capture session insights and capture them in a document ./claude/flashback/memory/CURRENT_SESSION.md  (which you can read directly in your project)
 
 **Use this to ask Claude to explain WHAT it understood about your command and what its plan to plement it is.**
 /fb:how                                           # Plan implementation before coding
-/fb:how "I asked you to create a unit test and you created a suite of fake e2e tests. What did you understand about what I aksed you do?"                              # Plan implementation for specific topic only
+/fb:how "I asked you to create a unit test and you created a suite of fake e2e tests. What did you understand about what I asked you to do?"                              # Plan implementation for specific topic only
 
 **Use AST trees for Go, Python, TypeScript, JavaScript (with automatic language detection) hueristics to hunt down technical debt and code quality issues like placeholders, fake code, duplicate code, etc.**
 # Code Quality & Fix Analysis
@@ -387,7 +387,7 @@ Flashbacker includes a comprehensive task management system with surgical discip
 
 ### Task Management Commands
 
-**Taks management currently reads from ./docs/issues in your CODEBASE and expects issues in that directory in the following format: ISSUE-008-non-interactive-deploy-and-e2e-tests.md**
+**Task management currently reads from ./docs/issues in your CODEBASE and expects issues in that directory in the following format: ISSUE-008-non-interactive-deploy-and-e2e-tests.md**
 
 **FIRST create your own issue file in ./docs/issues in your CODEBASE or tell claude to create one for you after you have discuss what you want to do next. THEN use the following commands to break that issue into TASKS, UPDATE TASKS, and WORK ON TASKS.**
 
@@ -548,7 +548,7 @@ flashback discuss john-carmack,architect,code-critic "Do a comprehensive API des
 
 How the discussion system works:
 1. **Parse Agent List**: Extract comma-separated agents from command
-2. **Gather Context**: Runs `flashback agent --context` in the backgroundto get project bundle
+2. **Gather Context**: Runs `flashback agent --context` in the background to get project bundle
 3. **Sequential Agent Calls**: Call each requested agent individually with full context
 4. **Synthesize Results**: Analyze responses for consensus, disagreements, and recommendations
 5. **Generate Action Items**: Provide clear next steps based on collective analysis
