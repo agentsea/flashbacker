@@ -26,10 +26,21 @@
 - ✅ **Context Bundles**: Agents auto-gather REMEMBER.md, WORKING_PLAN.md, conversation history
 - ✅ **Discussion System**: Multi-persona AI debates for complex decisions
 
-## 🚀 Installation
+## 🚀 Quick Installation
 
+**Option 1: NPM Package (RECOMMENDED)**
 ```bash
-# Clone and build
+# Install from npm registry
+npm install -g flashbacker
+
+# Initialize in your project with MCP servers
+cd /path/to/your/project
+flashback init --mcp              # Includes context7, playwright, sequential-thinking
+```
+
+**Option 2: Source Installation (Development)**
+```bash
+# Clone and build from source
 git clone https://github.com/agentsea/flashbacker.git
 cd flashbacker
 npm install && npm run build
@@ -39,8 +50,10 @@ npm link
 
 # Initialize in your project
 cd /path/to/your/project
-flashback init
+flashback init --mcp
 ```
+
+> 📖 **[Complete Installation Guide →](INSTALLATION.md)** - Full installation options, troubleshooting, and MCP setup
 
 ## 🎯 How You Actually Use Flashbacker
 
@@ -251,21 +264,396 @@ This command:
 - **Context Loading**: REMEMBER.md + WORKING_PLAN.md + conversation history
 - **No Manual Action Required**: Everything loads automatically
 
-## 🔄 Discussion System (Advanced)
+## 🔄 **Complete Session Management Workflows**
 
-Create AI-to-AI debates for complex decisions:
+### Workflow 1: After Context Compaction
+
+**What Happens Automatically:**
+1. **Claude Code compacts** your conversation to save tokens
+2. **SessionStart Hook triggers** automatically (no action needed)
+3. **Context injection occurs**:
+   ```
+   Loading project memory from REMEMBER.md...
+   Loading working plan from WORKING_PLAN.md...
+   Project context restored successfully! ✓
+   ```
+
+**What You Should Do Next:**
+```bash
+# 1. Verify context loaded properly
+"Can you remind me what we were working on?"
+
+# 2. Check if any important decisions were missed
+/fb:remember "any key insights from the previous session"
+
+# 3. Update working plan if priorities changed
+/fb:working-plan
+
+# 4. Continue with your specific work
+/fb:persona architect "continue with the authentication system review"
+```
+
+### Workflow 2: Starting a Brand New Session
+
+**Complete startup sequence for maximum productivity:**
 
 ```bash
-# CLI command for multi-persona debates:
+# 1. Load project context (automatic, but verify)
+"What's the current state of this project?"
+
+# 2. Review working plan and priorities
+/fb:working-plan
+
+# 3. Get implementation guidance for your session
+/fb:how "today I want to work on user authentication"
+
+# 4. Use specialized personas for your work
+/fb:persona security "analyze current auth implementation"
+/fb:persona backend "review API endpoints for user management"
+
+# 5. As you work, update memory with key insights
+/fb:remember "decided to use JWT tokens with refresh token rotation"
+
+# 6. Before ending, capture the session
+/fb:save-session
+```
+
+### Workflow 3: Mid-Session Context Management
+
+**When conversation gets long (before hitting token limits):**
+
+```bash
+# 1. Capture current progress
+/fb:save-session
+
+# 2. Update working plan with accomplishments
+/fb:working-plan
+
+# 3. Save any important insights
+/fb:remember "key architectural decision: using Redis for session storage"
+
+# 4. Let Claude Code compact naturally
+# 5. SessionStart hook will restore context automatically
+```
+
+### Workflow 4: Session Transition (Switching Tasks)
+
+**Moving from one major task to another:**
+
+```bash
+# 1. Complete current task documentation
+/fb:save-session
+/fb:working-plan  # Mark current task complete
+
+# 2. Plan new task
+/fb:how "implement user roles and permissions system"
+
+# 3. Get specialized analysis for new task
+/fb:persona security "design role-based access control"
+/fb:persona database-architect "design user roles schema"
+
+# 4. Update project memory with task transition
+/fb:remember "completed auth system, moving to RBAC implementation"
+```
+
+## 📝 **Task & Issues Management System**
+
+Flashbacker includes a comprehensive task management system with surgical discipline:
+
+### Task Management Commands
+
+```bash
+/fb:create-tasks "implement user authentication system"  # Create atomic tasks with clear deliverables
+/fb:update-tasks                                        # Update task status and progress
+/fb:tasks-status                                        # View current tasks and their status
+/fb:work-task 1                                         # Focus on specific task with context
+```
+
+### Task Creation Workflow
+
+**Creating well-defined tasks:**
+```bash
+# 1. Create tasks from high-level requirements
+/fb:create-tasks "build user authentication system with JWT tokens"
+
+# This creates atomic tasks like:
+# Task 1: Design JWT authentication flow
+# Task 2: Create user registration endpoint
+# Task 3: Implement login/logout functionality 
+# Task 4: Add password reset capability
+# Task 5: Write authentication tests
+```
+
+### Task Management Best Practices
+
+**Atomic Deliverables:**
+- Each task has **one clear deliverable**
+- Tasks are **independently testable**
+- No placeholder implementations allowed
+- **Surgical precision** - fix exactly what's broken
+
+**Anti-Placeholder Enforcement:**
+```bash
+# ❌ BAD: Placeholder implementations
+function authenticate(token) {
+  // TODO: Implement token validation
+  return true;
+}
+
+# ✅ GOOD: Complete, working implementation
+function authenticate(token) {
+  if (!token) throw new Error('Token required');
+  return jwt.verify(token, process.env.JWT_SECRET);
+}
+```
+
+### Working with Tasks
+
+```bash
+# Start working on a specific task
+/fb:work-task 2  # Loads full context for task #2
+
+# Update task progress
+/fb:update-tasks # AI analyzes conversation and updates task status
+
+# Check overall progress
+/fb:tasks-status # Shows completed, in-progress, and pending tasks
+```
+
+### Integration with Memory System
+
+**Tasks automatically integrate with:**
+- **Working Plan**: High-level development priorities
+- **Project Memory**: Key architectural decisions
+- **Session Continuity**: Task context survives compaction
+
+```bash
+# Example integrated workflow:
+/fb:create-tasks "refactor database layer for better performance"
+/fb:work-task 1  # Start with task #1
+/fb:persona database-architect "analyze current schema performance"
+/fb:remember "identified N+1 query problem in user relations"
+/fb:update-tasks # Mark analysis complete, move to implementation
+```
+
+## 🔄 Discussion System & Code Critique
+
+### Multi-Agent Discussions for Complex Decisions
+
+**CLI Command for Architecture Debates:**
+```bash
+# High-level architectural decisions
 flashback discuss "Should we use microservices?" --personas architect,devops,security
 flashback discuss "API design review" --personas backend,frontend,architect
 ```
 
-How it works:
+**Slash Command for Code Critique (In-Conversation):**
+```bash
+# Code review discussions
+/fb:discuss architect,security,performance "review this authentication implementation"
+/fb:discuss frontend,backend,qa "analyze this API integration"
+/fb:discuss database-architect,performance "optimize this query structure"
+```
+
+### Code Critique Workflows
+
+#### Workflow 1: Comprehensive Code Review
+
+```bash
+# 1. Start with architecture analysis
+/fb:persona architect "analyze the overall structure of this auth system"
+
+# 2. Security deep-dive
+/fb:persona security "identify security vulnerabilities in this code"
+
+# 3. Performance assessment
+/fb:persona performance "analyze bottlenecks and optimization opportunities"
+
+# 4. Multi-agent discussion for consensus
+/fb:discuss architect,security,performance "synthesize findings and provide unified recommendations"
+```
+
+#### Workflow 2: Targeted Code Issues
+
+```bash
+# For specific problems or bugs:
+/fb:fix-master "authentication fails intermittently with 500 errors"
+
+# Get multiple perspectives on the fix:
+/fb:discuss backend,security "validate this authentication bug fix approach"
+
+# Test strategy validation:
+/fb:discuss qa,backend "review testing strategy for this auth fix"
+```
+
+#### Workflow 3: Pre-Implementation Review
+
+```bash
+# Before writing code, get design validation:
+/fb:how "implement OAuth2 integration with Google"
+
+# Get architectural input:
+/fb:persona architect "design OAuth2 flow architecture"
+
+# Security validation:
+/fb:persona security "validate OAuth2 security implementation"
+
+# Multi-agent design review:
+/fb:discuss architect,security,backend "finalize OAuth2 implementation approach"
+```
+
+### Real-World Code Critique Examples
+
+#### Example 1: Database Performance Issue
+
+```bash
+# Problem: Slow user queries
+/fb:persona database-architect "analyze this user query performance issue"
+/fb:persona performance "identify bottlenecks in user data retrieval"
+
+# Multi-agent solution discussion:
+/fb:discuss database-architect,performance,backend "design optimal user query solution"
+
+# Result: Consensus on indexing strategy + query optimization
+```
+
+#### Example 2: API Design Critique
+
+```bash
+# New API endpoint design
+/fb:persona api-designer "review this REST API design for user management"
+/fb:persona security "analyze API security implications"
+/fb:persona frontend "evaluate API usability from frontend perspective"
+
+# Multi-stakeholder discussion:
+/fb:discuss api-designer,security,frontend "finalize user management API design"
+
+# Result: Unified API specification with security and usability considerations
+```
+
+#### Example 3: Architecture Decision Validation
+
+```bash
+# Major architectural change
+/fb:persona architect "evaluate microservices vs monolithic architecture"
+/fb:persona devops "assess deployment and operational complexity"
+/fb:persona performance "analyze performance implications"
+
+# Strategic decision discussion:
+/fb:discuss architect,devops,performance,security "make final architecture recommendation"
+
+# Result: Evidence-based architectural decision with implementation roadmap
+```
+
+### Discussion System Benefits
+
+**Multi-Perspective Analysis:**
+- **Reduces blind spots** in code review
+- **Catches edge cases** from different domains
+- **Provides balanced recommendations** considering multiple factors
+
+**Consensus Building:**
+- **Identifies conflicting recommendations** between specialists
+- **Synthesizes unified solutions** from diverse inputs
+- **Prioritizes concerns** based on project context
+
+**Knowledge Transfer:**
+- **Documents decision rationale** in project memory
+- **Captures expert insights** for future reference
+- **Builds team understanding** of complex trade-offs
+
+How the discussion system works:
 1. **Parse Agent List**: Extract comma-separated agents from command
 2. **Gather Context**: Run `flashback agent --context` to get project bundle
 3. **Sequential Agent Calls**: Call each requested agent individually with full context
 4. **Synthesize Results**: Analyze responses for consensus, disagreements, and recommendations
+5. **Generate Action Items**: Provide clear next steps based on collective analysis
+
+## 🔗 **Integrated Workflow Examples**
+
+### Complete Feature Development Workflow
+
+**Scenario: Implementing User Profile Management**
+
+```bash
+# 1. Initial planning and task creation
+/fb:create-tasks "implement user profile management with photo uploads"
+/fb:how "build user profile system with image handling"
+
+# 2. Architecture and design phase
+/fb:persona architect "design user profile system architecture"
+/fb:persona api-designer "design profile management API endpoints"
+/fb:persona security "security considerations for profile data and file uploads"
+
+# 3. Multi-agent design review
+/fb:discuss architect,api-designer,security "finalize profile management design"
+
+# 4. Implementation phase with task focus
+/fb:work-task 1  # Start with first atomic task
+/fb:persona backend "implement profile data model"
+/fb:remember "using bcrypt for password hashing, S3 for profile images"
+
+# 5. Continuous validation during development
+/fb:persona qa "what should we test for profile image uploads?"
+/fb:fix-master "profile image upload fails with large files"
+
+# 6. Progress tracking and session management
+/fb:update-tasks  # Update task progress based on conversation
+/fb:working-plan  # Update overall development priorities
+/fb:save-session  # Capture session insights
+```
+
+### Bug Investigation and Resolution Workflow
+
+**Scenario: Critical Production Issue**
+
+```bash
+# 1. Initial problem analysis
+/fb:fix-master "users can't login after password reset, getting 401 errors"
+
+# 2. Multi-domain investigation
+/fb:persona analyzer "investigate this login failure after password reset"
+/fb:persona security "analyze authentication flow for password reset issues"
+/fb:persona backend "debug API responses for login failures"
+
+# 3. Root cause discussion
+/fb:discuss analyzer,security,backend "determine root cause of password reset login issue"
+
+# 4. Solution validation
+/fb:persona qa "create test cases for password reset login flow"
+/fb:remember "issue was token invalidation not happening after password reset"
+
+# 5. Implementation tracking
+/fb:create-tasks "fix password reset authentication flow"
+/fb:work-task 1
+/fb:update-tasks
+```
+
+### Code Review and Refactoring Workflow
+
+**Scenario: Legacy Code Modernization**
+
+```bash
+# 1. Comprehensive code analysis
+/fb:debt-hunter comprehensive  # Scan for technical debt
+/fb:hallucination-hunter        # Check for non-functional code
+
+# 2. Multi-agent code review
+/fb:persona code-critic "review this legacy authentication module"
+/fb:persona refactorer "suggest refactoring approach for cleaner code"
+/fb:persona security "identify security improvements needed"
+
+# 3. Collaborative refactoring plan
+/fb:discuss code-critic,refactorer,security "create refactoring roadmap"
+
+# 4. Incremental improvement
+/fb:create-tasks "refactor authentication module following modern patterns"
+/fb:work-task 1  # Start with first refactoring task
+
+# 5. Validation and testing
+/fb:persona qa "test strategy for refactored authentication"
+/fb:working-plan  # Update priorities with refactoring progress
+```
 
 ## 🔧 Setup & Troubleshooting
 
@@ -314,15 +702,192 @@ flashback init --refresh  # In your project
 - **Claude**: Executes Task tool with specialized persona prompts
 - **Hybrid Pattern**: Computer handles data, AI handles intelligence
 
-## 💡 Best Practices
+## 💡 **Best Practices & Real-World Scenarios**
 
-1. **Start with `/fb:persona` commands**: Get specialized analysis for any technical question
-2. **Use Memory System**: Add key insights with `/fb:remember "important decision about X"`
-3. **Update Working Plans**: Use `/fb:working-plan` regularly to track progress
-4. **Plan Before Coding**: Use `/fb:how` to ensure clear understanding before implementation
-5. **Capture Sessions**: Use `/fb:save-session` before major context compactions
-6. **Trust the Hook System**: SessionStart automatically loads context after compaction
-7. **Multi-persona Discussions**: Use `flashback discuss` for complex architectural decisions
+### Daily Development Workflow
+
+**Morning Startup (5 minutes):**
+```bash
+# 1. Verify project context loaded
+"What did we accomplish yesterday and what's next?"
+
+# 2. Review and update priorities
+/fb:working-plan
+
+# 3. Plan today's work
+/fb:how "today I want to implement the user dashboard"
+
+# 4. Get initial analysis
+/fb:persona frontend "analyze requirements for user dashboard"
+```
+
+**During Development:**
+```bash
+# Before implementing major features
+/fb:how "specific feature implementation"
+
+# When stuck or unsure
+/fb:persona relevant-expert "specific question"
+
+# For code review
+/fb:discuss multiple-experts "review this implementation"
+
+# Document key decisions
+/fb:remember "important architectural decision"
+```
+
+**End of Day (3 minutes):**
+```bash
+# 1. Update task progress
+/fb:update-tasks
+
+# 2. Update working plan
+/fb:working-plan
+
+# 3. Capture session insights
+/fb:save-session
+```
+
+### Pro Tips for Maximum Productivity
+
+#### 1. **Leverage the Dual-Layer System**
+```bash
+# Quick questions: Use personas in current conversation
+/fb:persona security "is this password validation secure?"
+
+# Deep analysis: Spawn dedicated agents with full context
+@agent-security "comprehensive security audit of authentication system"
+```
+
+#### 2. **Master the Task System**
+```bash
+# Break down large features into atomic tasks
+/fb:create-tasks "build user dashboard with analytics"
+
+# Focus on one task at a time
+/fb:work-task 2  # Loads full context for task #2
+
+# Track progress continuously
+/fb:update-tasks
+```
+
+#### 3. **Use Discussion System for Complex Decisions**
+```bash
+# Architecture decisions
+/fb:discuss architect,devops,security "microservices vs monolithic"
+
+# Code review
+/fb:discuss backend,frontend,qa "API integration approach"
+
+# Performance optimization
+/fb:discuss performance,database-architect "query optimization strategy"
+```
+
+#### 4. **Optimize Session Continuity**
+```bash
+# Proactive session management (before hitting token limits)
+/fb:save-session    # Capture current progress
+/fb:working-plan    # Update priorities
+/fb:remember "key decision: using Redis for session storage"
+
+# Let compaction happen naturally - context will restore automatically
+```
+
+#### 5. **Build Project Knowledge Systematically**
+```bash
+# Document architectural decisions
+/fb:remember "authentication uses JWT with refresh token rotation"
+
+# Capture lessons learned
+/fb:remember "N+1 query issue resolved by adding user.posts index"
+
+# Record important patterns
+/fb:remember "using repository pattern for data access layer"
+```
+
+### Troubleshooting Common Scenarios
+
+#### "I'm Stuck on a Bug"
+```bash
+# 1. Systematic investigation
+/fb:fix-master "detailed error description"
+
+# 2. Multi-angle analysis
+/fb:persona analyzer "investigate this bug"
+/fb:persona backend "debug server-side issues"
+
+# 3. Collaborative debugging
+/fb:discuss analyzer,backend,qa "determine root cause and fix"
+```
+
+#### "Need to Make an Architectural Decision"
+```bash
+# 1. Get expert perspectives
+/fb:persona architect "evaluate options for user data storage"
+/fb:persona performance "analyze performance implications"
+/fb:persona devops "consider operational complexity"
+
+# 2. Collaborative decision making
+/fb:discuss architect,performance,devops "make final recommendation"
+
+# 3. Document decision
+/fb:remember "chose PostgreSQL over MongoDB for ACID requirements"
+```
+
+#### "Working on Legacy Code"
+```bash
+# 1. Comprehensive analysis
+/fb:debt-hunter comprehensive
+/fb:hallucination-hunter
+
+# 2. Get modernization guidance
+/fb:persona refactorer "suggest refactoring approach"
+/fb:persona code-critic "identify improvement priorities"
+
+# 3. Plan incremental improvements
+/fb:create-tasks "modernize authentication module"
+```
+
+### Advanced Workflow Patterns
+
+#### **The "Feature Complete" Pattern**
+1. **Plan**: `/fb:how "implement feature X"`
+2. **Design**: Multi-agent discussion for architecture
+3. **Implement**: Task-focused development with continuous validation
+4. **Review**: Code critique with discussion system
+5. **Document**: Update memory with key decisions
+6. **Track**: Update working plan with progress
+
+#### **The "Bug Hunter" Pattern**
+1. **Investigate**: `/fb:fix-master "error description"`
+2. **Analyze**: Multiple persona perspectives on the issue
+3. **Collaborate**: Discussion system for root cause analysis
+4. **Resolve**: Focused task work with validation
+5. **Prevent**: Update memory and tests to prevent recurrence
+
+#### **The "Architecture Review" Pattern**
+1. **Assess**: Current architecture with architect persona
+2. **Critique**: Multi-agent review of design decisions
+3. **Discuss**: Collaborative evaluation of alternatives
+4. **Decide**: Evidence-based architectural choices
+5. **Document**: Memory system for future reference
+
+### Workflow Integration Principles
+
+**Memory → Tasks → Working Plan:**
+- **Memory**: Long-term architectural decisions and patterns
+- **Tasks**: Short-term atomic deliverables with clear outcomes
+- **Working Plan**: Medium-term priorities and development phases
+
+**Personas → Discussions → Agents:**
+- **Personas**: Quick expert analysis in current conversation
+- **Discussions**: Multi-perspective collaborative decision making
+- **Agents**: Deep analysis with full project context in dedicated conversations
+
+**Sessions → Continuity → Context:**
+- **Sessions**: Individual work periods with focused outcomes
+- **Continuity**: Automatic context restoration across sessions
+- **Context**: Rich project understanding that survives compactions
 
 ## 🔒 Security
 
@@ -335,4 +900,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.3.5 Status**: 🚧 **ALPHA** - Comprehensive task management system with 20 total specialists. Added `/fb:create-tasks`, `/fb:update-tasks`, `/fb:tasks-status`, and `/fb:work-task` commands with surgical discipline enforcement and atomic deliverable focus.
+**v2.3.5 Status**: 🚧 **ALPHA** - **Complete Workflow System** with 20 total specialists. Enhanced with comprehensive task management, advanced discussion system, and integrated workflow patterns for professional development teams.
