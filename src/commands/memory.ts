@@ -191,7 +191,7 @@ async function removeMemory(pattern: string, projectDir: string): Promise<void> 
 
   try {
     let content = fs.readFileSync(memoryPath, 'utf-8');
-    const _originalContent = content; // Currently unused
+    const _originalContent = content; // Keep for future diff functionality
     let removedCount = 0;
     const removedItems: string[] = [];
 

@@ -59,3 +59,10 @@ temp/
 # Claude Code frameworks (exclude all user state, but include bundled templates)
 .claude/
 !templates/.claude/
+
+# NPM pack artifacts
+flashbacker-*.tgz
+
+# Exclude docs areas not intended for distribution
+docs/issues/
+docs/external/

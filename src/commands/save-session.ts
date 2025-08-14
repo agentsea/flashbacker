@@ -278,11 +278,11 @@ async function pruneOldSessionsManually(projectDir: string, keepCount: number): 
 
 // getLatestConversationLog function removed - now using shared utility from conversation-logs.ts
 
-async function _getGitStatus(projectDir: string): Promise<string> { // Currently unused
+async function _getGitStatus(_projectDir: string): Promise<string> { // Reserved for future git integration
   try {
     const { execSync } = require('child_process');
-    const gitStatus = execSync('git status --porcelain', { cwd: projectDir, encoding: 'utf-8' });
-    const gitStatusLong = execSync('git status', { cwd: projectDir, encoding: 'utf-8' });
+    const gitStatus = execSync('git status --porcelain', { cwd: _projectDir, encoding: 'utf-8' });
+    const gitStatusLong = execSync('git status', { cwd: _projectDir, encoding: 'utf-8' });
 
     const statusLines = gitStatus.trim().split('\n').filter((line: string) => line.trim());
     const fileCount = statusLines.length;

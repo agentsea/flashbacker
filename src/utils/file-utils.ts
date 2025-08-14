@@ -13,7 +13,15 @@ export async function fileExists(filePath: string): Promise<boolean> {
  * Get the bundled templates directory path
  */
 function getTemplatesDir(): string {
-  return path.join(__dirname, '..', '..', 'templates', '.claude', 'flashback');
+  // Prefer published package location (node_modules/flashbacker/templates)
+  const publishedPath = path.join(__dirname, '..', '..', 'templates', '.claude', 'flashback');
+  if (fs.pathExistsSync(publishedPath)) {
+    return publishedPath;
+  }
+
+  // Fallback to development location (when running from source with different layout)
+  const devPath = path.join(__dirname, '..', '..', '..', 'templates', '.claude', 'flashback');
+  return devPath;
 }
 
 /**

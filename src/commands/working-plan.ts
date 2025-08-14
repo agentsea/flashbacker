@@ -123,7 +123,7 @@ async function updateWorkingPlan(projectDir: string): Promise<void> {
     if (!await fs.pathExists(promptPath)) {
       throw new Error('AI prompt not found. Run `flashback init --refresh` to install prompts.');
     }
-    const _prompt = await fs.readFile(promptPath, 'utf-8'); // Currently unused in this context
+    const _prompt = await fs.readFile(promptPath, 'utf-8'); // Reserved for future template processing
 
     // 2. Gather context data
     const currentPlan = await fs.readFile(planPath, 'utf-8');
@@ -218,9 +218,9 @@ async function updateWorkingPlanTimestampOnly(projectDir: string): Promise<void>
   console.log(chalk.dim(`📝 Updated: ${planPath}`));
 }
 
-async function _archiveCurrentPlan(projectDir: string): Promise<void> { // Currently unused
-  const planPath = getWorkingPlanPath(projectDir);
-  const archiveDir = path.join(projectDir, '.claude', 'flashback', 'memory', 'ARCHIVE', 'working_plans');
+async function _archiveCurrentPlan(_projectDir: string): Promise<void> { // Reserved for future archive functionality
+  const planPath = getWorkingPlanPath(_projectDir);
+  const archiveDir = path.join(_projectDir, '.claude', 'flashback', 'memory', 'ARCHIVE', 'working_plans');
 
   if (!await fs.pathExists(planPath)) {
     console.log(chalk.yellow('⚠️  No current working plan to archive.'));
@@ -242,7 +242,7 @@ async function _archiveCurrentPlan(projectDir: string): Promise<void> { // Curre
     await cleanupOldArchives(archiveDir, 10);
 
     // Create fresh working plan
-    await initializeWorkingPlan(projectDir);
+    await initializeWorkingPlan(_projectDir);
 
     console.log(chalk.green('✅ Working plan archived successfully'));
     console.log(chalk.dim(`📁 Archived to: ${archivePath}`));
