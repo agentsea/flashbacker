@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.3] - 2025-08-14
+
+### Enhanced
+- **ENHANCED FIX-MASTER**: Significantly improved `/fb:fix-master` surgical fix protocol
+  - **Refined workflow structure**: Clear 7-phase methodology with better decision points
+  - **Agent validation integration**: Smart agent selection for complex fixes with explicit criteria  
+  - **Enhanced agent workflow**: Template-driven agent instructions with focus areas (TypeScript, performance, architecture)
+  - **Structured final reporting**: Comprehensive fix summary template with files changed, root cause, testing, and agent feedback
+  - **Improved manual validation**: Stronger emphasis on hands-on testing before e2e tests
+  - **Better decision logic**: Clear criteria for when to engage agents vs. simple fixes
+
+### Technical
+- Completely rewrote fix-master-enhanced.md with condensed principles and clear workflow guidelines
+- Enhanced agent selection process with specific focus areas and review-only instructions
+- Improved template consistency and removed redundant content for better usability
+- Added structured agent feedback integration with explicit wait requirements
+
 ## [2.3.2] - 2025-08-13
 
 ### Added

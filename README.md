@@ -21,7 +21,7 @@
 
 Flashbacker provides **session continuity** for Claude Code through intelligent state management and specialized AI personas accessed via `/fb:` slash commands.
 
-**Current Status: v2.3.2** - 🚧 **ALPHA** - Complete dual-layer AI system with all 20 specialists available as both personas and agents. John Carmack now includes full agent support with project-aware analysis.
+**Current Status: v2.3.3** - 🚧 **ALPHA** - Enhanced surgical fix protocol with intelligent agent validation. Significantly improved `/fb:fix-master` workflow with structured 7-phase methodology and smart agent integration.
 
 ## 🚀 Quick Start
 
@@ -305,7 +305,7 @@ MIT License
 
 ---
 
-**v2.3.2 Status**: 🚧 **ALPHA** - Complete Dual-Layer System + **20 Total Specialists**. All specialists now available in both persona (`/fb:persona`) and agent (`@agent-`) formats with full project-aware analysis capabilities.
+**v2.3.3 Status**: 🚧 **ALPHA** - Enhanced Surgical Fix Protocol + **20 Total Specialists**. Refined `/fb:fix-master` with intelligent agent validation, structured workflows, and comprehensive fix reporting for precise bug resolution.
 
 ## 🙏 Acknowledgments
 

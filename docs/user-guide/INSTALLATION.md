@@ -117,7 +117,7 @@ After installation, verify everything works:
 
 ```bash
 # Check version and basic functionality
-flashback --version          # Should show 2.2.8
+flashback --version          # Should show 2.3.3
 flashback doctor            # System diagnostics
 
 # Test core commands
@@ -140,7 +140,7 @@ Expected output from `flashback doctor`:
 
 ✅ Node.js version: v22.x.x (compatible - LTS supported)
 ✅ npm version: v10.x.x (compatible)  
-✅ Flashbacker CLI: Working (v2.2.8)
+✅ Flashbacker CLI: Working (v2.3.3)
 ✅ Project structure: Initialized  
 ✅ Configuration: Valid
 ✅ Slash commands: Installed (/fb: namespace)
@@ -320,7 +320,7 @@ cd /path/to/flashbacker
 npm unlink && npm link
 
 # Verify correct version:
-flashback --version  # Should show 2.2.8
+flashback --version  # Should show 2.3.3
 
 # If still wrong, check which flashback you're running:
 which flashback
@@ -606,6 +606,6 @@ After successful installation:
 
 ---
 
-**Installation Status**: v2.2.8 - Source installation fully functional with GPT-5 integration and enhanced analysis capabilities  
+**Installation Status**: v2.3.3 - Source installation fully functional with enhanced surgical fix protocol and intelligent agent validation  
 **Next**: NPM package publication for simplified installation  
-**Last Updated**: August 6, 2025 - Fixed catastrophic init system bug that destroyed other Claude frameworks, implemented dynamic template scanning
+**Last Updated**: August 14, 2025 - Enhanced surgical fix protocol with intelligent agent validation, structured workflows, and comprehensive fix reporting
