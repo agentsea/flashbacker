@@ -58,6 +58,18 @@ flashback init --mcp
 - ✅ `@agent-john-carmack "analyze hot path performance and control flow"` # Performance-critical systems analysis with game engine principles in the style of the legendary John Carmack
 - ✅ `@agent-code-critic "be brutally honest about this code and tell me what is actually implemented and what is not realistically!"`      # Code quality enforcement
 
+### What Happens Behind the Scenes
+
+**Persona Commands (`/fb:persona architect "review API"`):**
+1. **Direct template application**: Reads persona template from `.claude/flashback/personas/architect.md`
+2. **Simple output**: Template content + your request in current conversation
+3. **Immediate analysis**: No subagent spawn, direct analysis
+
+**Agent Commands (`@agent-architect "review API"`):**
+1. **Agent spawning**: Claude Code spawns dedicated architect subagent
+2. **Context gathering**: Agent runs `flashback agent --context` to get project bundle
+3. **Rich context**: Agent receives REMEMBER.md, WORKING_PLAN.md, conversation history
+4. **Project-aware analysis**: Specialized analysis with full project understanding
 
 **🧠 SESSION CONTINUITY SYSTEM AND MEMORY:**
 
@@ -71,10 +83,12 @@ flashback init --mcp
 
 ### Workflow 1: After Context Compaction
 
-**Does it happen automatically? NO!!!! Claude Code does not have proper hooks for pre and post compaction at this time so session management is done manually!**
+**Does memory management happen automatically? NO!!!! Claude Code does not have proper hooks for pre and post compaction at this time so session management is done manually!**
 
-When you see Claude has about 10% context window left run the following
-1. **/fb:save-session** AND/OR **/fb:working-plan** command to capture session insights before compaction to the **./claude/flashback/memory/CURRENT_SESSION.md** file
+When you see Claude has about **10% context window left** run the following:
+
+1. **/fb:working-plan** command AND/OR **/fb:save-session** to capture session insights before compaction to the **./claude/flashback/memory/WORKING_PLAN.md** file or the **./claude/flashback/memory/CURRENT_SESSION.md** file respectively.
+
 2. AFTER COMPACTION, RUN **/fb:session-start** to restore the context from the **./claude/flashback/memory/CURRENT_SESSION.md** file
 
 
@@ -82,7 +96,7 @@ When you see Claude has about 10% context window left run the following
 
 ### Working Plan Intelligence
 ```bash
-/fb:working-plan  {create a new working plan based on verything we just discussed}  # AI analyzes conversation and updates development priorities
+/fb:working-plan  {create a new working plan based on everything we just discussed}  # AI analyzes conversation and updates development priorities
 ```
 This command:
 - Analyzes recent conversation for accomplishments and new tasks
@@ -90,10 +104,10 @@ This command:
 - Moves completed tasks to "Recently Completed" section
 - Identifies next steps discovered during the session
 
-### Getting Claude to Underestand and Output a Plan to Implement
+### Getting Claude to Understand and Output a Plan to Implement
 ```bash
 /fb:how                  # Get structured implementation planning prompt
-/fb:how "Explain exactly what you understood from what I just told you and output a plan to implemnet it" # Focused planning for specific topic only
+/fb:how "Explain exactly what you understood from what I just told you and output a plan to implement it" # Focused planning for specific topic only
 ```
 This command:
 - Prompts Claude to understand your request clearly so you know you are aligned as AI often DOES NOT UNDERSTAND YOU and you can save a LOT of TIME and TROUBLE and frustration by having it explain what it understood and what it's plan is to implement it.
@@ -135,23 +149,23 @@ After installation, you primarily use Flashbacker through **slash commands in Cl
 @agent-architect "comprehensive API analysis"     # Spawns subagent with full context
 @agent-security "security audit with remediation" # Project-aware security analysis
 
-# Agent Discussion system - Spawns a series of dedicated agents and injects them with full context to analyze a specific issues/debate architecture or fix a specific issue. Recommended READ ONLY to claude so that multiple agents do not try to chagne the codebase at the same time.
-flashback discuss "Should we use microservices? Research the pros and cons and provide concreat recommendations with a clear list and a summary of your findings and citations." john-carmack,architect,devops,security
+# Agent Discussion system - Spawns a series of dedicated agents and injects them with full context to analyze a specific issues/debate architecture or fix a specific issue. Recommended READ ONLY to claude so that multiple agents do not try to change the codebase at the same time.
+flashback discuss "Should we use microservices? Research the pros and cons and provide concrete recommendations with a clear list and a summary of your findings and citations." john-carmack,architect,devops,security
 
 # Session Management
 **Use the working-plan command to save a comprehensive working plan of what you are developing and to keep that plan updated with information**
 /fb:working-plan  {additional information to tell Claude}                                # Update development priorities and capture them in a document ./claude/flashback/memory/WORKING_PLAN.md (which you can read directly in your project)
 
-**Use the remember command to save bite size, importnat info like a) tests always go in ./tests b) .env files must always go in .gitignore c) etc.**
+**Use the remember command to save bite size, important info like a) tests always go in ./tests b) .env files must always go in .gitignore c) etc.**
 /fb:remember {key insight or decision}             # Save important info to memory to ./claude/flashback/memory/REMEMBER.md (which you can read directly in your project). 
 
 /fb:save-session                                  # Capture session insights and capture them in a document ./claude/flashback/memory/CURRENT_SESSION.md  (which you can read directly in your project)
 
-**Use this to ask Claude to explain WHAT it understood about your command and what its plan to plement it is.**
+**Use this to ask Claude to explain WHAT it understood about your command and what its plan to implement it is.**
 /fb:how                                           # Plan implementation before coding
 /fb:how "I asked you to create a unit test and you created a suite of fake e2e tests. What did you understand about what I asked you to do?"                              # Plan implementation for specific topic only
 
-**Use AST trees for Go, Python, TypeScript, JavaScript (with automatic language detection) hueristics to hunt down technical debt and code quality issues like placeholders, fake code, duplicate code, etc.**
+**Use AST trees for Go, Python, TypeScript, JavaScript (with automatic language detection) heuristics to hunt down technical debt and code quality issues like placeholders, fake code, duplicate code, etc.**
 # Code Quality & Fix Analysis
 /fb:debt-hunter     
 
@@ -164,18 +178,6 @@ flashback discuss "Should we use microservices? Research the pros and cons and p
 /fb:fix-master "error description"                 # Surgical fix methodology for precise bug fixes
 ```
 
-### What Happens Behind the Scenes
-
-**Persona Commands (`/fb:persona architect "review API"`):**
-1. **Direct template application**: Reads persona template from `.claude/flashback/personas/architect.md`
-2. **Simple output**: Template content + your request in current conversation
-3. **Immediate analysis**: No subagent spawn, direct analysis
-
-**Agent Commands (`@agent-architect "review API"`):**
-1. **Agent spawning**: Claude Code spawns dedicated architect subagent
-2. **Context gathering**: Agent runs `flashback agent --context` to get project bundle
-3. **Rich context**: Agent receives REMEMBER.md, WORKING_PLAN.md, conversation history
-4. **Project-aware analysis**: Specialized analysis with full project understanding
 
 ### Direct CLI Commands (Rarely Used)
 ```bash
@@ -248,7 +250,7 @@ All 20 specialists available in both layers:
 
 ## 🧠 Using the Memory System
 
-Flashbacker maintains project knowledge that survives context compactions if you manually use it. Unfortuanately, Claude Code does not support AUTOMATIC memory HOOKs via pre-compaction or post-compaction.
+Flashbacker maintains project knowledge that survives context compactions if you manually use it. Unfortunately, Claude Code does not support AUTOMATIC memory HOOKS via pre-compaction or post-compaction.
 
 **What You Should Do Next:**
 ```bash
