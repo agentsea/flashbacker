@@ -15,6 +15,7 @@
     "test": "npm run build && jest",
     "test:unit": "npm run build && jest tests/unit",
     "test:integration": "npm run build && node tests/cli-integration.test.js",
+    "test:install": "npm run build && jest tests/install.e2e.test.js --coverage=false",
     "test:watch": "npm run build && jest --watch",
     "test:coverage": "npm run build && jest --coverage",
     "test:ci": "npm run build && jest --ci --coverage --watchAll=false",
