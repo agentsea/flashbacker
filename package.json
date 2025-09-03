@@ -1,6 +1,6 @@
 {
   "name": "flashbacker",
-  "version": "2.3.5",
+  "version": "2.3.6",
   "description": "Claude Code state management with session continuity and AI personas",
   "main": "lib/index.js",
   "bin": {
@@ -10,6 +10,7 @@
     "build": "npm run build:compile && npm run build:copy-templates",
     "build:compile": "tsc",
     "build:copy-templates": "cp -r templates lib/ 2>/dev/null || true",
+    "postinstall": "node scripts/setup-prereqs.js --ensure-pm2 --verbose || echo 'Warning: PM2 auto-install failed, background intelligence disabled'",
     "dev": "tsc --watch",
     "test": "npm run build && jest",
     "test:unit": "npm run build && jest tests/unit",
