@@ -16,6 +16,7 @@ import { personaCommand } from './commands/persona';
 import { agentCommand } from './commands/agent';
 import { debtHunterCommand } from './commands/debt-hunter';
 import { getProjectDirectory } from './utils/config';
+import { daemonCommand } from './commands/daemon';
 
 // Read version from package.json
 const packageJsonPath = join(__dirname, '..', 'package.json');
@@ -105,6 +106,17 @@ program
   .option('-l, --list', 'List all available agents')
   .option('-c, --context', 'Generate project context bundle')
   .action(agentCommand);
+
+program
+  .command('daemon')
+  .description('Manage the background daemon (PM2)')
+  .option('--start', 'Start the daemon using PM2')
+  .option('--stop', 'Stop the daemon')
+  .option('--restart', 'Restart the daemon')
+  .option('--status', 'Show daemon status')
+  .option('--logs', 'Show recent daemon logs')
+  .option('--project <dir>', 'Project directory')
+  .action(daemonCommand);
 
 
 program

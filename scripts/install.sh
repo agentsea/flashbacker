@@ -55,6 +55,18 @@ npm run build --silent
 echo "🔗 Creating npm link..."
 npm link --silent
 
+# Ensure PM2 is installed (auto-install if missing)
+echo "🧩 Ensuring PM2 is installed..."
+if ! command -v pm2 >/dev/null; then
+    echo "   ⬇️  Installing pm2 globally..."
+    if npm install -g pm2 --silent; then
+        echo "   ✅ pm2 installed"
+    else
+        echo "   ⚠️  pm2 installation failed. You can install it manually with: npm install -g pm2"
+    fi
+fi
+pm2 -v >/dev/null 2>&1 || echo "   ⚠️  pm2 not available on PATH. Ensure your npm global bin is on PATH."
+
 # Add alias to shell config if not already present
 SHELL_CONFIG=""
 if [ -f ~/.zshrc ]; then

@@ -59,15 +59,15 @@
 - [ ] 3.5.4 Test config management with various user preferences
 
 ## 3.6 Daemon CLI Integration
-**Deliverable**: Daemon management integrated into existing CLI structure
-**Acceptance Criteria**: Daemon commands follow existing CLI patterns in src/cli.ts
-**Dependencies**: 1.7 complete
+**Deliverable**: PM2-managed daemon control integrated into existing CLI structure
+**Acceptance Criteria**: Daemon commands follow existing CLI patterns, leverage Phase 1 PM2 integration
+**Dependencies**: Phase 1 PM2 setup (1.8) complete
 **Estimated Time**: 2 hours
 
-- [ ] 3.6.1 Complete `src/commands/daemon.ts` following existing command patterns
-- [ ] 3.6.2 Add daemon status reporting with per-project breakdown
+- [ ] 3.6.1 Complete `src/commands/daemon.ts` using PM2 wrapper functions from Phase 1
+- [ ] 3.6.2 Add daemon status reporting with per-project breakdown and PM2 process status
 - [ ] 3.6.3 Integrate daemon commands into existing `src/cli.ts` structure
-- [ ] 3.6.4 Test daemon CLI works with existing command architecture
+- [ ] 3.6.4 Test daemon CLI works with PM2 ecosystem configuration from Phase 1
 
 ## 3.7 Template-Prompt Integration
 **Deliverable**: Daemon can call AI model with prompt templates when activity detected
@@ -80,16 +80,40 @@
 - [ ] 3.7.3 Implement template selection based on detected activity type
 - [ ] 3.7.4 Test DUMB→SMART workflow: daemon detects → calls AI model → AI model uses tools
 
-## 3.8 Extension Testing
+## 3.8 API Key Management System
+**Deliverable**: Secure API key management for background AI model operations
+**Acceptance Criteria**: API keys stored securely, rotated safely, not logged
+**Dependencies**: 3.6 complete
+**Estimated Time**: 3 hours
+
+- [ ] 3.8.1 Create `src/utils/api-key-manager.ts` with secure key storage
+- [ ] 3.8.2 Implement API key rotation capabilities for background operations
+- [ ] 3.8.3 Add key validation and health checking
+- [ ] 3.8.4 Ensure API keys never appear in logs or memory files
+- [ ] 3.8.5 Test API key management with various provider configurations
+
+## 3.9 Cost Control Implementation
+**Deliverable**: Actual cost tracking and quota enforcement system
+**Acceptance Criteria**: Real-time cost tracking, budget limits, usage alerts
+**Dependencies**: 3.7 complete
+**Estimated Time**: 3 hours
+
+- [ ] 3.9.1 Create `src/utils/cost-tracker.ts` with real-time usage monitoring
+- [ ] 3.9.2 Implement budget limits and quota enforcement per project
+- [ ] 3.9.3 Add cost estimation before expensive AI model operations
+- [ ] 3.9.4 Create usage alerts and budget notification system
+- [ ] 3.9.5 Test cost controls prevent runaway background intelligence costs
+
+## 3.10 Extension Testing
 **Deliverable**: All extended commands work with existing Flashbacker functionality
 **Acceptance Criteria**: No conflicts with existing commands, proper integration
-**Dependencies**: 3.1-3.7 complete
+**Dependencies**: 3.1-3.9 complete
 **Estimated Time**: 2 hours
 
-- [ ] 3.8.1 Test enhanced commands don't conflict with existing functionality
-- [ ] 3.8.2 Verify background intelligence enhances existing workflows
-- [ ] 3.8.3 Test graceful degradation when daemon not running
-- [ ] 3.8.4 Confirm all extensions follow existing Flashbacker patterns
+- [ ] 3.10.1 Test enhanced commands don't conflict with existing functionality
+- [ ] 3.10.2 Verify background intelligence enhances existing workflows
+- [ ] 3.10.3 Test graceful degradation when daemon not running
+- [ ] 3.10.4 Confirm all extensions follow existing Flashbacker patterns with security
 
 ---
 

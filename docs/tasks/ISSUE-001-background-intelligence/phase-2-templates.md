@@ -79,16 +79,38 @@
 - [ ] 2.7.3 Test distribution via existing `flashback init --refresh` command
 - [ ] 2.7.4 Verify templates appear in `.claude/flashback/prompts/` in user projects
 
-## 2.8 Template Testing and Validation
-**Deliverable**: Validated templates that work reliably with existing Flashbacker patterns
-**Acceptance Criteria**: All templates produce consistent AI model responses
+## 2.8 Cost Monitoring Template
+**Deliverable**: Template for AI model to track and report background intelligence costs
+**Acceptance Criteria**: AI model can assess usage patterns and recommend cost optimizations
+**Dependencies**: 2.6 complete
+**Estimated Time**: 2 hours
+
+- [ ] 2.8.1 Create `templates/.claude/flashback/prompts/cost-monitoring.md`
+- [ ] 2.8.2 Design template for AI model to analyze API usage and cost patterns
+- [ ] 2.8.3 Add cost estimation and budget tracking capabilities
+- [ ] 2.8.4 Test cost monitoring template with various usage scenarios
+
+## 2.9 Security & Data Filtering Template
+**Deliverable**: Template for AI model to handle sensitive data in background operations
+**Acceptance Criteria**: AI model can identify and filter sensitive information
 **Dependencies**: 2.7 complete
 **Estimated Time**: 2 hours
 
-- [ ] 2.8.1 Test all templates follow existing Flashbacker prompt template patterns
-- [ ] 2.8.2 Validate AI model response quality and consistency across templates
-- [ ] 2.8.3 Verify GPT-5 parameter optimization works in all templates
-- [ ] 2.8.4 Test templates with multiple project contexts
+- [ ] 2.9.1 Create `templates/.claude/flashback/prompts/data-security.md`
+- [ ] 2.9.2 Design template for AI model to detect and filter sensitive data in logs
+- [ ] 2.9.3 Add API key and credential detection capabilities
+- [ ] 2.9.4 Test security filtering with real project data containing secrets
+
+## 2.10 Template Testing and Validation
+**Deliverable**: Validated templates that work reliably with existing Flashbacker patterns
+**Acceptance Criteria**: All templates produce consistent AI model responses
+**Dependencies**: 2.8, 2.9 complete
+**Estimated Time**: 2 hours
+
+- [ ] 2.10.1 Test all templates follow existing Flashbacker prompt template patterns
+- [ ] 2.10.2 Validate AI model response quality and consistency across templates
+- [ ] 2.10.3 Verify GPT-5 parameter optimization works in all templates
+- [ ] 2.10.4 Test templates with multiple project contexts including sensitive data
 
 ---
 

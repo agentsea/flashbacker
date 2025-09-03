@@ -8,5 +8,28 @@
   },
   "hooks": {
     "session_start_enabled": true
+  },
+  "background": {
+    "enabled": false,
+    "poll_interval_seconds": 30,
+    "activity_threshold_minutes": 5
+  },
+  "pm2": {
+    "resource_limits": {
+      "max_memory_mb": 150
+    }
+  },
+  "retention": {
+    "remember": 10,
+    "workingPlan": 10,
+    "todoChain": 10
+  },
+  "models": {
+    "default": "gpt-5-nano",
+    "textVerbosity": "low",
+    "reasoning_effort": "low"
+  },
+  "audit": {
+    "schedule": "weekly"
   }
 }

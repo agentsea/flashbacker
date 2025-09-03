@@ -120,6 +120,15 @@ export async function initCommand(options: InitOptions): Promise<void> {
     console.log(chalk.gray('🧠 Initializing memory system...'));
     await initializeMemorySystem(cwd, options);
 
+    // Generate PM2 ecosystem configuration
+    try {
+      console.log(chalk.gray('🧩 Generating PM2 ecosystem configuration...'));
+      await generatePm2Ecosystem(cwd, options);
+      console.log(chalk.green('   ✅ PM2 ecosystem configuration generated'));
+    } catch (err) {
+      console.log(chalk.yellow(`   ⚠️  Could not generate PM2 ecosystem config: ${err instanceof Error ? err.message : String(err)}`));
+    }
+
     // Update .gitignore
     console.log(chalk.gray('🔒 Updating .gitignore...'));
     await ensureGitignoreProtection(cwd);
@@ -142,11 +151,60 @@ export async function initCommand(options: InitOptions): Promise<void> {
     console.log(chalk.gray('  • Use `flashback memory --show` to view project memory'));
     console.log(chalk.gray('  • Use `/fb:persona` to see available AI personas'));
     console.log(chalk.gray('  • Use `/fb:save-session` before context compaction'));
+    console.log(chalk.gray('  • Start background daemon: `flashback daemon --start`'));
+    console.log(chalk.gray('  • Check daemon: `flashback daemon --status` and `--logs`'));
 
   } catch (error) {
     console.error(chalk.red('❌ Failed to initialize Flashback:'));
     console.error(chalk.red(error instanceof Error ? error.message : String(error)));
     process.exit(1);
+  }
+}
+/**
+ * Generate PM2 ecosystem configuration under the project
+ */
+async function generatePm2Ecosystem(projectDir: string, options: InitOptions): Promise<void> {
+  const pm2Dir = path.join(projectDir, '.claude', 'flashback', 'scripts', 'pm2');
+  const ecosystemPath = path.join(pm2Dir, 'ecosystem.config.js');
+
+  await fs.ensureDir(pm2Dir);
+
+  // Create a unique per-project app name preferring project_name from config
+  const realProjectDir: string = fs.realpathSync(projectDir);
+  let projectSlug = path.basename(realProjectDir);
+  try {
+    const cfgRaw = await fs.readFile(path.join(realProjectDir, '.claude', 'flashback', 'config', 'flashback.json'), 'utf-8');
+    const cfg = JSON.parse(cfgRaw);
+    if (cfg?.project_name) {
+      projectSlug = String(cfg.project_name);
+    }
+  } catch {}
+  // sanitize projectSlug
+  projectSlug = projectSlug.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const appName = `flashback-daemon-${projectSlug}`;
+  const projectPathEscaped = projectDir.replace(/\\/g, '\\\\');
+  // Absolute path to the compiled daemon entry, relative to this compiled file
+  const daemonScript = path.join(__dirname, '..', 'daemon', 'index.js');
+
+  const ecosystemContent = `module.exports = {
+  apps: [
+    {
+      name: ${JSON.stringify(appName)},
+      script: ${JSON.stringify(daemonScript)},
+      cwd: ${JSON.stringify(realProjectDir)},
+      watch: false,
+      max_memory_restart: '150M',
+      env: {
+        NODE_ENV: 'production'
+      }
+    }
+  ]
+};
+`;
+
+  // Overwrite if refresh requested or file missing
+  if (options.refresh || !await fs.pathExists(ecosystemPath)) {
+    await fs.writeFile(ecosystemPath, ecosystemContent);
   }
 }
 

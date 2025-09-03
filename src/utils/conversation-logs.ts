@@ -68,7 +68,7 @@ async function getJSONLFiles(projectDir: string): Promise<Array<{ name: string; 
 /**
  * Get the current session ID
  */
-export async function getCurrentSessionId(projectDir?: string): Promise<string> {
+async function getCurrentSessionId(projectDir?: string): Promise<string> {
   try {
     const currentProject = projectDir || process.cwd();
     const jsonlFiles = await getJSONLFiles(currentProject);
@@ -188,7 +188,7 @@ async function processSessionFile(file: { name: string; path: string; mtime: Dat
 /**
  * Get both current and previous session logs with intelligent filtering
  */
-export async function getDualSessionLogs(projectDir: string, options: SessionOptions = {}): Promise<{
+async function getDualSessionLogs(projectDir: string, options: SessionOptions = {}): Promise<{
   currentSession: SessionSummary;
   previousSession: SessionSummary;
 }> {
@@ -208,7 +208,7 @@ export async function getDualSessionLogs(projectDir: string, options: SessionOpt
 /**
  * Legacy function for backward compatibility - returns current session content only
  */
-export async function getLatestConversationLog(projectDir: string, maxEntries: number = 100): Promise<string> {
+async function getLatestConversationLog(projectDir: string, maxEntries: number = 100): Promise<string> {
   try {
     const { currentSession } = await getDualSessionLogs(projectDir, {
       maxEntriesPerSession: maxEntries,
@@ -227,7 +227,7 @@ export async function getLatestConversationLog(projectDir: string, maxEntries: n
 /**
  * Get current session information - lightweight check using only session ID
  */
-export async function getCurrentSessionInfo(projectDir?: string): Promise<{
+async function getCurrentSessionInfo(projectDir?: string): Promise<{
   sessionId: string;
   projectDir: string;
   conversationAvailable: boolean;
@@ -242,3 +242,12 @@ export async function getCurrentSessionInfo(projectDir?: string): Promise<{
     conversationAvailable: jsonlFiles.length > 0,
   };
 }
+
+export {
+  pathToClaudeProjectDir,
+  getJSONLFiles,
+  getCurrentSessionId,
+  getDualSessionLogs,
+  getLatestConversationLog,
+  getCurrentSessionInfo,
+};

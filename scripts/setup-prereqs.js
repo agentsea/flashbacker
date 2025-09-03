@@ -28,6 +28,31 @@ function checkCommand(command) {
   }
 }
 
+function ensurePm2(verbose = false) {
+  const logPrefix = verbose ? '[PM2] ' : '';
+  try {
+    if (checkCommand('pm2')) {
+      if (verbose) log(`${logPrefix}pm2 already installed`, 'green');
+      // Also verify it runs
+      execSync('pm2 -v', { stdio: 'ignore' });
+      return true;
+    }
+
+    if (verbose) log(`${logPrefix}Installing pm2 globally...`, 'yellow');
+    execSync('npm install -g pm2 --silent', { stdio: 'inherit' });
+
+    // Re-check
+    execSync('pm2 -v', { stdio: 'ignore' });
+    if (verbose) log(`${logPrefix}pm2 installed successfully`, 'green');
+    return true;
+  } catch (error) {
+    log(`${logPrefix}Failed to install pm2 automatically.`, 'red');
+    log('💡 Try: npm config get prefix (ensure it is on your PATH)', 'yellow');
+    log('💡 Or run: npm install -g pm2', 'yellow');
+    return false;
+  }
+}
+
 function checkNodeVersion() {
   try {
     const nodeVersion = process.version;
@@ -123,7 +148,20 @@ function main() {
   const nodeOk = checkNodeVersion();
   const npmOk = checkNpmVersion();
   
-  if (nodeOk && npmOk) {
+  // Parse flags
+  const args = process.argv.slice(2);
+  const ensurePm2Flag = args.includes('--ensure-pm2');
+  const verbose = args.includes('--verbose');
+
+  if (ensurePm2Flag) {
+    const pm2Ok = ensurePm2(verbose);
+    if (!pm2Ok) {
+      process.exitCode = 0; // do not block installation
+      return;
+    }
+  }
+
+  if (nodeOk && npmOk && !ensurePm2Flag) {
     log('\n🎉 All prerequisites are already satisfied!', 'green');
     log('✅ You can proceed with: npm install && npm run build', 'green');
     return;
