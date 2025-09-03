@@ -1,0 +1,85 @@
+{
+  "issue": "ISSUE-001-background-intelligence",
+  "title": "Background Intelligence System",
+  "status": "ready_to_start",
+  "priority": "critical",
+  "estimated_effort": "3-4 weeks",
+  "created": "2025-08-31",
+  "updated": "2025-08-31",
+  "assignee": "Architecture Team",
+  "architecture_pattern": "hybrid_ai_computer_operations",
+  "phases": {
+    "phase-1": {
+      "name": "Foundation Integration",
+      "status": "not_started",
+      "tasks_total": 32,
+      "tasks_completed": 0,
+      "estimated_duration": "1 week",
+      "dependencies": [],
+      "key_features": ["DUMB daemon with existing utilities", "enhanced config system", "memory rotation"]
+    },
+    "phase-2": {
+      "name": "Template-Driven Intelligence", 
+      "status": "not_started",
+      "tasks_total": 32,
+      "tasks_completed": 0,
+      "estimated_duration": "1 week",
+      "dependencies": ["phase-1"],
+      "key_features": ["prompt templates", "NO hardcoded prompts", "GPT-5 parameter controls"]
+    },
+    "phase-3": {
+      "name": "Command Extensions",
+      "status": "not_started", 
+      "tasks_total": 32,
+      "tasks_completed": 0,
+      "estimated_duration": "1 week",
+      "dependencies": ["phase-2"],
+      "key_features": ["extend existing commands", "DUMB CRUD tools", "template integration"]
+    },
+    "phase-4": {
+      "name": "Production Integration",
+      "status": "not_started",
+      "tasks_total": 32,
+      "tasks_completed": 0,
+      "estimated_duration": "1 week", 
+      "dependencies": ["phase-3"],
+      "key_features": ["weekly audits", "memory decay", "model sweeps", "user controls"]
+    }
+  },
+  "total_tasks": 128,
+  "completed_tasks": 0,
+  "progress_percentage": 0,
+  "cost_strategy": {
+    "default_model": "gpt-5-nano",
+    "no_auto_escalation": true,
+    "user_controlled_overrides": true,
+    "target_monthly_cost": "$3 aggregate"
+  },
+  "memory_management": {
+    "rotation_enabled": true,
+    "decay_enabled": true,
+    "audit_schedule": "weekly",
+    "retention_count": 10
+  },
+  "architecture_compliance": {
+    "dumb_daemon": "Uses existing utilities only, no embedded AI",
+    "smart_prompts": "All intelligence via template-driven Claude prompts",
+    "dumb_tools": "Extends existing commands with simple CRUD operations",
+    "existing_integration": "Zero duplication, leverages all existing utilities"
+  },
+  "key_technologies": [
+    "PM2 (DUMB daemon)",
+    "Existing conversation-logs.ts utilities",
+    "Existing config.ts utilities", 
+    "Existing template distribution system",
+    "Claude prompts (SMART intelligence)",
+    "Extended existing commands (DUMB tools)"
+  ],
+  "success_metrics": [
+    "99% daemon uptime with DUMB operations only",
+    "Weekly memory audits with user-controlled model selection",
+    "Memory decay prevents obsolete information accumulation",
+    "Zero code duplication - uses ALL existing utilities",
+    "Cost controlled - no automatic model escalation"
+  ]
+}
