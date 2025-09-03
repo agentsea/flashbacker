@@ -28,7 +28,7 @@
 5) A code task management system for complex issues
 6) A code quality and fix system for complex issues
 
-**Current Status: v2.3.5** - 🚧 **ALPHA** - Complete workflow system with 20 total specialists. Enhanced with comprehensive task management, advanced discussion system, and integrated workflow patterns for professional development teams.
+**Current Status: v2.3.6** - 🚧 **ALPHA** - Complete workflow system with 20 total specialists. Adds PM2 background daemon foundation with per-project ecosystem generation and CLI management.
 
 ## 🚀 Quick Start
 
@@ -198,6 +198,17 @@ flashback discuss "Should we use microservices?" john-carmack,architect,security
 - **playwright**: Browser automation, testing, and web interaction capabilities  
 - **sequential-thinking**: Advanced multi-step reasoning and problem-solving chains
 
+### 🧩 Background Daemon (PM2)
+
+- PM2 auto-install: ensured during install via postinstall/prereqs/installer
+- Per-project daemon: `flashback init` generates `.claude/flashback/scripts/pm2/ecosystem.config.js`
+- Start/stop/status/logs:
+  - `flashback daemon --start`
+  - `flashback daemon --stop`
+  - `flashback daemon --status`
+  - `flashback daemon --logs`
+- Naming: PM2 app name uses your `project_name` from `flashback.json` (sanitized)
+
 ## 🎯 Slash Commands You'll Use
 
 ### Persona Analysis (Current Conversation)
@@ -334,7 +345,7 @@ MIT License
 
 ---
 
-**v2.3.5 Status**: 🚧 **ALPHA** - **Complete Workflow System** + **20 Total Specialists**. Enhanced comprehensive task management system with manual session continuity, advanced discussion workflows, and integrated development patterns for professional teams.
+**v2.3.6 Status**: 🚧 **ALPHA** - **Complete Workflow System** + **20 Total Specialists**. Adds PM2 background daemon foundation and readable per-project process names.
 
 ## 🙏 Acknowledgments
 

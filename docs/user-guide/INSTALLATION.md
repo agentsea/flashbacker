@@ -190,6 +190,18 @@ Flashbacker follows a clean installation model:
 - **Project**: Only `.claude/` directory with templates and configuration
 - **Result**: Clean separation, no conflicts with existing project structure
 
+### Background Daemon (PM2)
+
+- PM2 is auto-installed by the installer/postinstall when possible
+- After `flashback init`, start the daemon:
+  ```bash
+  flashback daemon --start
+  flashback daemon --status
+  flashback daemon --logs
+  ```
+- A per-project PM2 ecosystem is generated at `.claude/flashback/scripts/pm2/ecosystem.config.js`
+- The PM2 app name uses your `project_name` from `flashback.json` (sanitized)
+
 ## 🎯 Post-Installation Setup
 
 ### Initialize Your First Project

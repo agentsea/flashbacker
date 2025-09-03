@@ -28,6 +28,25 @@ npm link
 flashback --version
 ```
 
+## ✅ Running Tests (Contributors)
+
+End users don’t need tests. These are for contributors:
+
+```bash
+# Unit tests (with coverage)
+npm run test:unit
+
+# Integration tests (with coverage)
+npm run test:integration
+
+# Install E2E (no coverage): packs, installs to temp prefix, inits, asserts PM2 ecosystem
+npm run test:install
+```
+
+Notes:
+- PM2 is auto-installed during install/link via postinstall/prereqs/installer.
+- The install E2E avoids coverage thresholds to prevent noise; keep coverage gates for unit/integration.
+
 ## 🔧 Development Workflow
 
 ### Making Changes
