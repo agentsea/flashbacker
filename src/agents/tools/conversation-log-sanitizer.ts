@@ -185,6 +185,8 @@ export const sanitizeConversationLogs = tool({
         '## Output Requirements - MANDATORY FILE UPDATE',
         '## Quality Requirements',
         '## Session Analysis Guidelines',
+        '## Directory Structure',
+        '## Implementation Instructions',
       ];
 
       const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -219,6 +221,36 @@ export const sanitizeConversationLogs = tool({
         }
       }
       (sanitizeConversationLogs as any)._lastSectionCounts = sectionCounts;
+    }
+
+    // Optional fenced code block deduplication: keep first identical block, collapse repeats
+    if (regexPrune) {
+      const codeRe = /```[^\n]*\n[\s\S]*?```/g;
+      const seenCode = new Map<string, number>();
+      const parts: { start: number; end: number; text: string }[] = [];
+      let m: RegExpExecArray | null;
+      while ((m = codeRe.exec(cleanedText)) !== null) {
+        parts.push({ start: m.index, end: m.index + m[0].length, text: m[0] });
+        if (m.index === codeRe.lastIndex) codeRe.lastIndex++;
+      }
+      if (parts.length > 1) {
+        let result = '';
+        let cursor = 0;
+        for (const p of parts) {
+          result += cleanedText.slice(cursor, p.start);
+          const norm = normalizeBlock(p.text);
+          const count = (seenCode.get(norm) || 0) + 1;
+          seenCode.set(norm, count);
+          if (count === 1) {
+            result += p.text;
+          } else {
+            result += `\n(duplicate code block deduped x${count - 1})\n`;
+          }
+          cursor = p.end;
+        }
+        result += cleanedText.slice(cursor);
+        cleanedText = result;
+      }
     }
     const before = estimateTokens(originalText);
     const after = estimateTokens(cleanedText);

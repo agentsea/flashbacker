@@ -1,16 +1,11 @@
 #!/usr/bin/env node
-/*
- Manual sanitizer runner against real logs.
- Prints memory usage, file sizes, line counts, and token estimates.
- Optionally prints provider token counts if OPENAI_API_KEY is set and input is within limits.
- Usage: node scripts/sanitize-real.js [projectDir]
-*/
+/* Manual sanitizer runner (tests/manual). */
 const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 
-const { sanitizeConversationLogs } = require('../lib/agents/tools/conversation-log-sanitizer.js');
-const { getJSONLFiles } = require('../lib/utils/conversation-logs.js');
+const { sanitizeConversationLogs } = require('../../lib/agents/tools/conversation-log-sanitizer.js');
+const { getJSONLFiles } = require('../../lib/utils/conversation-logs.js');
 
 function mb(n) { return (n / (1024 * 1024)).toFixed(2); }
 function tokensEstimate(s) { return Math.ceil((s?.length || 0) / 4); }
@@ -62,24 +57,6 @@ async function buildOriginalExtractedText(currentPath, prevPath, currentName, pr
   return segs.join('\n\n');
 }
 
-async function countTokensViaEmbeddings(text) {
-  // Optional precise provider tokens using embeddings (single-shot, small inputs)
-  if (!process.env.OPENAI_API_KEY) return null;
-  if (!text || text.length < 1) return 0;
-  try {
-    const { openai } = require('@ai-sdk/openai');
-    const { embed } = require('ai');
-    if (text.length > 24000) return null;
-    const { usage } = await embed({
-      model: openai.textEmbeddingModel('text-embedding-3-small'),
-      value: text,
-    });
-    return usage?.tokens ?? null;
-  } catch {
-    return null;
-  }
-}
-
 async function countTokensViaEmbeddingsChunked(text, maxChunkChars = 12000) {
   if (!process.env.OPENAI_API_KEY) return null;
   if (!text || text.length < 1) return 0;
@@ -95,7 +72,6 @@ async function countTokensViaEmbeddingsChunked(text, maxChunkChars = 12000) {
       });
       total += usage?.tokens || 0;
     } catch {
-      // If any chunk fails, return null to indicate provider token calc not available
       return null;
     }
   }
@@ -105,7 +81,6 @@ async function countTokensViaEmbeddingsChunked(text, maxChunkChars = 12000) {
 async function main() {
   const projectDir = process.argv[2] ? path.resolve(process.argv[2]) : process.cwd();
   const memStart = process.memoryUsage();
-
   const files = await getJSONLFiles(projectDir);
   const curr = files[0];
   const prev = files[1];
@@ -132,6 +107,10 @@ async function main() {
   const cleanedProviderTokens = await countTokensViaEmbeddingsChunked(cleanedText);
 
   const memEnd = process.memoryUsage();
+
+  const topBlocksRaw = (result.meta && result.meta.topRepeatedBlocks) || [];
+  const topBlocks = topBlocksRaw.slice(0, 5).map(b => ({ count: b.count, preview: String(b.preview || '').slice(0, 100) }));
+  const sectionCounts = (result.meta && result.meta.sectionDedupCounts) || {};
 
   const report = {
     projectDir,
@@ -164,6 +143,10 @@ async function main() {
       rssEnd: Number(mb(memEnd.rss)),
       delta: Number((mb(memEnd.rss - memStart.rss)))
     },
+    dedupInsights: {
+      topRepeatedBlocks: topBlocks,
+      sectionDedupCounts: sectionCounts,
+    }
   };
 
   console.log(JSON.stringify(report, null, 2));
