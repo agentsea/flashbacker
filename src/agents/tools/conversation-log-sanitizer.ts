@@ -126,10 +126,11 @@ export const sanitizeConversationLogs = tool({
     projectDir: z.string(),
     sessionLimit: z.number().min(1).max(3).default(2),
     targetTokens: z.number().default(150000),
-    cleanupLevel: z.enum(['basic','aggressive']).default('aggressive')
+    cleanupLevel: z.enum(['basic','aggressive']).default('aggressive'),
+    regexPrune: z.boolean().default(true)
   }),
-  execute: async (input: { projectDir: string; sessionLimit?: number; targetTokens?: number; cleanupLevel?: 'basic'|'aggressive' }) => {
-    const { projectDir, cleanupLevel } = input;
+  execute: async (input: { projectDir: string; sessionLimit?: number; targetTokens?: number; cleanupLevel?: 'basic'|'aggressive'; regexPrune?: boolean }) => {
+    const { projectDir, cleanupLevel, regexPrune } = input;
     const files = await getJSONLFiles(projectDir);
     const current = files[0]?.path;
     const previous = files[1]?.path;
@@ -164,7 +165,48 @@ export const sanitizeConversationLogs = tool({
       segmentsDedup.push(seg);
     }
 
-    const cleanedText = segmentsDedup.join('\n\n');
+    let cleanedText = segmentsDedup.join('\n\n');
+
+    // Optional curated regex pruning of known repeated boilerplate sections
+    if (regexPrune) {
+      const headings = [
+        '## Project Memory',
+        '## Current Working Plan',
+        '## Session Continuity Reference',
+        '## Recent Conversation Log',
+        '# Session Start Context',
+      ];
+
+      const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+      for (const h of headings) {
+        const re = new RegExp(`${escapeRegExp(h)}[\n\r]+[\s\S]*?(?=\n#{1,2}\s|$)`, 'g');
+        // collect all matches first
+        const matches: { start: number; end: number; text: string }[] = [];
+        let m: RegExpExecArray | null;
+        while ((m = re.exec(cleanedText)) !== null) {
+          matches.push({ start: m.index, end: m.index + m[0].length, text: m[0] });
+          if (m.index === re.lastIndex) re.lastIndex++;
+        }
+        if (matches.length > 1) {
+          // keep first occurrence, replace others with placeholder
+          let result = '';
+          let cursor = 0;
+          for (let i = 0; i < matches.length; i++) {
+            const { start, end } = matches[i];
+            result += cleanedText.slice(cursor, start);
+            if (i === 0) {
+              result += cleanedText.slice(start, end);
+            } else {
+              result += `\n(${h} deduped)\n`;
+            }
+            cursor = end;
+          }
+          result += cleanedText.slice(cursor);
+          cleanedText = result;
+        }
+      }
+    }
     const before = estimateTokens(originalText);
     const after = estimateTokens(cleanedText);
     const reductionPct = before === 0 ? 0 : Math.max(0, Math.round(((before - after) / before) * 100));
