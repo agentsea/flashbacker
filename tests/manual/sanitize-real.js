@@ -94,6 +94,8 @@ async function main() {
     return val;
   };
   const mode = getFlag('mode', 'full'); // full|truncated|sections|slice|grep
+  const showTail = getFlag('tail', false);
+  const tailLines = Number(getFlag('tailLines', '100'));
   const memStart = process.memoryUsage();
   const files = await getJSONLFiles(projectDir);
   const curr = files[0];
@@ -276,6 +278,27 @@ async function main() {
   };
 
   console.log(JSON.stringify(report, null, 2));
+  
+  // Show tail comparison if requested
+  if (showTail) {
+    console.log('\n--- TAIL COMPARISON ---');
+    
+    const originalLines = originalStitched.split('\n');
+    const cleanedLines = cleanedText.split('\n');
+    const showLines = tailLines || 100;
+    
+    console.log(`\n=== ORIGINAL (last ${showLines} lines) ===`);
+    console.log(originalLines.slice(-showLines).join('\n'));
+    
+    console.log(`\n=== SANITIZED (last ${showLines} lines) ===`);
+    console.log(cleanedLines.slice(-showLines).join('\n'));
+    
+    console.log(`\n=== COMPARISON SUMMARY ===`);
+    console.log(`Original lines: ${originalLines.length}`);
+    console.log(`Sanitized lines: ${cleanedLines.length}`);
+    console.log(`Lines removed: ${originalLines.length - cleanedLines.length}`);
+    console.log(`Reduction: ${Math.round(((originalLines.length - cleanedLines.length) / originalLines.length) * 100)}%`);
+  }
 }
 
 main().catch(err => {
