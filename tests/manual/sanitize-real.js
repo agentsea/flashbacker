@@ -4,7 +4,11 @@ const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 
-const { sanitizeConversationLogs } = require('../../lib/agents/tools/conversation-log-sanitizer.js');
+const { sanitizeConversationLogsFull } = require('../../lib/agents/tools/logs/sanitize-full.js');
+const { sanitizeConversationLogsTruncated } = require('../../lib/agents/tools/logs/sanitize-truncated.js');
+const { sanitizeConversationBySections } = require('../../lib/agents/tools/logs/sections.js');
+const { getConversationContextSlice } = require('../../lib/agents/tools/logs/slice.js');
+const { grepConversationLogs } = require('../../lib/agents/tools/logs/grep.js');
 const { getJSONLFiles } = require('../../lib/utils/conversation-logs.js');
 
 function mb(n) { return (n / (1024 * 1024)).toFixed(2); }
@@ -79,7 +83,17 @@ async function countTokensViaEmbeddingsChunked(text, maxChunkChars = 12000) {
 }
 
 async function main() {
-  const projectDir = process.argv[2] ? path.resolve(process.argv[2]) : process.cwd();
+  // Simple arg parsing
+  const args = process.argv.slice(2);
+  const projectDir = args.find(a => !a.startsWith('--')) ? path.resolve(args.find(a => !a.startsWith('--'))) : process.cwd();
+  const getFlag = (name, def) => {
+    const idx = args.findIndex(a => a === `--${name}`);
+    if (idx === -1) return def;
+    const val = args[idx + 1];
+    if (!val || val.startsWith('--')) return true;
+    return val;
+  };
+  const mode = getFlag('mode', 'full'); // full|truncated|sections|slice|grep
   const memStart = process.memoryUsage();
   const files = await getJSONLFiles(projectDir);
   const curr = files[0];
@@ -99,11 +113,46 @@ async function main() {
   const originalTokenEst = tokensEstimate(originalStitched);
   const originalProviderTokens = await countTokensViaEmbeddingsChunked(originalStitched);
 
-  const result = await sanitizeConversationLogs.execute({ projectDir });
-  const cleanedText = result.text || '';
+  let result;
+  if (mode === 'truncated') {
+    const targetTokens = Number(getFlag('targetTokens', '180000'));
+    const strategy = String(getFlag('strategy', 'perMessageCap'));
+    result = await sanitizeConversationLogsTruncated.execute({ projectDir, targetTokens, strategy });
+  } else if (mode === 'sections') {
+    const secs = String(getFlag('sections', 'Project Memory,Current Working Plan,Recent Conversation Log'))
+      .split(',').map(s => s.trim()).filter(Boolean);
+    result = await sanitizeConversationBySections.execute({ projectDir, sections: secs });
+  } else if (mode === 'slice') {
+    const index = Number(getFlag('index', '100'));
+    const before = Number(getFlag('before', '5'));
+    const after = Number(getFlag('after', '5'));
+    result = await getConversationContextSlice.execute({ projectDir, messageIndex: index, windowBefore: before, windowAfter: after });
+  } else if (mode === 'grep') {
+    const pattern = String(getFlag('pattern', 'TODO'));
+    const flags = String(getFlag('flags', 'i'));
+    const before = Number(getFlag('before', '2'));
+    const after = Number(getFlag('after', '2'));
+    const max = Number(getFlag('max', '50'));
+    result = await grepConversationLogs.execute({ projectDir, pattern, flags, messagesBefore: before, messagesAfter: after, maxMatches: max });
+  } else {
+    result = await sanitizeConversationLogsFull.execute({ projectDir });
+  }
+
+  let cleanedText = '';
+  if (mode === 'sections') {
+    const sectionsOut = result.sections || {};
+    cleanedText = Object.entries(sectionsOut).map(([k, v]) => `## ${k}\n${v.text}`).join('\n\n');
+  } else if (mode === 'slice') {
+    cleanedText = result.sliceText || '';
+  } else if (mode === 'grep') {
+    cleanedText = (result.matches || []).map(m => m.text).join('\n\n---\n\n');
+  } else {
+    cleanedText = result.text || '';
+  }
+
   const cleanedBytes = Buffer.byteLength(cleanedText, 'utf-8');
   const cleanedLines = cleanedText ? cleanedText.split('\n').length : 0;
-  const cleanedTokenEst = result.tokensAfter ?? tokensEstimate(cleanedText);
+  const cleanedTokenEst = tokensEstimate(cleanedText);
   const cleanedProviderTokens = await countTokensViaEmbeddingsChunked(cleanedText);
 
   const memEnd = process.memoryUsage();

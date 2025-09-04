@@ -83,8 +83,8 @@ describe('conversation-log-sanitizer (e2e)', () => {
     for (const e of linesPrev) { const m = extractFullMessage(e); if (m) originalSegments.push(m); }
     const originalText = originalSegments.join('\n\n');
 
-    const { sanitizeConversationLogs } = require('../lib/agents/tools/conversation-log-sanitizer.js');
-    const result = await sanitizeConversationLogs.execute({ projectDir });
+    const { sanitizeConversationLogsFull } = require('../lib/agents/tools/logs/sanitize-full.js');
+    const result = await sanitizeConversationLogsFull.execute({ projectDir });
 
     // Show stats for human inspection when running locally
     // eslint-disable-next-line no-console
