@@ -391,19 +391,25 @@ async function installAIPrompts(projectDir: string): Promise<void> {
   const templatesDir = path.join(__dirname, '..', '..', 'templates', '.claude', 'flashback', 'prompts');
 
   try {
-    // Copy AI prompt templates from templates directory
-    const templateFiles = await fs.readdir(templatesDir);
-
-    for (const file of templateFiles) {
-      if (file.endsWith('.md')) {
-        await fs.copy(
-          path.join(templatesDir, file),
-          path.join(promptsDir, file),
-        );
+    // Copy AI prompt templates recursively (supports subdirectories like agents/)
+    const copyRecursive = async (srcDir: string, dstDir: string): Promise<void> => {
+      await fs.ensureDir(dstDir);
+      const entries = await fs.readdir(srcDir);
+      for (const entry of entries) {
+        const srcPath = path.join(srcDir, entry);
+        const dstPath = path.join(dstDir, entry);
+        const stat = await fs.stat(srcPath);
+        if (stat.isDirectory()) {
+          await copyRecursive(srcPath, dstPath);
+        } else if (entry.endsWith('.md')) {
+          await fs.copy(srcPath, dstPath);
+        }
       }
-    }
+    };
 
-    console.log(chalk.green('   ✅ AI prompts installed'));
+    await copyRecursive(templatesDir, promptsDir);
+
+    console.log(chalk.green('   ✅ AI prompts installed (recursive)'));
   } catch (error) {
     throw new Error(`Failed to install AI prompts: ${error instanceof Error ? error.message : String(error)}`);
   }
@@ -761,9 +767,16 @@ async function cleanupObsoleteDirectories(projectDir: string): Promise<void> {
  */
 async function installMcpServers(projectDir: string): Promise<void> {
   const mcpServers = [
-    { name: 'context7', package: '@upstash/context7-mcp', command: '@upstash/context7-mcp', args: ['-y', '@upstash/context7-mcp'] },
-    { name: 'playwright', package: 'mcp-playwright', command: 'mcp-playwright', args: ['mcp-playwright'] },
-    { name: 'sequential-thinking', package: '@modelcontextprotocol/server-sequential-thinking', command: '@modelcontextprotocol/server-sequential-thinking', args: ['-y', '@modelcontextprotocol/server-sequential-thinking'] },
+    // Existing editor-oriented servers
+    { name: 'context7', package: '@upstash/context7-mcp', command: 'npx', args: ['-y', '@upstash/context7-mcp'] },
+    { name: 'playwright', package: 'mcp-playwright', command: 'npx', args: ['mcp-playwright'] },
+    { name: 'sequential-thinking', package: '@modelcontextprotocol/server-sequential-thinking', command: 'npx', args: ['-y', '@modelcontextprotocol/server-sequential-thinking'] },
+
+    // Core servers used by background agents
+    { name: 'filesystem', package: '@modelcontextprotocol/server-filesystem', command: 'npx', args: ['-y', '@modelcontextprotocol/server-filesystem'] },
+    // For git and shell servers we prefer uvx. We'll still verify availability below.
+    { name: 'git', package: 'mcp-server-git', command: 'uvx', args: ['mcp-server-git'] },
+    { name: 'shell', package: 'mcp-shell-server', command: 'uvx', args: ['mcp-shell-server'] },
   ];
 
   const claudeDir = path.join(projectDir, '.claude');
@@ -780,18 +793,44 @@ async function installMcpServers(projectDir: string): Promise<void> {
       throw new Error('npm is required to install MCP servers. Please install Node.js and npm.');
     }
 
-    // Install each MCP server globally
+    // Detect uv/uvx or suggest pipx for Python-based servers
+    let hasUvx = false;
+    try {
+      await execAsync('uvx --version', { timeout: 5000 });
+      hasUvx = true;
+    } catch {
+      // try uv as well; some envs alias uvx
+      try {
+        await execAsync('uv --version', { timeout: 5000 });
+        // uv present but uvx may not be; still proceed with guidance
+      } catch {}
+    }
+
+    // Install each MCP server globally (npm packages only); python ones require uvx/pipx
     console.log(chalk.gray('   📦 Installing MCP server packages...'));
     console.log(chalk.yellow('   ⚠️  MCP package installation is experimental - may require manual installation'));
 
     for (const server of mcpServers) {
       try {
-        console.log(chalk.gray(`   ⬇️  Installing ${server.package}...`));
-        await execAsync(`npm install -g ${server.package}`, { timeout: 60000 });
-        console.log(chalk.green(`   ✅ ${server.name} installed`));
+        if (server.package.startsWith('@modelcontextprotocol/server-') || server.package === 'mcp-playwright' || server.package === '@upstash/context7-mcp' || server.package === '@modelcontextprotocol/server-sequential-thinking') {
+          // Node-based packages installable via npm
+          console.log(chalk.gray(`   ⬇️  Installing ${server.package}...`));
+          await execAsync(`npm install -g ${server.package}`, { timeout: 60000 });
+          console.log(chalk.green(`   ✅ ${server.name} installed`));
+        } else if (server.package === 'mcp-server-git' || server.package === 'mcp-shell-server') {
+          // Python-based servers; advise installation if uvx/pipx missing
+          if (!hasUvx) {
+            console.log(chalk.yellow(`   ⚠️  ${server.package} requires Python with uvx (preferred) or pipx.`));
+            console.log(chalk.gray('      Guidance: Install uv from https://docs.astral.sh/uv/ or use: pipx install mcp-server-git / pipx install mcp-shell-server'));
+          }
+        }
       } catch (error) {
         console.log(chalk.yellow(`   ⚠️  Could not install ${server.name}: ${error instanceof Error ? error.message : String(error)}`));
-        console.log(chalk.gray(`   💡 Try manual install: npm install -g ${server.package}`));
+        if (server.package === 'mcp-server-git' || server.package === 'mcp-shell-server') {
+          console.log(chalk.gray(`   💡 Try manual install with uvx/pipx: uvx ${server.package} --help or pipx install ${server.package}`));
+        } else {
+          console.log(chalk.gray(`   💡 Try manual install: npm install -g ${server.package}`));
+        }
         // Continue with configuration even if package install fails
       }
     }
@@ -833,7 +872,7 @@ async function updateClaudeConfig(configPath: string, mcpServers: Array<{ name: 
     // Add each MCP server to config
     for (const server of mcpServers) {
       config.mcpServers[server.name] = {
-        command: 'npx',
+        command: server.command,
         args: server.args,
       };
     }
@@ -854,7 +893,8 @@ async function verifyMcpServers(mcpServers: Array<{ name: string; package: strin
   for (const server of mcpServers) {
     try {
       // Try to run the MCP server with --help to verify it's installed
-      await execAsync(`npx ${server.args.join(' ')} --help`, { timeout: 10000 });
+      const cmd = `${server.command} ${server.args.join(' ')} --help`;
+      await execAsync(cmd, { timeout: 10000 });
       console.log(chalk.green(`   ✅ ${server.name} is working`));
     } catch (error) {
       console.log(chalk.yellow(`   ⚠️  ${server.name} verification failed - may need manual check`));

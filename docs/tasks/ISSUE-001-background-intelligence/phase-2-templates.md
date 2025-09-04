@@ -8,6 +8,7 @@
 **Estimated Time**: 4 hours
 
 - [ ] 2.1.1 Add new MCP server dependencies to init system: `@modelcontextprotocol/server-filesystem`, `mcp-server-git`, `mcp-shell-server`
+  - **Note**: Current init only installs context7, playwright, sequential-thinking - need to add filesystem/git/shell servers
 - [ ] 2.1.2 Create `src/agents/mcp-loader.ts` with project-specific MCP client creation using AI SDK `experimental_createMCPClient()`
 - [ ] 2.1.3 Implement filesystem MCP client with `projectDir` as root (sandboxed to project only)
 - [ ] 2.1.4 Implement git MCP client with `--repository projectDir` (project repo only)  
@@ -47,7 +48,7 @@
 **Estimated Time**: 4 hours
 
 - [ ] 2.4.1 Create `src/agents/base/flashback-agent.ts` base class with template loading
-- [ ] 2.4.2 Implement template reading from `.claude/flashback/prompts/` using existing file patterns
+- [ ] 2.4.2 Implement template reading from `.claude/flashback/prompts/agents/` using existing file patterns
 - [ ] 2.4.3 Integrate AI SDK `generateText()` with `tool()` definitions, `stopWhen: stepCountIs()`, and `prepareStep` context management
 - [ ] 2.4.4 Add MCP tool loading via `loadMCPTools()` helper with agent-specific configurations
 - [ ] 2.4.5 Implement proper MCP client cleanup and error handling following AI SDK patterns
@@ -59,7 +60,7 @@
 **Dependencies**: 2.4 complete
 **Estimated Time**: 4 hours
 
-- [ ] 2.5.1 Create `templates/.claude/flashback/prompts/session-analysis-agent.md` template with system prompt and workflow instructions
+- [ ] 2.5.1 Create `templates/.claude/flashback/prompts/agents/session-analysis-agent.md` template with system prompt and workflow instructions
 - [ ] 2.5.2 Implement Session Analysis Agent using base framework with sessionAnalysisToolConfig
 - [ ] 2.5.3 Integrate conversation log sanitization, significance checking, and early exit logic
 - [ ] 2.5.4 Add AI SDK context window management using `prepareStep` for large conversations
@@ -72,7 +73,7 @@
 **Dependencies**: 2.5 complete
 **Estimated Time**: 4 hours
 
-- [ ] 2.6.1 Create `templates/.claude/flashback/prompts/code-quality-agent.md` template
+- [ ] 2.6.1 Create `templates/.claude/flashback/prompts/agents/code-quality-agent.md` template
 - [ ] 2.6.2 Implement Code Quality Agent using codeQualityToolConfig (adds ripgrep to shell whitelist)
 - [ ] 2.6.3 Integrate existing `debt-hunter.ts` tree-sitter infrastructure via custom tools
 - [ ] 2.6.4 Add MCP filesystem and shell tools for codebase scanning and analysis
@@ -85,7 +86,7 @@
 **Dependencies**: 2.5 complete (needs session analysis output)
 **Estimated Time**: 3 hours
 
-- [ ] 2.7.1 Create `templates/.claude/flashback/prompts/memory-management-agent.md` template
+- [ ] 2.7.1 Create `templates/.claude/flashback/prompts/agents/memory-management-agent.md` template
 - [ ] 2.7.2 Implement Memory Management Agent using base framework
 - [ ] 2.7.3 Test MCP filesystem `edit_file` vs jsdiff for memory updates (determine best approach)
 - [ ] 2.7.4 Add session insight prioritization and memory update logic
@@ -98,7 +99,7 @@
 **Dependencies**: 2.5 complete (needs session analysis input)
 **Estimated Time**: 3 hours
 
-- [ ] 2.8.1 Create `templates/.claude/flashback/prompts/focus-chain-agent.md` template with Cline-inspired workflow
+- [ ] 2.8.1 Create `templates/.claude/flashback/prompts/agents/focus-chain-agent.md` template with Cline-inspired workflow
 - [ ] 2.8.2 Implement Focus Chain Agent with TODO chain parsing and persistence logic
 - [ ] 2.8.3 Add Cline-style markdown checklist management (`- [ ]`/`- [x]` format)
 - [ ] 2.8.4 Integrate with session analysis to identify new tasks and completed items
@@ -111,7 +112,7 @@
 **Dependencies**: 2.1, 2.5 complete (needs MCP git + session analysis)
 **Estimated Time**: 3 hours
 
-- [ ] 2.9.1 Create `templates/.claude/flashback/prompts/git-analysis-agent.md` template
+- [ ] 2.9.1 Create `templates/.claude/flashback/prompts/agents/git-analysis-agent.md` template
 - [ ] 2.9.2 Implement Git Analysis Agent using MCP git server tools (git_status, git_log, git_diff)
 - [ ] 2.9.3 Add correlation logic between git changes and session analysis insights
 - [ ] 2.9.4 Integrate architectural significance assessment for code changes
@@ -124,7 +125,7 @@
 **Dependencies**: 2.5, 2.7, 2.9 complete (needs session + memory + git analysis)
 **Estimated Time**: 3 hours
 
-- [ ] 2.10.1 Create `templates/.claude/flashback/prompts/working-plan-agent.md` template
+- [ ] 2.10.1 Create `templates/.claude/flashback/prompts/agents/working-plan-agent.md` template
 - [ ] 2.10.2 Implement Working Plan Agent reading multiple input sources (session, memory, git insights)
 - [ ] 2.10.3 Add working plan update logic via MCP filesystem edit_file or jsdiff
 - [ ] 2.10.4 Test with real working plan updates reflecting actual progress
@@ -137,7 +138,7 @@
 **Dependencies**: 2.1 complete (needs MCP filesystem and git)
 **Estimated Time**: 3 hours
 
-- [ ] 2.11.1 Create `templates/.claude/flashback/prompts/security-analysis-agent.md` template
+- [ ] 2.11.1 Create `templates/.claude/flashback/prompts/agents/security-analysis-agent.md` template
 - [ ] 2.11.2 Implement Security Analysis Agent using MCP filesystem search capabilities
 - [ ] 2.11.3 Add security pattern detection for secrets, keys, configuration exposure
 - [ ] 2.11.4 Integrate MCP git tools for analyzing security-relevant changes
@@ -150,7 +151,7 @@
 **Dependencies**: 2.5-2.11 complete (needs all agent outputs)
 **Estimated Time**: 4 hours
 
-- [ ] 2.12.1 Create `templates/.claude/flashback/prompts/ground-truth-agent.md` template  
+- [ ] 2.12.1 Create `templates/.claude/flashback/prompts/agents/ground-truth-agent.md` template  
 - [ ] 2.12.2 Implement Ground Truth Agent with comprehensive codebase analysis capabilities
 - [ ] 2.12.3 Add drift detection logic comparing documented state vs actual code
 - [ ] 2.12.4 Implement correction capability using MCP filesystem edit_file for multiple memory files
@@ -163,11 +164,13 @@
 **Dependencies**: 2.5-2.12 templates created
 **Estimated Time**: 2 hours
 
-- [ ] 2.13.1 Integrate 7 new agent templates into existing template distribution system
-- [ ] 2.13.2 Update template scanning in `file-utils.ts` to include agent prompt templates
+- [ ] 2.13.1 Integrate 7 new agent templates into existing template distribution system under `prompts/agents/` subdirectory
+- [ ] 2.13.2 Update template scanning in `file-utils.ts` to include `prompts/agents/` subdirectory for recursive copying
+  - **Migration**: Update `installAIPrompts()` to copy subdirectories recursively
+  - **Directory Structure**: Separate agents from personas for better organization
 - [ ] 2.13.3 Test distribution via existing `flashback init --refresh` command
-- [ ] 2.13.4 Verify templates appear in `.claude/flashback/prompts/` in user projects
-- [ ] 2.13.5 Validate all templates follow existing Flashbacker prompt template patterns
+- [ ] 2.13.4 Verify templates appear in `.claude/flashback/prompts/agents/` in user projects
+- [ ] 2.13.5 Validate all agent templates follow existing Flashbacker prompt template patterns and are properly separated from personas
 
 ## 2.14 Agent Integration Testing  
 **Deliverable**: Complete agent system with MCP integration, custom tools, and proper cleanup
