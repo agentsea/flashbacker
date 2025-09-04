@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { discoverProjectsFromCwd } from './project-scanner';
+import { discoverProjects } from './project-scanner';
 import { getJSONLFiles } from '../utils/conversation-logs';
 import { getFlashbackConfig } from '../utils/config';
 import { rotateMemoryFile } from '../utils/memory-rotation';
@@ -42,17 +42,26 @@ async function writeLog(projectDir: string, line: string): Promise<void> {
   const logDir = path.join(projectDir, '.claude', 'flashback', 'log');
   await fs.ensureDir(logDir);
   const logPath = path.join(logDir, 'daemon.log');
+  // Cap log size (~512KB). If exceeded, rotate to .1 and truncate.
+  try {
+    const stats = await fs.stat(logPath).catch(() => null as any);
+    if (stats && stats.size > 512 * 1024) {
+      const rotated = path.join(logDir, 'daemon.log.1');
+      await fs.move(logPath, rotated, { overwrite: true });
+    }
+  } catch {}
   await fs.appendFile(logPath, `${new Date().toISOString()} ${line}\n`);
 }
 
 export async function runDaemon(): Promise<void> {
   const cwd = process.env.FLASHBACK_DAEMON_CWD || process.cwd();
-  const projects = await discoverProjectsFromCwd(cwd);
+  const projects = await discoverProjects(cwd);
   if (projects.length === 0) {
     // nothing to monitor
     return;
   }
 
+  // Simple multi-project loop (conservative): monitor first project for now
   const projectDir = projects[0].projectPath;
   const { pollSeconds, activityThresholdMinutes, retention } = await getConfig(projectDir);
   const thresholdMs = activityThresholdMinutes * 60 * 1000;

@@ -114,7 +114,7 @@ export async function initCommand(options: InitOptions): Promise<void> {
 
     // Create configuration
     console.log(chalk.gray('⚙️ Creating configuration...'));
-    await createConfiguration(cwd);
+    await createConfiguration(cwd, options);
 
     // Initialize memory system
     console.log(chalk.gray('🧠 Initializing memory system...'));
@@ -412,7 +412,21 @@ async function installAIPrompts(projectDir: string): Promise<void> {
 /**
  * Create configuration file from template
  */
-async function createConfiguration(projectDir: string): Promise<void> {
+function deepMerge(target: any, source: any): any {
+  if (typeof target !== 'object' || target === null) return source;
+  if (typeof source !== 'object' || source === null) return source;
+  const result: any = Array.isArray(target) ? [...target] : { ...target };
+  for (const key of Object.keys(source)) {
+    if (key in result) {
+      result[key] = deepMerge(result[key], source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  }
+  return result;
+}
+
+async function createConfiguration(projectDir: string, options: InitOptions): Promise<void> {
   const configPath = path.join(projectDir, '.claude', 'flashback', 'config', 'flashback.json');
   const templatePath = path.join(__dirname, '..', '..', 'templates', '.claude', 'flashback', 'config', 'flashback.json.template');
 
@@ -438,7 +452,23 @@ async function createConfiguration(projectDir: string): Promise<void> {
         .replace('{{PROJECT_NAME}}', path.basename(projectDir))
         .replace('{{TIMESTAMP}}', new Date().toISOString());
 
-      await fs.writeFile(configPath, templateContent);
+      // Merge with existing config on refresh to preserve user values
+      if (options.refresh && await fs.pathExists(configPath)) {
+        try {
+          const existingRaw = await fs.readFile(configPath, 'utf-8');
+          const existing = JSON.parse(existingRaw);
+          const templ = JSON.parse(templateContent);
+          // Existing values win over defaults; ensure version/timestamps from template retained
+          const merged = deepMerge(templ, existing);
+          merged.version = templ.version;
+          merged.initialized = templ.initialized;
+          await fs.writeFile(configPath, JSON.stringify(merged, null, 2));
+        } catch {
+          await fs.writeFile(configPath, templateContent);
+        }
+      } else {
+        await fs.writeFile(configPath, templateContent);
+      }
       console.log(chalk.green('   ✅ Configuration created from template'));
     } else {
       // Fallback for development/testing

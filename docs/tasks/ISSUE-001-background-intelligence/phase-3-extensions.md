@@ -1,125 +1,72 @@
-# Phase 3: Command Extensions (Week 3)
+# Phase 3: Agent Orchestration (Week 3)
 
-**Goal**: Extend existing commands (memory.ts, save-session.ts, etc.) with background intelligence capabilities
+**Goal**: Integrate agents with daemon and establish agent coordination patterns
 
-## 3.1 Memory Command Extension
-**Deliverable**: Enhanced memory.ts with rotation and decay capabilities
-**Acceptance Criteria**: `flashback memory` supports rotation, decay, audit operations
-**Dependencies**: Phase 2 complete
+## 3.1 Daemon-Agent Integration
+**Deliverable**: PM2 daemon triggers agents when activity detected
+**Acceptance Criteria**: Daemon calls agents using AI SDK patterns when session activity goes idle
+**Dependencies**: Phase 2 complete (all 8 agents implemented)
 **Estimated Time**: 3 hours
 
-- [ ] 3.1.1 Extend existing `src/commands/memory.ts` with rotation functionality
-- [ ] 3.1.2 Add `--rotate` flag to manually trigger memory file rotation
-- [ ] 3.1.3 Add `--decay-audit` flag to trigger memory decay assessment
-- [ ] 3.1.4 Add `--audit-model [gpt-5-nano|gpt-5-mini|gpt-5]` for user model selection
-- [ ] 3.1.5 Test enhanced memory command with existing memory files
+- [ ] 3.1.1 Integrate agent execution into existing `src/daemon/index.ts` when activity detected
+- [ ] 3.1.2 Add agent triggering logic when session goes from active → idle status
+- [ ] 3.1.3 Implement agent execution using AI SDK `generateText()` with MCP + custom tools
+- [ ] 3.1.4 Add agent result logging to daemon logs for monitoring
+- [ ] 3.1.5 Test daemon-agent integration with real session activity patterns
 
-## 3.2 Save Session Command Extension
-**Deliverable**: Enhanced save-session.ts with background intelligence integration
-**Acceptance Criteria**: Save-session can trigger background analysis and use insights
-**Dependencies**: Phase 2 complete
+## 3.2 Agent Execution Sequencing  
+**Deliverable**: Sequential agent execution to prevent file conflicts
+**Acceptance Criteria**: Agents run in order, each using previous agent outputs as input
+**Dependencies**: 3.1 complete
 **Estimated Time**: 2 hours
 
-- [ ] 3.2.1 Extend existing `src/commands/save-session.ts` with background integration
-- [ ] 3.2.2 Add background intelligence summary reading from memory files
-- [ ] 3.2.3 Integrate background insights into session summaries
-- [ ] 3.2.4 Test enhanced save-session with background intelligence data
+- [ ] 3.2.1 Implement agent execution sequence: Session Analysis → Memory Management → Git Analysis → Working Plan → Focus Chain
+- [ ] 3.2.2 Add agent output validation before triggering next agent in sequence
+- [ ] 3.2.3 Implement error handling and graceful degradation when agents fail
+- [ ] 3.2.4 Test sequential execution with real project data and agent coordination
+- [ ] 3.2.5 Validate agent isolation (each writes to own file, no conflicts)
 
-## 3.3 Session Start Command Extension
-**Deliverable**: Enhanced session-start.ts with background intelligence summaries
-**Acceptance Criteria**: Session restoration includes background insights when available
-**Dependencies**: Phase 2 complete
+## 3.3 Cost Monitoring and Controls
+**Deliverable**: Real-time cost tracking and budget enforcement for agent execution
+**Acceptance Criteria**: Cost tracking prevents runaway spending, provides usage visibility
+**Dependencies**: 3.2 complete
 **Estimated Time**: 2 hours
 
-- [ ] 3.3.1 Extend existing `src/commands/session-start.ts` with background summaries
-- [ ] 3.3.2 Add background intelligence report reading from rotated memory files
-- [ ] 3.3.3 Integrate weekly audit summaries into session restoration
-- [ ] 3.3.4 Test enhanced session-start with various background intelligence states
+- [ ] 3.3.1 Implement cost tracking for AI SDK agent executions (token usage, API calls)
+- [ ] 3.3.2 Add budget controls and spending limits per agent and per project
+- [ ] 3.3.3 Create cost monitoring dashboard integration with existing daemon status
+- [ ] 3.3.4 Test cost controls prevent excessive spending during background operations
+- [ ] 3.3.5 Validate cost reporting and budget enforcement work correctly
 
-## 3.4 Background Intelligence CRUD Tools
-**Deliverable**: Simple CRUD tools AI model can call (extending existing commands)
-**Acceptance Criteria**: AI model can call tools to execute memory, session, file operations
-**Dependencies**: 3.1-3.3 complete
-**Estimated Time**: 3 hours
-
-- [ ] 3.4.1 Create tool interface extending existing memory command functionality
-- [ ] 3.4.2 Add DUMB file operation tools (read-memory-file, write-memory-file, append-memory)
-- [ ] 3.4.3 Create DUMB git tools (git-status, git-log, get-recent-commits)
-- [ ] 3.4.4 Test CRUD tools execute AI model decisions without embedded intelligence
-
-## 3.5 Config Management Extension
-**Deliverable**: Enhanced config commands for background intelligence settings
-**Acceptance Criteria**: Users can configure model selection, rotation, decay via CLI
-**Dependencies**: 1.3 complete
+## 3.4 Agent Error Handling and Recovery
+**Deliverable**: Robust error handling ensuring agent failures don't crash daemon
+**Acceptance Criteria**: Agent failures are logged, other agents continue, graceful degradation
+**Dependencies**: 3.3 complete  
 **Estimated Time**: 2 hours
 
-- [ ] 3.5.1 Extend existing config management with background intelligence settings
-- [ ] 3.5.2 Add `flashback config --set-model <task> <model>` for user model overrides
-- [ ] 3.5.3 Add `flashback config --set-audit-schedule <weekly|daily|monthly>`
-- [ ] 3.5.4 Test config management with various user preferences
+- [ ] 3.4.1 Implement comprehensive error boundaries around agent execution
+- [ ] 3.4.2 Add agent failure logging and error recovery strategies
+- [ ] 3.4.3 Ensure failed agents don't prevent other agents from running
+- [ ] 3.4.4 Test error handling with simulated agent failures and edge cases
+- [ ] 3.4.5 Validate daemon stability when agents encounter errors
 
-## 3.6 Daemon CLI Integration
-**Deliverable**: PM2-managed daemon control integrated into existing CLI structure
-**Acceptance Criteria**: Daemon commands follow existing CLI patterns, leverage Phase 1 PM2 integration
-**Dependencies**: Phase 1 PM2 setup (1.8) complete
+## 3.5 Agent Coordination Testing
+**Deliverable**: Complete agent orchestration system working with daemon
+**Acceptance Criteria**: All agents coordinate properly, isolated outputs, daemon integration
+**Dependencies**: 3.1-3.4 complete
 **Estimated Time**: 2 hours
 
-- [ ] 3.6.1 Complete `src/commands/daemon.ts` using PM2 wrapper functions from Phase 1
-- [ ] 3.6.2 Add daemon status reporting with per-project breakdown and PM2 process status
-- [ ] 3.6.3 Integrate daemon commands into existing `src/cli.ts` structure
-- [ ] 3.6.4 Test daemon CLI works with PM2 ecosystem configuration from Phase 1
-
-## 3.7 Template-Prompt Integration
-**Deliverable**: Daemon can call AI model with prompt templates when activity detected
-**Acceptance Criteria**: DUMB daemon calls SMART AI model via templates when needed
-**Dependencies**: 2.7, 3.6 complete
-**Estimated Time**: 2 hours
-
-- [ ] 3.7.1 Create template-prompt calling interface in daemon
-- [ ] 3.7.2 Add activity-triggered AI model calling with project context
-- [ ] 3.7.3 Implement template selection based on detected activity type
-- [ ] 3.7.4 Test DUMB→SMART workflow: daemon detects → calls AI model → AI model uses tools
-
-## 3.8 API Key Management System
-**Deliverable**: Secure API key management for background AI model operations
-**Acceptance Criteria**: API keys stored securely, rotated safely, not logged
-**Dependencies**: 3.6 complete
-**Estimated Time**: 3 hours
-
-- [ ] 3.8.1 Create `src/utils/api-key-manager.ts` with secure key storage
-- [ ] 3.8.2 Implement API key rotation capabilities for background operations
-- [ ] 3.8.3 Add key validation and health checking
-- [ ] 3.8.4 Ensure API keys never appear in logs or memory files
-- [ ] 3.8.5 Test API key management with various provider configurations
-
-## 3.9 Cost Control Implementation
-**Deliverable**: Actual cost tracking and quota enforcement system
-**Acceptance Criteria**: Real-time cost tracking, budget limits, usage alerts
-**Dependencies**: 3.7 complete
-**Estimated Time**: 3 hours
-
-- [ ] 3.9.1 Create `src/utils/cost-tracker.ts` with real-time usage monitoring
-- [ ] 3.9.2 Implement budget limits and quota enforcement per project
-- [ ] 3.9.3 Add cost estimation before expensive AI model operations
-- [ ] 3.9.4 Create usage alerts and budget notification system
-- [ ] 3.9.5 Test cost controls prevent runaway background intelligence costs
-
-## 3.10 Extension Testing
-**Deliverable**: All extended commands work with existing Flashbacker functionality
-**Acceptance Criteria**: No conflicts with existing commands, proper integration
-**Dependencies**: 3.1-3.9 complete
-**Estimated Time**: 2 hours
-
-- [ ] 3.10.1 Test enhanced commands don't conflict with existing functionality
-- [ ] 3.10.2 Verify background intelligence enhances existing workflows
-- [ ] 3.10.3 Test graceful degradation when daemon not running
-- [ ] 3.10.4 Confirm all extensions follow existing Flashbacker patterns with security
+- [ ] 3.5.1 Test complete agent orchestration with real project activity cycles
+- [ ] 3.5.2 Validate agent execution sequence and output coordination
+- [ ] 3.5.3 Confirm cost controls and error handling work in integrated system
+- [ ] 3.5.4 Test daemon-agent integration across different project scenarios
+- [ ] 3.5.5 Validate all agents produce useful outputs without conflicts
 
 ---
 
 **Phase 3 Success Criteria:**
-- ✅ ALL commands extended, not replaced (memory.ts, save-session.ts, session-start.ts)
-- ✅ CRUD tools enable AI model to execute decisions via existing command patterns
-- ✅ Config system supports user model selection and parameter controls
-- ✅ Template-prompt integration follows DUMB→SMART→DUMB pattern
-- ✅ No conflicts with existing Flashbacker functionality
+- ✅ Daemon successfully triggers agents when activity detected
+- ✅ Agents execute in sequence without file conflicts or race conditions
+- ✅ Cost monitoring prevents excessive spending with real-time tracking
+- ✅ Agent failures don't crash daemon, graceful degradation works
+- ✅ Complete agent orchestration system ready for production use
