@@ -121,7 +121,9 @@ async function main() {
   } else if (mode === 'sections') {
     const secs = String(getFlag('sections', 'Project Memory,Current Working Plan,Recent Conversation Log'))
       .split(',').map(s => s.trim()).filter(Boolean);
-    result = await sanitizeConversationBySections.execute({ projectDir, sections: secs });
+    const useRegex = Boolean(getFlag('useRegex', false));
+    const windowLines = Number(getFlag('windowLines', '20'));
+    result = await sanitizeConversationBySections.execute({ projectDir, sections: secs, useRegex, windowLines });
   } else if (mode === 'slice') {
     const index = Number(getFlag('index', '100'));
     const before = Number(getFlag('before', '5'));
@@ -134,6 +136,76 @@ async function main() {
     const after = Number(getFlag('after', '2'));
     const max = Number(getFlag('max', '50'));
     result = await grepConversationLogs.execute({ projectDir, pattern, flags, messagesBefore: before, messagesAfter: after, maxMatches: max });
+  } else if (mode === 'legacy') {
+    const legacy = require('../../lib/agents/tools/conversation-log-sanitizer.js');
+    result = await legacy.sanitizeConversationLogs.execute({ projectDir, cleanupLevel: 'aggressive', regexPrune: true });
+  } else if (mode === 'compare') {
+    const legacy = require('../../lib/agents/tools/conversation-log-sanitizer.js');
+    const fullRes = await sanitizeConversationLogsFull.execute({ projectDir });
+    const legacyRes = await legacy.sanitizeConversationLogs.execute({ projectDir, cleanupLevel: 'aggressive', regexPrune: true });
+
+    const cleanedFull = fullRes.text || '';
+    const cleanedLegacy = legacyRes.text || '';
+
+    const cleanedFullBytes = Buffer.byteLength(cleanedFull, 'utf-8');
+    const cleanedLegacyBytes = Buffer.byteLength(cleanedLegacy, 'utf-8');
+    const cleanedFullLines = cleanedFull ? cleanedFull.split('\n').length : 0;
+    const cleanedLegacyLines = cleanedLegacy ? cleanedLegacy.split('\n').length : 0;
+    const cleanedFullTokenEst = tokensEstimate(cleanedFull);
+    const cleanedLegacyTokenEst = tokensEstimate(cleanedLegacy);
+    const cleanedFullProviderTokens = await countTokensViaEmbeddingsChunked(cleanedFull);
+    const cleanedLegacyProviderTokens = await countTokensViaEmbeddingsChunked(cleanedLegacy);
+
+    const memEnd = process.memoryUsage();
+
+    const report = {
+      projectDir,
+      files: {
+        current: curr ? { path: curr.path, bytes: currBytes, jsonlLines: currLines.length } : null,
+        previous: prev ? { path: prev.path, bytes: prevBytes, jsonlLines: prevLines.length } : null,
+      },
+      extracted: {
+        original: {
+          bytes: originalBytes,
+          lines: originalStitched.split('\n').length,
+          tokensEstimate: originalTokenEst,
+          providerTokens: originalProviderTokens,
+        },
+        full: {
+          bytes: cleanedFullBytes,
+          lines: cleanedFullLines,
+          tokensEstimate: cleanedFullTokenEst,
+          providerTokens: cleanedFullProviderTokens,
+          reduction: {
+            bytesPercent: originalBytes ? Math.round(((originalBytes - cleanedFullBytes) / originalBytes) * 100) : 0,
+            linesPercent: (originalStitched ? Math.round(((originalStitched.split('\n').length - cleanedFullLines) / originalStitched.split('\n').length) * 100) : 0),
+            tokensEstimatePercent: originalTokenEst ? Math.round(((originalTokenEst - cleanedFullTokenEst) / originalTokenEst) * 100) : 0,
+            providerTokensPercent: (originalProviderTokens && cleanedFullProviderTokens) ? Math.round(((originalProviderTokens - cleanedFullProviderTokens) / originalProviderTokens) * 100) : null,
+          },
+          meta: fullRes.meta || null,
+        },
+        legacy: {
+          bytes: cleanedLegacyBytes,
+          lines: cleanedLegacyLines,
+          tokensEstimate: cleanedLegacyTokenEst,
+          providerTokens: cleanedLegacyProviderTokens,
+          reduction: {
+            bytesPercent: originalBytes ? Math.round(((originalBytes - cleanedLegacyBytes) / originalBytes) * 100) : 0,
+            linesPercent: (originalStitched ? Math.round(((originalStitched.split('\n').length - cleanedLegacyLines) / originalStitched.split('\n').length) * 100) : 0),
+            tokensEstimatePercent: originalTokenEst ? Math.round(((originalTokenEst - cleanedLegacyTokenEst) / originalTokenEst) * 100) : 0,
+            providerTokensPercent: (originalProviderTokens && cleanedLegacyProviderTokens) ? Math.round(((originalProviderTokens - cleanedLegacyProviderTokens) / originalProviderTokens) * 100) : null,
+          },
+          meta: legacyRes.meta || null,
+        }
+      },
+      memoryMB: {
+        rssStart: Number(mb(memStart.rss)),
+        rssEnd: Number(mb(memEnd.rss)),
+        delta: Number((mb(memEnd.rss - memStart.rss)))
+      }
+    };
+    console.log(JSON.stringify(report, null, 2));
+    process.exit(0);
   } else {
     result = await sanitizeConversationLogsFull.execute({ projectDir });
   }
@@ -195,7 +267,12 @@ async function main() {
     dedupInsights: {
       topRepeatedBlocks: topBlocks,
       sectionDedupCounts: sectionCounts,
-    }
+    },
+    sectionsInfo: mode === 'sections' ? {
+      detectedOrder: result.detectedOrder || [],
+      detectedHeadings: result.detectedHeadings || [],
+      notFound: result.notFound || [],
+    } : undefined
   };
 
   console.log(JSON.stringify(report, null, 2));
