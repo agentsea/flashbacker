@@ -3,6 +3,15 @@
 const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
+// Simple ANSI color helpers (avoid ESM import issues with chalk@5)
+const color = {
+  cyan: (s) => `\x1b[36m${s}\x1b[0m`,
+  yellowBold: (s) => `\x1b[33;1m${s}\x1b[0m`,
+  magentaBold: (s) => `\x1b[35;1m${s}\x1b[0m`,
+  greenBold: (s) => `\x1b[32;1m${s}\x1b[0m`,
+  white: (s) => `\x1b[37m${s}\x1b[0m`,
+  whiteBold: (s) => `\x1b[37;1m${s}\x1b[0m`,
+};
 
 const { sanitizeConversationLogsFull } = require('../../lib/agents/tools/logs/sanitize-full.js');
 const { sanitizeConversationLogsTruncated } = require('../../lib/agents/tools/logs/sanitize-truncated.js');
@@ -95,6 +104,7 @@ async function main() {
   };
   const mode = getFlag('mode', 'full'); // full|truncated|sections|slice|grep
   const showTail = getFlag('tail', false);
+  const noRaw = Boolean(getFlag('noRaw', false));
   const tailLines = Number(getFlag('tailLines', '100'));
   const memStart = process.memoryUsage();
   const files = await getJSONLFiles(projectDir);
@@ -207,6 +217,62 @@ async function main() {
       }
     };
     console.log(JSON.stringify(report, null, 2));
+    // Optional tails for compare
+    if (showTail) {
+      console.log(color.cyan('\n--- TAIL COMPARISON (COMPARE MODE) ---'));
+      const originalLines = originalStitched.split('\n');
+      const fullTail = cleanedFull.split('\n');
+      const legacyTail = cleanedLegacy.split('\n');
+      const showLines = tailLines || 100;
+
+      // Raw JSONL tails (same for both runs)
+      if (!noRaw) {
+        if (curr) {
+          console.log(color.yellowBold(`\n=== RAW JSONL CURRENT: ${curr.path} (last ${showLines} lines) ===`));
+          const prettyPrintJsonl = (lines) => {
+            const tail = lines.slice(-showLines);
+            for (const line of tail) {
+              try { console.log(JSON.stringify(JSON.parse(line), null, 2)); } catch { console.log(line); }
+              console.log('');
+            }
+          };
+          prettyPrintJsonl(currLines);
+        }
+        if (prev) {
+          console.log(color.yellowBold(`\n=== RAW JSONL PREVIOUS: ${prev.path} (last ${showLines} lines) ===`));
+          const prettyPrintJsonl = (lines) => {
+            const tail = lines.slice(-showLines);
+            for (const line of tail) {
+              try { console.log(JSON.stringify(JSON.parse(line), null, 2)); } catch { console.log(line); }
+              console.log('');
+            }
+          };
+          prettyPrintJsonl(prevLines);
+        }
+      }
+
+      console.log(color.magentaBold(`\n=== EXTRACTED ORIGINAL (stitched from current: ${curr ? curr.path : 'none'}, previous: ${prev ? prev.path : 'none'}) (last ${showLines} lines) ===`));
+      console.log(originalLines.slice(-showLines).join('\n'));
+
+      console.log(color.greenBold(`\n=== EXTRACTED NEW SANITIZED (sanitize-full.ts) (last ${showLines} lines) ===`));
+      console.log(fullTail.slice(-showLines).join('\n'));
+
+      console.log(color.greenBold(`\n=== EXTRACTED LEGACY SANITIZED (conversation-log-sanitizer.ts) (last ${showLines} lines) ===`));
+      console.log(legacyTail.slice(-showLines).join('\n'));
+
+      console.log(color.cyan(`\n=== COMPARISON SUMMARY ===`));
+      console.log(color.white(`Original extracted lines: `) + color.whiteBold(originalLines.length));
+      console.log(color.white(`New sanitized lines: `) + color.whiteBold(fullTail.length));
+      console.log(color.white(`Legacy sanitized lines: `) + color.whiteBold(legacyTail.length));
+      console.log(color.white(`New reduction (tokens est): `) + color.whiteBold(`${report.extracted.full.reduction.tokensEstimatePercent}%`));
+      console.log(color.white(`Legacy reduction (tokens est): `) + color.whiteBold(`${report.extracted.legacy.reduction.tokensEstimatePercent}%`));
+    }
+    // Always print final condensed summary
+    console.log(color.cyan(`\n=== FINAL SUMMARY (COMPARE) ===`));
+    console.log(color.white(`Original tokens(est): `) + color.whiteBold(report.extracted.original.tokensEstimate));
+    console.log(color.white(`New tokens(est): `) + color.whiteBold(report.extracted.full.tokensEstimate) + color.white(`  (reduction `) + color.whiteBold(`${report.extracted.full.reduction.tokensEstimatePercent}%`) + color.white(`)`));
+    console.log(color.white(`Legacy tokens(est): `) + color.whiteBold(report.extracted.legacy.tokensEstimate) + color.white(`  (reduction `) + color.whiteBold(`${report.extracted.legacy.reduction.tokensEstimatePercent}%`) + color.white(`)`));
+    console.log(color.white(`Files: current=`) + color.whiteBold(report.files.current?.path || 'none') + color.white(` previous=`) + color.whiteBold(report.files.previous?.path || 'none'));
     process.exit(0);
   } else {
     result = await sanitizeConversationLogsFull.execute({ projectDir });
@@ -281,24 +347,55 @@ async function main() {
   
   // Show tail comparison if requested
   if (showTail) {
-    console.log('\n--- TAIL COMPARISON ---');
-    
+    console.log(color.cyan('\n--- TAIL COMPARISON ---'));
+
     const originalLines = originalStitched.split('\n');
-    const cleanedLines = cleanedText.split('\n');
+    const cleanedTailLines = cleanedText.split('\n');
     const showLines = tailLines || 100;
-    
-    console.log(`\n=== ORIGINAL (last ${showLines} lines) ===`);
+
+    // Raw JSONL tails for direct inspection
+    const prettyPrintJsonl = (lines) => {
+      const tail = lines.slice(-showLines);
+      for (const line of tail) {
+        try {
+          const obj = JSON.parse(line);
+          console.log(JSON.stringify(obj, null, 2));
+        } catch {
+          console.log(line);
+        }
+        console.log('');
+      }
+    };
+
+    if (!noRaw) {
+      if (curr) {
+        console.log(color.yellowBold(`\n=== RAW JSONL CURRENT: ${curr.path} (last ${showLines} lines) ===`));
+        prettyPrintJsonl(currLines);
+      }
+      if (prev) {
+        console.log(color.yellowBold(`\n=== RAW JSONL PREVIOUS: ${prev.path} (last ${showLines} lines) ===`));
+        prettyPrintJsonl(prevLines);
+      }
+    }
+
+    // Extracted message tails (pre/post sanitation)
+    console.log(color.magentaBold(`\n=== EXTRACTED ORIGINAL (stitched from current: ${curr ? curr.path : 'none'}, previous: ${prev ? prev.path : 'none'}) (last ${showLines} lines) ===`));
     console.log(originalLines.slice(-showLines).join('\n'));
-    
-    console.log(`\n=== SANITIZED (last ${showLines} lines) ===`);
-    console.log(cleanedLines.slice(-showLines).join('\n'));
-    
-    console.log(`\n=== COMPARISON SUMMARY ===`);
-    console.log(`Original lines: ${originalLines.length}`);
-    console.log(`Sanitized lines: ${cleanedLines.length}`);
-    console.log(`Lines removed: ${originalLines.length - cleanedLines.length}`);
-    console.log(`Reduction: ${Math.round(((originalLines.length - cleanedLines.length) / originalLines.length) * 100)}%`);
+
+    console.log(color.greenBold(`\n=== EXTRACTED NEW SANITIZED (sanitize-full.ts) (last ${showLines} lines) ===`));
+    console.log(cleanedTailLines.slice(-showLines).join('\n'));
+
+    console.log(color.cyan(`\n=== COMPARISON SUMMARY ===`));
+    console.log(color.white(`Original extracted lines: `) + color.whiteBold(originalLines.length));
+    console.log(color.white(`Sanitized extracted lines: `) + color.whiteBold(cleanedTailLines.length));
+    console.log(color.white(`Lines removed: `) + color.whiteBold(originalLines.length - cleanedTailLines.length));
+    console.log(color.white(`Reduction: `) + color.whiteBold(`${Math.round(((originalLines.length - cleanedTailLines.length) / originalLines.length) * 100)}%`));
   }
+  // Always print final condensed summary (full mode)
+  console.log(color.cyan(`\n=== FINAL SUMMARY (FULL) ===`));
+  console.log(color.white(`Original tokens(est): `) + color.whiteBold(report.extracted.original.tokensEstimate));
+  console.log(color.white(`Sanitized tokens(est): `) + color.whiteBold(report.extracted.cleaned.tokensEstimate) + color.white(`  (reduction `) + color.whiteBold(`${report.extracted.reduction.tokensEstimatePercent}%`) + color.white(`)`));
+  console.log(color.white(`Files: current=`) + color.whiteBold(report.files.current?.path || 'none') + color.white(` previous=`) + color.whiteBold(report.files.previous?.path || 'none'));
 }
 
 main().catch(err => {
