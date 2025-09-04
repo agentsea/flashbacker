@@ -2,6 +2,7 @@ import { FlashbackAgent } from './base/flashback-agent';
 import { sanitizeConversationLogs } from './tools/conversation-log-sanitizer';
 import { checkSignificance } from './tools/significance-checker';
 import { loadMCPTools, MCPToolConfig } from './mcp-loader';
+import { conversationLogsTools } from './tools/logs/index';
 
 const sessionAnalysisToolConfig: MCPToolConfig = {
   filesystem: true,
@@ -26,6 +27,7 @@ export async function runSessionAnalysisAgent(projectDir: string) {
         ...tools,
         sanitizeConversationLogs,
         checkSignificance,
+        ...conversationLogsTools,
       },
       templatePath: pathWithinAgents('session-analysis-agent.md'),
     });
