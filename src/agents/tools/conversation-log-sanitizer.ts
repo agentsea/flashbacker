@@ -149,12 +149,15 @@ export const sanitizeConversationLogs = tool({
 
     // Block-level dedup with normalization
     const seenNorm = new Set<string>();
+    const normCount: Record<string, number> = {};
+    const normPreview: Record<string, string> = {};
     const segmentsDedup: string[] = [];
     for (const seg of segmentsAll) {
       if (!seg) { segmentsDedup.push(seg); continue; }
       if (/^#\s/.test(seg)) { segmentsDedup.push(seg); continue; }
       const norm = normalizeBlock(seg);
       if (seenNorm.has(norm)) {
+        normCount[norm] = (normCount[norm] || 1) + 1;
         if (cleanupLevel === 'aggressive') {
           const preview = seg.split(/\n/)[0]?.slice(0, 80) || 'block';
           segmentsDedup.push(`(deduped repeated block: ${preview} …)`);
@@ -162,6 +165,8 @@ export const sanitizeConversationLogs = tool({
         continue;
       }
       seenNorm.add(norm);
+      normCount[norm] = 1;
+      if (!normPreview[norm]) normPreview[norm] = seg.split(/\n/)[0]?.slice(0, 120) || 'block';
       segmentsDedup.push(seg);
     }
 
@@ -175,9 +180,15 @@ export const sanitizeConversationLogs = tool({
         '## Session Continuity Reference',
         '## Recent Conversation Log',
         '# Session Start Context',
+        '## AI Analysis Prompt',
+        '## Input Context',
+        '## Output Requirements - MANDATORY FILE UPDATE',
+        '## Quality Requirements',
+        '## Session Analysis Guidelines',
       ];
 
       const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const sectionCounts: Record<string, number> = {};
 
       for (const h of headings) {
         const re = new RegExp(`${escapeRegExp(h)}[\n\r]+[\s\S]*?(?=\n#{1,2}\s|$)`, 'g');
@@ -189,6 +200,7 @@ export const sanitizeConversationLogs = tool({
           if (m.index === re.lastIndex) re.lastIndex++;
         }
         if (matches.length > 1) {
+          sectionCounts[h] = matches.length - 1;
           // keep first occurrence, replace others with placeholder
           let result = '';
           let cursor = 0;
@@ -198,7 +210,7 @@ export const sanitizeConversationLogs = tool({
             if (i === 0) {
               result += cleanedText.slice(start, end);
             } else {
-              result += `\n(${h} deduped)\n`;
+              result += `\n(${h} deduped x${matches.length - 1})\n`;
             }
             cursor = end;
           }
@@ -206,10 +218,18 @@ export const sanitizeConversationLogs = tool({
           cleanedText = result;
         }
       }
+      (sanitizeConversationLogs as any)._lastSectionCounts = sectionCounts;
     }
     const before = estimateTokens(originalText);
     const after = estimateTokens(cleanedText);
     const reductionPct = before === 0 ? 0 : Math.max(0, Math.round(((before - after) / before) * 100));
+
+    const freqEntries = Object.entries(normCount)
+      .filter(([, c]) => c > 1)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([k, c]) => ({ count: c, preview: normPreview[k] }));
+    const sectionCountsOut = (sanitizeConversationLogs as any)._lastSectionCounts || {};
 
     return {
       text: cleanedText,
@@ -219,6 +239,8 @@ export const sanitizeConversationLogs = tool({
       meta: {
         messagesBefore: segmentsAll.length,
         messagesAfter: segmentsDedup.length,
+        topRepeatedBlocks: freqEntries,
+        sectionDedupCounts: sectionCountsOut,
       },
     };
   },
