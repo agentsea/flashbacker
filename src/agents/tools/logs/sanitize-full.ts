@@ -45,7 +45,7 @@ async function readSessionMessagesFull(filePath: string): Promise<string[]> {
 }
 
 export const sanitizeConversationLogsFull = tool({
-  description: 'Sanitize conversation logs with block-level dedup; return full messages (no truncation)',
+  description: 'Full-fidelity sanitizer for Claude JSONL logs. Splits USER/ASSISTANT content into logical blocks, normalizes/DEDUPs repeated boilerplate (headings, code fences), and collapses near-identical blocks. Returns full messages (no truncation) with stats. Example: use when you need maximum context fidelity but far fewer duplicates. Call: sanitizeConversationLogsFull({ projectDir }).',
   inputSchema: z.object({
     projectDir: z.string(),
     cleanupLevel: z.enum(['basic','aggressive']).default('aggressive'),
