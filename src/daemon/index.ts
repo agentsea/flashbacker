@@ -4,6 +4,7 @@ import { discoverProjects } from './project-scanner';
 import { getJSONLFiles } from '../utils/conversation-logs';
 import { getFlashbackConfig } from '../utils/config';
 import { rotateMemoryFile } from '../utils/memory-rotation';
+import { shouldRunSessionAnalysis } from '../agents/utils/significance';
 
 interface ProjectState {
   lastActivityTimestampMs: number | null;
@@ -87,6 +88,21 @@ export async function runDaemon(): Promise<void> {
         state.isActive = recentlyActive;
         state.lastActivityTimestampMs = ts;
         await writeLog(projectDir, `[activity] state=${recentlyActive ? 'active' : 'idle'} ts=${ts ?? 'none'}`);
+
+        // On transition to idle, evaluate programmatic significance gate
+        if (!recentlyActive) {
+          try {
+            const { shouldRun, reason } = await shouldRunSessionAnalysis(projectDir, {
+              minMessages: 5,
+              minElapsedMs: 30 * 60 * 1000,
+              minBytesDelta: 4096,
+            });
+            await writeLog(projectDir, `[gate] session-analysis ${reason}`);
+            // NOTE: We only log the decision here. Actual agent invocation wiring will use this gate.
+          } catch (e) {
+            await writeLog(projectDir, `[gate-error] ${(e as Error).message}`);
+          }
+        }
       }
 
       // Periodic memory rotation (once per hour max)
