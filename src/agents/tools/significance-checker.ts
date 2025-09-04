@@ -1,5 +1,7 @@
-import { tool } from 'ai';
-import { z } from 'zod';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { tool } = require('ai');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { z } = require('zod');
 import fs from 'fs-extra';
 import { getJSONLFiles } from '../../utils/conversation-logs';
 
@@ -11,7 +13,8 @@ export const checkSignificance = tool({
     minMessagesThreshold: z.number().default(5),
     minTimeThresholdMs: z.number().default(30 * 60 * 1000),
   }),
-  execute: async ({ projectDir, lastAnalysisTimestamp, minMessagesThreshold, minTimeThresholdMs }) => {
+  execute: async (input: { projectDir: string; lastAnalysisTimestamp?: string; minMessagesThreshold: number; minTimeThresholdMs: number }) => {
+    const { projectDir, lastAnalysisTimestamp, minMessagesThreshold, minTimeThresholdMs } = input;
     const files = await getJSONLFiles(projectDir);
     const latest = files[0];
     let messageCount = 0;

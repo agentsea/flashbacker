@@ -1,4 +1,5 @@
-import { experimental_createMCPClient } from 'ai';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { experimental_createMCPClient } = require('ai');
 
 type ToolSet = Record<string, unknown>;
 

@@ -1,7 +1,10 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { generateText, stepCountIs } from 'ai';
-import { openai } from '@ai-sdk/openai';
+// Use runtime requires to minimize TypeScript type-load for heavy AI SDK types
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { generateText, stepCountIs } = require('ai');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { openai } = require('@ai-sdk/openai');
 
 export interface AgentResult {
   success: boolean;
@@ -25,7 +28,7 @@ export interface AgentExecutionOptions {
   agentName: string;
   stepLimit: number;
   tokenBudget?: number;
-  tools?: Record<string, unknown>;
+  tools?: any;
   templatePath: string; // relative within .claude/flashback/prompts/
 }
 
@@ -75,8 +78,8 @@ export class FlashbackAgent {
       const template = await this.readAgentTemplate(projectDir, templatePath);
 
       const result: any = await generateText({
-        model: openai('gpt-5-nano'),
-        tools,
+        model: openai('gpt-5-nano') as any,
+        tools: tools as any,
         stopWhen: stepCountIs(stepLimit),
         system: template.system,
         prompt: template.prompt,

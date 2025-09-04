@@ -1,5 +1,7 @@
-import { tool } from 'ai';
-import { z } from 'zod';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { tool } = require('ai');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { z } = require('zod');
 import { getDualSessionLogs } from '../../utils/conversation-logs';
 
 function estimateTokens(content: string): number {
@@ -13,7 +15,8 @@ export const sanitizeConversationLogs = tool({
     sessionLimit: z.number().min(1).max(3).default(2),
     targetTokens: z.number().default(150000),
   }),
-  execute: async ({ projectDir }) => {
+  execute: async (input: { projectDir: string; sessionLimit?: number; targetTokens?: number }) => {
+    const { projectDir } = input;
     const { currentSession, previousSession } = await getDualSessionLogs(projectDir, {
       maxEntriesPerSession: 50,
       maxCharsPerSession: 50000,
