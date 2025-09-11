@@ -35,7 +35,8 @@ program
   .option('-c, --clean', 'Clean install - remove existing state and start fresh')
   .option('--mcp', 'Install with MCP servers (context7, playwright, sequential-thinking)')
   .option('--mcp-only', 'Only install MCP servers (skip template setup)')
-  .option('--statusline-register', 'Register status line command in Claude settings (optional)')
+  .option('--statusline-register', 'Register project-level status line in .claude/settings.json (optional)')
+  .option('--statusline-global', 'Register status line in global ~/.claude/settings.json (advanced)')
   .action(initCommand);
 
 program

@@ -14,6 +14,7 @@ interface InitOptions {
   mcp?: boolean;
   mcpOnly?: boolean;
   statuslineRegister?: boolean;
+  statuslineGlobal?: boolean;
 }
 
 export async function initCommand(options: InitOptions): Promise<void> {
@@ -153,9 +154,14 @@ export async function initCommand(options: InitOptions): Promise<void> {
 
     // Optionally register statusline in Claude settings
     if (options.statuslineRegister) {
-      console.log(chalk.gray('📟 Registering status line command in Claude settings...'));
-      await registerStatuslineCommand(cwd);
-      console.log(chalk.green('   ✅ Status line command registered'));
+      console.log(chalk.gray('📟 Registering status line command for this project...'));
+      await registerStatuslineCommand(cwd, 'project');
+      console.log(chalk.green('   ✅ Project status line registered'));
+    }
+    if (options.statuslineGlobal) {
+      console.log(chalk.gray('📟 Registering status line command in global settings...'));
+      await registerStatuslineCommand(cwd, 'global');
+      console.log(chalk.green('   ✅ Global status line registered'));
     }
 
     console.log(chalk.green('✅ Flashback initialized successfully!'));
@@ -328,10 +334,12 @@ async function installStatuslineMonitor(projectDir: string): Promise<void> {
 /**
  * Register statusline command in global Claude settings (~/.claude/settings.json)
  */
-async function registerStatuslineCommand(projectDir: string): Promise<void> {
+async function registerStatuslineCommand(projectDir: string, scope: 'project' | 'global' = 'project'): Promise<void> {
   try {
     const home = os.homedir();
-    const settingsDir = path.join(home, '.claude');
+    const globalDir = path.join(home, '.claude');
+    const projectSettingsDir = path.join(projectDir, '.claude');
+    const settingsDir = scope === 'global' ? globalDir : projectSettingsDir;
     const settingsPath = path.join(settingsDir, 'settings.json');
     await fs.ensureDir(settingsDir);
 
