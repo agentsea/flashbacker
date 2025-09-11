@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.3.5 - August 14, 2025)
+## 🎉 Current Status (v2.3.8 - September 11, 2025)
 
 **Flashbacker provides:** 
 
@@ -85,6 +85,36 @@ flashback init --mcp
 
 - ✅ `/fb:working-plan` # AI updates development priorities from conversation to the ./claude/flashback/memory/WORKING_PLAN.md file
 - ✅ `/fb:save-session` # Capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
+
+### 📟 Claude Context Status Line (New in v2.3.7)
+
+Flashbacker now ships a status line monitor that shows real-time Claude context usage:
+
+```
+[Claude Sonnet 4] 📁 my-project | 🌿 main | 🧠 25.6K/1M (2.6%)
+```
+
+- Installed at `.claude/statusline/claude_context_monitor.js` during `flashback init`/`--refresh`
+- Detects 1M vs 200K context windows (Claude 4/Sonnet 4 vs others)
+- Uses real `usage` tokens from your conversation transcript
+
+Quick test after init:
+
+```bash
+node .claude/statusline/claude_context_monitor.js <<'JSON'
+{ "model": "claude-4.1", "transcriptPath": ".claude/statusline/examples/sample-transcript-1m.json", "cwd": "." }
+JSON
+```
+
+See `.claude/statusline/README.md` for details and examples.
+
+Auto-registration (optional):
+
+```bash
+flashback init --refresh --statusline-register
+```
+
+Skips automatic registration by default; use the flag if you want Flashbacker to write the `statusLine` command into `~/.claude/settings.json`.
 - ✅ `/fb:remember "always remember to do XYZ with this project"` # AI updates key insights from conversation to the ./claude/flashback/memory/REMEMBER.md file
 
 ## 🔄 **Complete Session Management Workflows**
@@ -583,4 +613,4 @@ Flashbacker automatically excludes `.claude/` from git commits to protect sensit
 
 ---
 
-**v2.3.5 Status**: 🚧 **ALPHA** - **Complete Workflow System** with 20 total specialists. Enhanced with comprehensive task management, advanced discussion system, and integrated workflow patterns for professional development teams.
+**v2.3.7 Status**: 🚧 **ALPHA** - **Complete Workflow System** with 20 total specialists. Adds Claude context status line monitor and init integration; keep templates refreshed with `flashback init --refresh`.

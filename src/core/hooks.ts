@@ -8,14 +8,22 @@ export async function registerHooks(projectDir: string): Promise<void> {
   const settings = await getClaudeSettings();
   settings.hooks = settings.hooks || {};
 
-  // Simple hook registration - just register script files
-  settings.hooks.SessionStart = [{
-    matcher: projectMatcher,
-    hooks: [{
-      type: 'command',
-      command: `bash "${path.join(scriptsDir, 'session-start.sh')}"`,
-    }],
-  }];
+  // Register SessionStart hooks: existing session-start.sh and statusline cache clear
+  // Per docs, SessionStart does not require a matcher; omit it so it always runs
+  settings.hooks.SessionStart = [
+    {
+      hooks: [{
+        type: 'command',
+        command: `bash "${path.join(scriptsDir, 'session-start.sh')}"`,
+      }],
+    },
+    {
+      hooks: [{
+        type: 'command',
+        command: `bash -lc 'rm -f "$CLAUDE_PROJECT_DIR/.claude/statusline/state.json"'`
+      }],
+    },
+  ];
 
   await updateClaudeSettings(settings);
 }

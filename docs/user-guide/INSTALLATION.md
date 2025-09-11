@@ -111,7 +111,7 @@ npm install && npm run build
 # 4. ⚡ CRITICAL: Link globally (makes 'flashback' command available everywhere)
 npm link
 
-# 5. ✅ Verify installation shows v2.3.5
+# 5. ✅ Verify installation shows v2.3.8
 flashback --version
 flashback doctor
 
@@ -138,7 +138,7 @@ After installation, verify everything works:
 
 ```bash
 # Check version and basic functionality
-flashback --version          # Should show 2.3.5
+flashback --version          # Should show 2.3.8
 flashback doctor            # System diagnostics
 
 # Test core commands
@@ -155,13 +155,39 @@ flashback memory --show     # Display project memory
 ls .claude/commands/fb/     # Should show persona.md, working-plan.md, etc.
 ```
 
+### 📟 Status Line Monitor (Optional)
+
+After `flashback init` or `--refresh`, you can test the new Claude context status line monitor:
+
+```bash
+node .claude/statusline/claude_context_monitor.js <<'JSON'
+{ "model": "claude-4.1", "transcriptPath": ".claude/statusline/examples/sample-transcript-1m.json", "cwd": "." }
+JSON
+```
+
+Expected format:
+
+```
+[Claude Sonnet 4] 📁 my-project | 🌿 main | 🧠 25.6K/1M (2.6%)
+```
+
+See `.claude/statusline/README.md` for details and examples.
+
+To auto-register the status line in Claude Code settings, use:
+
+```bash
+flashback init --refresh --statusline-register
+```
+
+This writes a `statusLine` command to `~/.claude/settings.json` pointing at your project’s `.claude/statusline/claude_context_monitor.js`. If you prefer manual control, skip the flag and configure via `/statusline` in Claude Code or edit `~/.claude/settings.json` directly. 
+
 Expected output from `flashback doctor`:
 ```
 🏥 Flashbacker System Diagnostics
 
 ✅ Node.js version: v22.x.x (compatible - LTS supported)
 ✅ npm version: v10.x.x (compatible)  
-✅ Flashbacker CLI: Working (v2.3.5)
+✅ Flashbacker CLI: Working (v2.3.7)
 ✅ Project structure: Initialized  
 ✅ Configuration: Valid
 ✅ Slash commands: Installed (/fb: namespace)
@@ -189,6 +215,18 @@ Flashbacker follows a clean installation model:
 - **System**: Flashbacker CLI globally available as `flashback` command
 - **Project**: Only `.claude/` directory with templates and configuration
 - **Result**: Clean separation, no conflicts with existing project structure
+
+### Background Daemon (PM2)
+
+- PM2 is auto-installed by the installer/postinstall when possible
+- After `flashback init`, start the daemon:
+  ```bash
+  flashback daemon --start
+  flashback daemon --status
+  flashback daemon --logs
+  ```
+- A per-project PM2 ecosystem is generated at `.claude/flashback/scripts/pm2/ecosystem.config.js`
+- The PM2 app name uses your `project_name` from `flashback.json` (sanitized)
 
 ## 🎯 Post-Installation Setup
 
@@ -341,7 +379,7 @@ cd /path/to/flashbacker
 npm unlink && npm link
 
 # Verify correct version:
-flashback --version  # Should show 2.3.5
+flashback --version  # Should show 2.3.7
 
 # If still wrong, check which flashback you're running:
 which flashback
