@@ -174,9 +174,23 @@ function resolveInputFields(input) {
     }
     return undefined;
   };
-  const model = get(input, ["model", "claudeModel", "activeModel"]);
+  const rawModel = get(input, ["model", "claudeModel", "activeModel"]);
+  let model = undefined;
+  if (typeof rawModel === "string") {
+    model = rawModel;
+  } else if (rawModel && typeof rawModel === "object") {
+    // Claude Code provides { id, display_name }
+    model = rawModel.display_name || rawModel.id || "";
+  } else {
+    model = "";
+  }
+
   const transcriptPath = get(input, ["transcriptPath", "transcript_path", "transcript"]);
-  const cwd = get(input, ["cwd", "workspace", "workspacePath"]) || process.cwd();
+
+  // Prefer workspace.current_dir if available per docs
+  const workspace = get(input, ["workspace"]) || {};
+  const cwd = workspace.current_dir || get(input, ["cwd", "workspace", "workspacePath"]) || process.cwd();
+
   return { model, transcriptPath, cwd };
 }
 
