@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.3.8 - September 11, 2025)
+## 🎉 Current Status (v2.3.9 - September 11, 2025)
 
 **Flashbacker provides:** 
 
@@ -86,7 +86,7 @@ flashback init --mcp
 - ✅ `/fb:working-plan` # AI updates development priorities from conversation to the ./claude/flashback/memory/WORKING_PLAN.md file
 - ✅ `/fb:save-session` # Capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
 
-### 📟 Claude Context Status Line (New in v2.3.7)
+### 📟 Claude Context Status Line (Updated in v2.3.9)
 
 Flashbacker now ships a status line monitor that shows real-time Claude context usage:
 
@@ -108,13 +108,20 @@ JSON
 
 See `.claude/statusline/README.md` for details and examples.
 
-Auto-registration (optional):
+Auto-registration (optional, project-level settings):
 
 ```bash
 flashback init --refresh --statusline-register
 ```
 
-Skips automatic registration by default; use the flag if you want Flashbacker to write the `statusLine` command into `~/.claude/settings.json`.
+Skips automatic registration by default; use the flag to write `statusLine` and `hooks.SessionStart` into the PROJECT `.claude/settings.json`. The SessionStart hook also clears `.claude/statusline/state.json` on new/resumed sessions to prevent stale counts.
+
+To remove later:
+
+```bash
+flashback statusline --deregister           # project only
+flashback statusline --deregister --global  # also clean ~/.claude/settings.json
+```
 - ✅ `/fb:remember "always remember to do XYZ with this project"` # AI updates key insights from conversation to the ./claude/flashback/memory/REMEMBER.md file
 
 ## 🔄 **Complete Session Management Workflows**

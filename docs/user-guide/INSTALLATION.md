@@ -111,7 +111,7 @@ npm install && npm run build
 # 4. ⚡ CRITICAL: Link globally (makes 'flashback' command available everywhere)
 npm link
 
-# 5. ✅ Verify installation shows v2.3.8
+# 5. ✅ Verify installation shows v2.3.9
 flashback --version
 flashback doctor
 
@@ -138,7 +138,7 @@ After installation, verify everything works:
 
 ```bash
 # Check version and basic functionality
-flashback --version          # Should show 2.3.8
+flashback --version          # Should show 2.3.9
 flashback doctor            # System diagnostics
 
 # Test core commands
@@ -179,7 +179,14 @@ To auto-register the status line in Claude Code settings, use:
 flashback init --refresh --statusline-register
 ```
 
-This writes a `statusLine` command to `~/.claude/settings.json` pointing at your project’s `.claude/statusline/claude_context_monitor.js`. If you prefer manual control, skip the flag and configure via `/statusline` in Claude Code or edit `~/.claude/settings.json` directly. 
+This writes a `statusLine` command to the PROJECT file `.claude/settings.json` pointing at your project’s `.claude/statusline/claude_context_monitor.js` and registers `hooks.SessionStart` to clear `.claude/statusline/state.json` on session start. If you prefer manual control, skip the flag and configure it yourself.
+
+To remove project registration later:
+
+```bash
+flashback statusline --deregister           # project only
+flashback statusline --deregister --global  # also clean ~/.claude/settings.json
+```
 
 Expected output from `flashback doctor`:
 ```
