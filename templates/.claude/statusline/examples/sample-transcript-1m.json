@@ -1,0 +1,16 @@
+{
+  "model": "claude-4.1-sonnet",
+  "messages": [
+    { "role": "user", "content": "Hello" },
+    {
+      "role": "assistant",
+      "content": "Hi there",
+      "usage": {
+        "input_tokens": 12000,
+        "output_tokens": 3600,
+        "cache_read_input_tokens": 6000,
+        "cache_creation_input_tokens": 0
+      }
+    }
+  ]
+}

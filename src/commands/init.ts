@@ -92,6 +92,10 @@ export async function initCommand(options: InitOptions): Promise<void> {
     console.log(chalk.gray('📜 Installing hook scripts...'));
     await installHookScripts(cwd);
 
+    // Install statusline monitor
+    console.log(chalk.gray('📟 Installing status line monitor...'));
+    await installStatuslineMonitor(cwd);
+
     // Create persona templates
     console.log(chalk.gray('🎭 Installing persona templates...'));
     await installPersonaTemplates(cwd);
@@ -270,6 +274,47 @@ exec flashback session-start --context
   }
 }
 
+
+/**
+ * Install statusline monitor scripts (claude_context_monitor.js)
+ */
+async function installStatuslineMonitor(projectDir: string): Promise<void> {
+  const statusDir = path.join(projectDir, '.claude', 'statusline');
+  const templatesDir = path.join(__dirname, '..', '..', 'templates', '.claude', 'statusline');
+
+  try {
+    await fs.ensureDir(statusDir);
+
+    if (!await fs.pathExists(templatesDir)) {
+      console.log(chalk.gray('   ℹ️  No bundled statusline templates found'));
+      return;
+    }
+
+    const copyRecursive = async (srcDir: string, dstDir: string): Promise<void> => {
+      await fs.ensureDir(dstDir);
+      const entries = await fs.readdir(srcDir);
+      for (const entry of entries) {
+        const srcPath = path.join(srcDir, entry);
+        const dstPath = path.join(dstDir, entry);
+        const stat = await fs.stat(srcPath);
+        if (stat.isDirectory()) {
+          await copyRecursive(srcPath, dstPath);
+        } else {
+          await fs.copy(srcPath, dstPath);
+          // Make JS scripts executable
+          if (entry.endsWith('.js')) {
+            await fs.chmod(dstPath, 0o755);
+          }
+        }
+      }
+    };
+
+    await copyRecursive(templatesDir, statusDir);
+    console.log(chalk.green('   ✅ Status line monitor installed'));
+  } catch (error) {
+    throw new Error(`Failed to install status line monitor: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
 
 /**
  * Install persona templates
