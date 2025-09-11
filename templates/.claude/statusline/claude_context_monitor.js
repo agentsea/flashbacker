@@ -75,7 +75,9 @@ function colorize(text, pct) {
 
 function getClaudeContextWindow(model) {
   const m = (model || "").toLowerCase();
-  if (m.includes("sonnet-4") || m.includes("claude-4")) return 1_000_000;
+  if (m.includes("sonnet-4") || m.includes("claude-4") || m.includes("opus-4") || m.includes("[1m") || m.includes("1m token")) {
+    return 1_000_000;
+  }
   return 200_000;
 }
 
@@ -83,10 +85,11 @@ function getModelLabel(model) {
   if (!model) return "Claude";
   const m = model.toLowerCase();
   if (m.includes("sonnet-4")) return "Claude Sonnet 4";
+  if (m.includes("opus-4")) return "Claude Opus 4";
   if (m.includes("claude-4")) return "Claude 4";
   const match = m.match(/claude[-\s]?([0-9.]+[a-z-]*)/);
   if (match) return `Claude ${match[1]}`;
-  return "Claude";
+  return model.trim().replace(/^([a-z])/, (s) => s.toUpperCase());
 }
 
 function sumUsage(usage) {
@@ -198,6 +201,31 @@ function readJsonlAndExtractTokens(jsonlPath) {
   }
 }
 
+function getFileMtimeMs(filePath) {
+  try { return fs.statSync(filePath).mtime.getTime(); } catch { return 0; }
+}
+
+function getStatePath(cwd) {
+  return path.join(cwd, ".claude", "statusline", "state.json");
+}
+
+function readPreviousState(cwd) {
+  try {
+    const p = getStatePath(cwd);
+    if (!fs.existsSync(p)) return undefined;
+    const raw = fs.readFileSync(p, "utf8");
+    return safeJSONParse(raw);
+  } catch { return undefined; }
+}
+
+function writeCurrentState(cwd, state) {
+  try {
+    const p = getStatePath(cwd);
+    fs.mkdirSync(path.dirname(p), { recursive: true });
+    fs.writeFileSync(p, JSON.stringify({ ...state, ts: Date.now() }, null, 2));
+  } catch {}
+}
+
 function formatOutput({ model, projectName, branchName, tokens, contextWindow }) {
   const modelLabel = getModelLabel(model);
   const pct = contextWindow > 0 ? tokens / contextWindow : 0;
@@ -221,7 +249,7 @@ function resolveInputFields(input) {
     model = rawModel;
   } else if (rawModel && typeof rawModel === "object") {
     // Claude Code provides { id, display_name }
-    model = rawModel.display_name || rawModel.id || "";
+    model = rawModel.id || rawModel.display_name || "";
   } else {
     model = "";
   }
@@ -244,13 +272,25 @@ function resolveInputFields(input) {
   const projectName = path.basename(gitRoot);
   const branchName = getGitBranch(cwd);
   const contextWindow = getClaudeContextWindow(model);
+  const prev = readPreviousState(cwd);
+
   let tokens = readTranscriptAndExtractTokens(transcriptPath);
   if (tokens === 0 && (!transcriptPath || !fs.existsSync(transcriptPath))) {
     const fallbackJsonl = findLatestJsonlForProject(cwd);
-    tokens = readJsonlAndExtractTokens(fallbackJsonl);
+    const fresh = fallbackJsonl && (Date.now() - getFileMtimeMs(fallbackJsonl) < 30 * 60 * 1000);
+    if (fresh) tokens = readJsonlAndExtractTokens(fallbackJsonl);
   }
 
-  const line = formatOutput({ model, projectName, branchName, tokens, contextWindow });
+  let line;
+  if (tokens > 0) {
+    line = formatOutput({ model, projectName, branchName, tokens, contextWindow });
+    writeCurrentState(cwd, { tokens, contextWindow, line });
+  } else if (prev && prev.tokens > 0 && prev.line) {
+    line = prev.line;
+  } else {
+    line = formatOutput({ model, projectName, branchName, tokens: 0, contextWindow });
+  }
+
   process.stdout.write(line + "\n");
 })().catch((err) => {
   // Fail gracefully with minimal info
