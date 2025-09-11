@@ -9,16 +9,15 @@ export async function registerHooks(projectDir: string): Promise<void> {
   settings.hooks = settings.hooks || {};
 
   // Register SessionStart hooks: existing session-start.sh and statusline cache clear
+  // Per docs, SessionStart does not require a matcher; omit it so it always runs
   settings.hooks.SessionStart = [
     {
-      matcher: projectMatcher,
       hooks: [{
         type: 'command',
         command: `bash "${path.join(scriptsDir, 'session-start.sh')}"`,
       }],
     },
     {
-      // Clear statusline cache at session start to avoid stale carryover
       hooks: [{
         type: 'command',
         command: `bash -lc 'rm -f "$CLAUDE_PROJECT_DIR/.claude/statusline/state.json"'`
