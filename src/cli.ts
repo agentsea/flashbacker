@@ -10,6 +10,7 @@ import { configCommand } from './commands/config';
 import { doctorCommand } from './commands/doctor';
 import { memoryCommand } from './commands/memory';
 import { workingPlanCommand } from './commands/working-plan';
+import { statuslineCommand } from './commands/statusline';
 import { saveSessionCommand } from './commands/save-session';
 import { sessionStartCommand } from './commands/session-start';
 import { personaCommand } from './commands/persona';
@@ -42,6 +43,13 @@ program
   .command('status')
   .description('Show Flashbacker installation and configuration status')
   .action(statusCommand);
+program
+  .command('statusline')
+  .description('Manage status line registration')
+  .option('--deregister', 'Remove project status line and SessionStart hooks from project settings')
+  .option('--global', 'Also clean from global ~/.claude/settings.json')
+  .action(statuslineCommand);
+
 
 program
   .command('config')
