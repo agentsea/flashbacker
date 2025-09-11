@@ -1,3 +1,6 @@
+## 2.3.9 - 2025-09-11
+- fix: write SessionStart hooks to project-level .claude/settings.json (reset statusline cache on session start)
+
 # Changelog
 
 All notable changes to Flashbacker will be documented in this file.

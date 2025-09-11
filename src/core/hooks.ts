@@ -1,15 +1,23 @@
+import fs from 'fs-extra';
 import path from 'path';
 import { getClaudeSettings, updateClaudeSettings } from '../utils/claude-config';
 
 export async function registerHooks(projectDir: string): Promise<void> {
-  const projectMatcher = path.basename(projectDir);
   const scriptsDir = path.join(projectDir, '.claude', 'flashback', 'scripts');
 
-  const settings = await getClaudeSettings();
+  // Write hooks to PROJECT-LEVEL settings to ensure precedence over global
+  const projectSettingsPath = path.join(projectDir, '.claude', 'settings.json');
+  let settings: any = {};
+  if (await fs.pathExists(projectSettingsPath)) {
+    try {
+      settings = JSON.parse(await fs.readFile(projectSettingsPath, 'utf-8'));
+    } catch {
+      settings = {};
+    }
+  }
   settings.hooks = settings.hooks || {};
 
-  // Register SessionStart hooks: existing session-start.sh and statusline cache clear
-  // Per docs, SessionStart does not require a matcher; omit it so it always runs
+  // SessionStart hooks: run session-start.sh and clear statusline cache
   settings.hooks.SessionStart = [
     {
       hooks: [{
@@ -25,46 +33,45 @@ export async function registerHooks(projectDir: string): Promise<void> {
     },
   ];
 
-  await updateClaudeSettings(settings);
+  await fs.ensureDir(path.dirname(projectSettingsPath));
+  await fs.writeFile(projectSettingsPath, JSON.stringify(settings, null, 2));
 }
 
-export async function checkHooksInstalled(): Promise<boolean> {
+export async function checkHooksInstalled(projectDir?: string): Promise<boolean> {
+  if (projectDir) {
+    const projectSettingsPath = path.join(projectDir, '.claude', 'settings.json');
+    if (!await fs.pathExists(projectSettingsPath)) return false;
+    try {
+      const settings = JSON.parse(await fs.readFile(projectSettingsPath, 'utf-8'));
+      return !!(settings.hooks?.SessionStart?.length);
+    } catch {
+      return false;
+    }
+  }
   const settings = await getClaudeSettings();
   return !!(settings.hooks?.SessionStart?.length);
 }
 
 export async function unregisterHooks(projectDir?: string): Promise<void> {
-  const settings = await getClaudeSettings();
-
-  if (!settings.hooks) return;
-
   if (projectDir) {
-    // Remove hooks only for this specific project
-    const projectMatcher = path.basename(projectDir);
-
-    // Remove PreCompact hooks for this project
-    if (settings.hooks.PreCompact) {
-      settings.hooks.PreCompact = settings.hooks.PreCompact.filter(
-        (hook: any) => hook.matcher !== projectMatcher,
-      );
-      if (settings.hooks.PreCompact.length === 0) {
-        delete settings.hooks.PreCompact;
-      }
+    const projectSettingsPath = path.join(projectDir, '.claude', 'settings.json');
+    if (!await fs.pathExists(projectSettingsPath)) return;
+    try {
+      const settings = JSON.parse(await fs.readFile(projectSettingsPath, 'utf-8'));
+      if (!settings.hooks) return;
+      delete settings.hooks.PreCompact;
+      delete settings.hooks.SessionStart;
+      await fs.writeFile(projectSettingsPath, JSON.stringify(settings, null, 2));
+      return;
+    } catch {
+      return;
     }
-
-    if (settings.hooks.SessionStart) {
-      settings.hooks.SessionStart = settings.hooks.SessionStart.filter(
-        (hook: any) => hook.matcher !== projectMatcher,
-      );
-      if (settings.hooks.SessionStart.length === 0) {
-        delete settings.hooks.SessionStart;
-      }
-    }
-  } else {
-    // Remove all hooks (backwards compatibility)
-    delete settings.hooks.PreCompact;
-    delete settings.hooks.SessionStart;
   }
 
+  // Fallback: operate on global if no projectDir specified
+  const settings = await getClaudeSettings();
+  if (!settings.hooks) return;
+  delete settings.hooks.PreCompact;
+  delete settings.hooks.SessionStart;
   await updateClaudeSettings(settings);
 }
