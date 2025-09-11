@@ -33,7 +33,7 @@ junit.xml
 Thumbs.db
 
 # Logs
-logs/
+/logs/
 *.log
 
 # Temporary files
