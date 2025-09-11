@@ -111,7 +111,7 @@ npm install && npm run build
 # 4. ⚡ CRITICAL: Link globally (makes 'flashback' command available everywhere)
 npm link
 
-# 5. ✅ Verify installation shows v2.3.7
+# 5. ✅ Verify installation shows v2.3.8
 flashback --version
 flashback doctor
 
@@ -138,7 +138,7 @@ After installation, verify everything works:
 
 ```bash
 # Check version and basic functionality
-flashback --version          # Should show 2.3.7
+flashback --version          # Should show 2.3.8
 flashback doctor            # System diagnostics
 
 # Test core commands

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.8] - 2025-09-11
+
+### Added
+- **Statusline improvements**: Robust model detection (Sonnet/Opus/Claude 4 and [1M] hints)
+- **Stateful output**: Cache last good line to avoid zero flicker
+- **JSONL fallback**: Use latest `~/.claude/projects/-<project>/*.jsonl` when `transcript_path` missing
+- **Session-aware cache**: Reuse only within same session; derive `session_id` when available
+- **Hooks**: SessionStart clears `.claude/statusline/state.json` on new/resumed sessions
+
+### Changed
+- `flashback init --statusline-register` registers project-level statusline; removed global flag
+
 ## [2.3.7] - 2025-09-11
 
 ### Added

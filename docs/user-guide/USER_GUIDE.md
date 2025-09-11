@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.3.7 - September 11, 2025)
+## 🎉 Current Status (v2.3.8 - September 11, 2025)
 
 **Flashbacker provides:** 
 

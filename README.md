@@ -28,7 +28,7 @@
 5) A code task management system for complex issues
 6) A code quality and fix system for complex issues
 
-**Current Status: v2.3.7** - 🚧 **ALPHA** - Complete workflow system with 20 total specialists. Adds PM2 background daemon foundation with per-project ecosystem generation and CLI management. Includes new Claude context status line monitor.
+**Current Status: v2.3.8** - 🚧 **ALPHA** - Complete workflow system with 20 total specialists. Adds PM2 background daemon foundation with per-project ecosystem generation and CLI management. Status line: robust model detection, stateful output, JSONL fallback, session-aware cache.
 
 ## 🚀 Quick Start
 
@@ -345,7 +345,7 @@ MIT License
 
 ---
 
-**v2.3.7 Status**: 🚧 **ALPHA** - **Complete Workflow System** + **20 Total Specialists**. Adds PM2 background daemon foundation and readable per-project process names. Includes Claude context status line monitor.
+**v2.3.8 Status**: 🚧 **ALPHA** - **Complete Workflow System** + **20 Total Specialists**. Statusline improved: robust model detection, stateful output to avoid zero flicker, JSONL fallback, session-aware cache, and project-level registration.
 
 ## 🙏 Acknowledgments
 
