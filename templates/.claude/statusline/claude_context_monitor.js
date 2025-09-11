@@ -8,6 +8,7 @@
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
+const os = require("os");
 
 function readAllStdin() {
   return new Promise((resolve) => {
@@ -157,6 +158,46 @@ function readTranscriptAndExtractTokens(transcriptPath) {
   }
 }
 
+function pathToClaudeProjectDir(projectPath) {
+  const normalized = path.resolve(projectPath);
+  return normalized.replace(/\//g, "-");
+}
+
+function findLatestJsonlForProject(cwd) {
+  try {
+    const projectsDir = path.join(os.homedir(), ".claude", "projects");
+    const projDir = path.join(projectsDir, pathToClaudeProjectDir(cwd));
+    if (!fs.existsSync(projDir)) return undefined;
+    const files = fs
+      .readdirSync(projDir)
+      .filter((f) => f.endsWith(".jsonl"))
+      .map((f) => ({ f, m: fs.statSync(path.join(projDir, f)).mtime.getTime() }))
+      .sort((a, b) => b.m - a.m);
+    return files.length > 0 ? path.join(projDir, files[0].f) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function readJsonlAndExtractTokens(jsonlPath) {
+  try {
+    if (!jsonlPath || !fs.existsSync(jsonlPath)) return 0;
+    const content = fs.readFileSync(jsonlPath, "utf8");
+    const lines = content.split(/\r?\n/).filter((l) => l.trim().length > 0);
+    // scan from end for latest usage-like object
+    for (let i = lines.length - 1; i >= 0; i--) {
+      const data = safeJSONParse(lines[i]);
+      if (!data) continue;
+      const usage = deepFindLatestUsage(data);
+      const tokens = sumUsage(usage);
+      if (tokens > 0) return tokens;
+    }
+    return 0;
+  } catch {
+    return 0;
+  }
+}
+
 function formatOutput({ model, projectName, branchName, tokens, contextWindow }) {
   const modelLabel = getModelLabel(model);
   const pct = contextWindow > 0 ? tokens / contextWindow : 0;
@@ -203,7 +244,11 @@ function resolveInputFields(input) {
   const projectName = path.basename(gitRoot);
   const branchName = getGitBranch(cwd);
   const contextWindow = getClaudeContextWindow(model);
-  const tokens = readTranscriptAndExtractTokens(transcriptPath);
+  let tokens = readTranscriptAndExtractTokens(transcriptPath);
+  if (tokens === 0 && (!transcriptPath || !fs.existsSync(transcriptPath))) {
+    const fallbackJsonl = findLatestJsonlForProject(cwd);
+    tokens = readJsonlAndExtractTokens(fallbackJsonl);
+  }
 
   const line = formatOutput({ model, projectName, branchName, tokens, contextWindow });
   process.stdout.write(line + "\n");
