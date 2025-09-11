@@ -38,9 +38,7 @@
   "author": "Claude Code Community",
   "license": "MIT",
   "dependencies": {
-    "@ai-sdk/openai": "^1.0.0",
     "@vscode/ripgrep": "^1.15.14",
-    "ai": "^5.0.0",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
     "diff": "^5.2.0",
