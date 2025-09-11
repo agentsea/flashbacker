@@ -107,6 +107,14 @@ JSON
 ```
 
 See `.claude/statusline/README.md` for details and examples.
+
+Auto-registration (optional):
+
+```bash
+flashback init --refresh --statusline-register
+```
+
+Skips automatic registration by default; use the flag if you want Flashbacker to write the `statusLine` command into `~/.claude/settings.json`.
 - ✅ `/fb:remember "always remember to do XYZ with this project"` # AI updates key insights from conversation to the ./claude/flashback/memory/REMEMBER.md file
 
 ## 🔄 **Complete Session Management Workflows**

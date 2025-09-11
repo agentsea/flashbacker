@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import { promisify } from 'util';
 import { registerHooks, unregisterHooks } from '../core/hooks';
 import { getRequiredFlashbackDirectories } from '../utils/file-utils';
+import os from 'os';
 
 const execAsync = promisify(require('child_process').exec);
 
@@ -12,6 +13,7 @@ interface InitOptions {
   clean?: boolean;
   mcp?: boolean;
   mcpOnly?: boolean;
+  statuslineRegister?: boolean;
 }
 
 export async function initCommand(options: InitOptions): Promise<void> {
@@ -147,6 +149,13 @@ export async function initCommand(options: InitOptions): Promise<void> {
     if (options.mcp) {
       console.log(chalk.gray('🔌 Installing MCP servers...'));
       await installMcpServers(cwd);
+    }
+
+    // Optionally register statusline in Claude settings
+    if (options.statuslineRegister) {
+      console.log(chalk.gray('📟 Registering status line command in Claude settings...'));
+      await registerStatuslineCommand(cwd);
+      console.log(chalk.green('   ✅ Status line command registered'));
     }
 
     console.log(chalk.green('✅ Flashback initialized successfully!'));
@@ -313,6 +322,41 @@ async function installStatuslineMonitor(projectDir: string): Promise<void> {
     console.log(chalk.green('   ✅ Status line monitor installed'));
   } catch (error) {
     throw new Error(`Failed to install status line monitor: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+/**
+ * Register statusline command in global Claude settings (~/.claude/settings.json)
+ */
+async function registerStatuslineCommand(projectDir: string): Promise<void> {
+  try {
+    const home = os.homedir();
+    const settingsDir = path.join(home, '.claude');
+    const settingsPath = path.join(settingsDir, 'settings.json');
+    await fs.ensureDir(settingsDir);
+
+    const statusCmd = path.join(projectDir, '.claude', 'statusline', 'claude_context_monitor.js');
+
+    let settings: any = {};
+    if (await fs.pathExists(settingsPath)) {
+      try {
+        const raw = await fs.readFile(settingsPath, 'utf-8');
+        settings = JSON.parse(raw);
+      } catch {
+        settings = {};
+      }
+    }
+
+    // Set or replace statusLine command
+    settings.statusLine = {
+      type: 'command',
+      command: statusCmd,
+      padding: 0,
+    };
+
+    await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
+  } catch (error) {
+    throw new Error(`Failed to register status line: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 

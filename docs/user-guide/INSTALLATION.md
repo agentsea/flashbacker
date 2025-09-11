@@ -173,6 +173,14 @@ Expected format:
 
 See `.claude/statusline/README.md` for details and examples.
 
+To auto-register the status line in Claude Code settings, use:
+
+```bash
+flashback init --refresh --statusline-register
+```
+
+This writes a `statusLine` command to `~/.claude/settings.json` pointing at your project’s `.claude/statusline/claude_context_monitor.js`. If you prefer manual control, skip the flag and configure via `/statusline` in Claude Code or edit `~/.claude/settings.json` directly. 
+
 Expected output from `flashback doctor`:
 ```
 🏥 Flashbacker System Diagnostics
