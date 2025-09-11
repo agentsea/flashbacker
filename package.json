@@ -1,6 +1,6 @@
 {
   "name": "flashbacker",
-  "version": "2.3.5",
+  "version": "2.3.7",
   "description": "Claude Code state management with session continuity and AI personas",
   "main": "lib/index.js",
   "bin": {
@@ -10,10 +10,12 @@
     "build": "npm run build:compile && npm run build:copy-templates",
     "build:compile": "tsc",
     "build:copy-templates": "cp -r templates lib/ 2>/dev/null || true",
+    "postinstall": "node scripts/setup-prereqs.js --ensure-pm2 --verbose || echo 'Warning: PM2 auto-install failed, background intelligence disabled'",
     "dev": "tsc --watch",
     "test": "npm run build && jest",
     "test:unit": "npm run build && jest tests/unit",
     "test:integration": "npm run build && node tests/cli-integration.test.js",
+    "test:install": "npm run build && jest tests/install.e2e.test.js --coverage=false",
     "test:watch": "npm run build && jest --watch",
     "test:coverage": "npm run build && jest --coverage",
     "test:ci": "npm run build && jest --ci --coverage --watchAll=false",
@@ -36,9 +38,12 @@
   "author": "Claude Code Community",
   "license": "MIT",
   "dependencies": {
+    "@ai-sdk/openai": "^1.0.0",
     "@vscode/ripgrep": "^1.15.14",
+    "ai": "^5.0.0",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
+    "diff": "^5.2.0",
     "eslint-scope": "^8.4.0",
     "fs-extra": "^11.2.0",
     "meriyah": "^6.0.4",
@@ -49,6 +54,7 @@
     "tree-sitter-python": "^0.21.0",
     "tree-sitter-rust": "^0.21.0",
     "uuid": "^9.0.1",
+    "zod": "^3.23.8",
     "web-tree-sitter": "^0.25.8",
     "yaml": "^2.3.4"
   },

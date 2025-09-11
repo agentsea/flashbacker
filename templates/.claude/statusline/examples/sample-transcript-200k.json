@@ -1,0 +1,16 @@
+{
+  "model": "claude-3.5-sonnet",
+  "messages": [
+    { "role": "user", "content": "Start" },
+    {
+      "role": "assistant",
+      "content": "Response",
+      "usage": {
+        "input_tokens": 8200,
+        "output_tokens": 2200,
+        "cache_read_input_tokens": 1800,
+        "cache_creation_input_tokens": 0
+      }
+    }
+  ]
+}
