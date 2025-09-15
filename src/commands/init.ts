@@ -309,7 +309,7 @@ async function installStatuslineMonitor(projectDir: string): Promise<void> {
         if (stat.isDirectory()) {
           await copyRecursive(srcPath, dstPath);
         } else {
-          await fs.copy(srcPath, dstPath);
+          await fs.copy(srcPath, dstPath, { overwrite: true, errorOnExist: false });
           // Make JS scripts executable
           if (entry.endsWith('.js')) {
             await fs.chmod(dstPath, 0o755);

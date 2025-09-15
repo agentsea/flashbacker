@@ -165,7 +165,7 @@ function getSessionIdFromJsonlPath(p) { try { const base = path.basename(p || ""
   const projectName = path.basename(gitRoot);
   const branchName = getGitBranch(cwd);
   const contextWindow = getClaudeContextWindow(model);
-  const prev = readPreviousState(cwd);
+  const prev = readPreviousState(gitRoot);
 
   // Determine current session id
   let currentSessionId = stdinSessionId || "";
@@ -184,7 +184,7 @@ function getSessionIdFromJsonlPath(p) { try { const base = path.basename(p || ""
   let line;
   if (tokens > 0) {
     line = formatOutput({ model, projectName, branchName, tokens, contextWindow });
-    writeCurrentState(cwd, { sessionId: currentSessionId, tokens, contextWindow, line });
+    writeCurrentState(gitRoot, { sessionId: currentSessionId, tokens, contextWindow, line });
   } else if (prev && prev.tokens > 0 && prev.line && (!currentSessionId || prev.sessionId === currentSessionId)) {
     // Reuse only if session matches (or session unknown)
     line = prev.line;

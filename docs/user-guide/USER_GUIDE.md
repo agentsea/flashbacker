@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.3.9 - September 11, 2025)
+## 🎉 Current Status (v2.4.0 - September 15, 2025)
 
 **Flashbacker provides:** 
 
@@ -86,7 +86,7 @@ flashback init --mcp
 - ✅ `/fb:working-plan` # AI updates development priorities from conversation to the ./claude/flashback/memory/WORKING_PLAN.md file
 - ✅ `/fb:save-session` # Capture session insights before compaction to the ./claude/flashback/memory/CURRENT_SESSION.md file
 
-### 📟 Claude Context Status Line (Updated in v2.3.9)
+### 📟 Claude Context Status Line (Updated in v2.4.0)
 
 Flashbacker now ships a status line monitor that shows real-time Claude context usage:
 

@@ -111,7 +111,7 @@ npm install && npm run build
 # 4. ⚡ CRITICAL: Link globally (makes 'flashback' command available everywhere)
 npm link
 
-# 5. ✅ Verify installation shows v2.3.9
+# 5. ✅ Verify installation shows v2.4.0
 flashback --version
 flashback doctor
 
@@ -138,7 +138,7 @@ After installation, verify everything works:
 
 ```bash
 # Check version and basic functionality
-flashback --version          # Should show 2.3.9
+flashback --version          # Should show 2.4.0
 flashback doctor            # System diagnostics
 
 # Test core commands
@@ -386,7 +386,7 @@ cd /path/to/flashbacker
 npm unlink && npm link
 
 # Verify correct version:
-flashback --version  # Should show 2.3.7
+flashback --version  # Should show 2.4.0
 
 # If still wrong, check which flashback you're running:
 which flashback
@@ -586,7 +586,7 @@ npm install && npm run build
 npm unlink && npm link
 
 # ✅ Verify version updated correctly
-flashback --version  # Should show latest version
+flashback --version  # Should show latest version (2.4.0)
 
 # Refresh templates in existing projects
 cd /your/project && flashback init --refresh
