@@ -1,3 +1,13 @@
+## [2.4.0] - 2025-09-15
+
+### Fixed
+- statusline: read/write `.claude/statusline/state.json` at the git repository root (gitRoot) instead of the current working directory
+- init: always overwrite installed statusline templates during refresh to ensure the latest monitor is deployed
+- init: install to the git repository root even when run from a nested subdirectory (avoids creating nested `.claude/` trees)
+
+### Changed
+- docs: update instructions and version references to v2.4.0
+
 ## 2.3.9 - 2025-09-11
 - fix: write SessionStart hooks to project-level .claude/settings.json (reset statusline cache on session start)
 
