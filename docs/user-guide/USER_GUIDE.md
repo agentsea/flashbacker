@@ -2,7 +2,7 @@
 
 > **Claude Code state management with session continuity and specialized AI personas**
 
-## 🎉 Current Status (v2.4.0 - September 15, 2025)
+## 🎉 Current Status (v2.4.1 - September 18, 2025)
 
 **Flashbacker provides:** 
 
@@ -383,13 +383,16 @@ Flashbacker includes a comprehensive task management system with surgical discip
 
 **Task management currently reads from ./docs/issues in your CODEBASE and expects issues in that directory in the following format: ISSUE-008-non-interactive-deploy-and-e2e-tests.md**
 
-**FIRST create your own issue file in ./docs/issues in your CODEBASE or tell claude to create one for you after you have discuss what you want to do next. THEN use the following commands to break that issue into TASKS, UPDATE TASKS, and WORK ON TASKS.**
+**FIRST create your own issue file in ./docs/issues in your CODEBASE using `/fb:create-issue` command or tell claude to create one for you after you have discuss what you want to do next. THEN use the following commands to break that issue into TASKS, UPDATE TASKS, and WORK ON TASKS.**
 
-### Task Creation Workflow
+### Issue and Task Creation Workflow
 
-**Creating well-defined tasks:**
+**Creating comprehensive issues and tasks:**
 ```bash
-# 1. Create tasks from high-level requirements
+# 1. Create comprehensive issue documentation from working plan
+/fb:create-issue "auto-context-management" high 4-weeks
+
+# 2. Create tasks from high-level requirements
 /fb:create-tasks "break down ISSUE-014-non-interactive-deploy-and-e2e-tests into tasks"
 
 # This creates atomic tasks like:

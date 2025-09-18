@@ -1,3 +1,9 @@
+## [2.4.1] - 2025-09-18
+
+### Fixed
+- restore: recovered lost `create-issue.md` slash command from commit 8175b4c
+- command: `/fb:create-issue` now available for generating comprehensive issue documentation from working plan insights
+
 ## [2.4.0] - 2025-09-15
 
 ### Fixed

@@ -28,7 +28,7 @@
 5) A code task management system for complex issues
 6) A code quality and fix system for complex issues
 
-**Current Status: v2.4.0** - 🚧 **ALPHA** - Complete workflow system with 20 total specialists. PM2 daemon foundation with per-project ecosystem generation and CLI management. Status line: robust model detection, stateful output, JSONL fallback, session-aware cache, and repository-root state persistence.
+**Current Status: v2.4.1** - 🚧 **ALPHA** - Complete workflow system with 20 total specialists. PM2 daemon foundation with per-project ecosystem generation and CLI management. Status line: robust model detection, stateful output, JSONL fallback, session-aware cache, and repository-root state persistence. Restored `/fb:create-issue` command for comprehensive issue documentation.
 
 ## 🚀 Quick Start
 
@@ -117,6 +117,7 @@ After installation, you use Flashbacker through **slash commands in Claude Code*
 /fb:debt-hunter                                   # Hunt technical debt with AST analysis
 /fb:hallucination-hunter                          # Hunt fake AI-generated code
 /fb:fix-master "error description"                # Surgical fix methodology
+/fb:create-issue "issue-title" priority effort     # Generate comprehensive issue documentation
 /fb:create-tasks "issue description"               # Break down issues into atomic tasks
 /fb:work-task {task-number}                       # Focus on specific task
 /fb:update-tasks {task-number}                    # Update task progress
@@ -345,7 +346,7 @@ MIT License
 
 ---
 
-**v2.4.0 Status**: 🚧 **ALPHA** - **Complete Workflow System** + **20 Total Specialists**. Statusline now writes state at the git repository root and init installs to the repo root even when run from nested subdirectories. Templates auto-overwrite on refresh.
+**v2.4.1 Status**: 🚧 **ALPHA** - **Complete Workflow System** + **20 Total Specialists**. Statusline now writes state at the git repository root and init installs to the repo root even when run from nested subdirectories. Templates auto-overwrite on refresh. Restored `/fb:create-issue` command for comprehensive issue documentation from working plan insights.
 
 ## 🙏 Acknowledgments
 
