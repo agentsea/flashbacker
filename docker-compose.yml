@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  flashbacker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ghcr.io/agentsea/flashbacker:latest
+    container_name: flashbacker-mcp
+    volumes:
+      # Mount your project directory to work with flashback commands
+      - ./:/workspace
+    working_dir: /workspace
+    # Override entrypoint to keep container running for interactive use
+    entrypoint: ["/bin/sh"]
+    stdin_open: true
+    tty: true
+    environment:
+      # Set any environment variables needed
+      - NODE_ENV=production
+    networks:
+      - flashback-network
+
+  # Example: Using flashbacker with an MCP server setup
+  flashbacker-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ghcr.io/agentsea/flashbacker:latest
+    container_name: flashbacker-mcp-stdio
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    # For MCP server mode, you'd typically run a specific command
+    # This is a placeholder - adjust based on your MCP server implementation
+    command: ["--version"]
+    stdin_open: true
+    tty: true
+    networks:
+      - flashback-network
+
+networks:
+  flashback-network:
+    driver: bridge
+
+# Usage examples:
+#
+# 1. Build the image:
+#    docker-compose build
+#
+# 2. Run flashback commands:
+#    docker-compose run --rm flashbacker flashback --version
+#    docker-compose run --rm flashbacker flashback init --mcp
+#
+# 3. Interactive shell in container:
+#    docker-compose run --rm flashbacker /bin/sh
+#
+# 4. Start MCP server (adjust command as needed):
+#    docker-compose up flashbacker-mcp-server
