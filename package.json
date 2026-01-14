@@ -41,7 +41,7 @@
     "@vscode/ripgrep": "^1.15.14",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
-    "diff": "^5.2.0",
+    "diff": "^8.0.3",
     "eslint-scope": "^8.4.0",
     "fs-extra": "^11.2.0",
     "meriyah": "^6.0.4",
